@@ -1,6 +1,6 @@
 TP_WS_MongoDB
 =============
 
-Trabalho de web service
-<b>Alunos:</b>Bruno Ferreira e Guilherme Anselmo
-<b>Instituição:</b> IFSEMG - Câmpus Barbacena
+<h2>Trabalho de web service</h2><br>
+<b>Alunos:</b>Bruno Ferreira e Guilherme Anselmo<br>
+<b>Instituição:</b> IFSEMG - Câmpus Barbacena<br>
