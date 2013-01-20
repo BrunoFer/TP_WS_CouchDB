@@ -15,6 +15,7 @@ public class MenuPrincipal extends JMenuBar {
 	}
 
 	public void montarMenu(){
+		
 		menuAluno = new JMenu("Alunos");
 		menuArquivo = new JMenu("Arquivo");
 		menuSobre = new JMenu("Sobre");
@@ -32,4 +33,38 @@ public class MenuPrincipal extends JMenuBar {
 		add(menuAluno);
 		add(menuSobre);
 	}
+
+	public JMenu getMenuSobre() {
+		return menuSobre;
+	}
+
+	public void setMenuSobre(JMenu menuSobre) {
+		this.menuSobre = menuSobre;
+	}
+
+	public JMenuItem getExit() {
+		return exit;
+	}
+
+	public void setExit(JMenuItem exit) {
+		this.exit = exit;
+	}
+
+	public JMenuItem getCadastro() {
+		return cadastro;
+	}
+
+	public void setCadastro(JMenuItem cadastro) {
+		this.cadastro = cadastro;
+	}
+
+	public JMenuItem getExibir() {
+		return exibir;
+	}
+
+	public void setExibir(JMenuItem exibir) {
+		this.exibir = exibir;
+	}
+	
+	
 }

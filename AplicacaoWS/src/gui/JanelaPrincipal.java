@@ -13,10 +13,12 @@ import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
+import tratador_eventos.TratadorEventosCadastro;
+import tratador_eventos.TratadorEventosMenu;
+
 import net.miginfocom.swing.MigLayout;
 
 import aplicacao.MenuPrincipal;
-import aplicacao.TratadorEventos;
 
 public class JanelaPrincipal extends JFrame {
 
@@ -28,6 +30,7 @@ public class JanelaPrincipal extends JFrame {
 	private JLabel sexo = new JLabel("Sexo: ");
 	private JTextField textoTel = new JTextField(12);
 	private JTextField textoIdade = new JTextField(5);
+	private JPanel painelPrincipal;
 	//private JCheckBox textoSexo = new JCheckBox();
 	private JRadioButton masc = new JRadioButton("Masculino");
 	private JRadioButton fem = new JRadioButton("Feminino");
@@ -36,19 +39,46 @@ public class JanelaPrincipal extends JFrame {
 	private JPanel botoes = new JPanel();
 	private ButtonGroup botoesSexo = new ButtonGroup();
 	private JSeparator separacao1 = new JSeparator();
-	private TratadorEventos tratadorEventos;
-	private MenuPrincipal menuJanela = new MenuPrincipal();
+	private TratadorEventosCadastro tratadorEventos;
+	private MenuPrincipal menuJanela;
+	private MigLayout migLayout = new MigLayout("wrap 3");
+	private TratadorEventosMenu tratadorEventosMenu;
+
 	
 	public JanelaPrincipal() {
 		super();
 	}
 
 	public void montarJanela() {
-		tratadorEventos = new TratadorEventos(this);
-		MigLayout migLayout = new MigLayout("wrap 3");
-		setLayout(migLayout);
-
+		tratadorEventosMenu = new TratadorEventosMenu(this);
+		menuJanela = new MenuPrincipal();
+	
 		setJMenuBar(menuJanela);
+	
+		// Evento gerados pelo Menu
+		menuJanela.getCadastro().addActionListener(tratadorEventosMenu);
+		menuJanela.getExibir().addActionListener(tratadorEventosMenu);
+		menuJanela.getExit().addActionListener(tratadorEventosMenu);
+
+		painelPrincipal = new JPanel();
+		add(painelPrincipal);
+		
+		setSize(800, 600);
+		repaint();
+		setVisible(true);
+		setLocationRelativeTo(null);
+		
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
+	}
+	
+	public void Cadastrar() {
+		tratadorEventos = new TratadorEventosCadastro(this);
+		
+		painelPrincipal.setLayout(migLayout);
 		
 		botoesSexo.add(masc);
 		botoesSexo.add(fem);
@@ -58,31 +88,32 @@ public class JanelaPrincipal extends JFrame {
 		
 		separacao1.setSize(500, 500);
 		separacao1.setBackground(new Color(100,100,100));
-		add(separacao1, "spanx 3");
-		add(nome, "gapleft 70, gaptop 150");
-		add(textoNome,"spanx 2");
-		add(telefone, "gapleft 70");
-		add(textoTel, "spanx 2");
-		add(idade, "gapleft 70");
-		add(textoIdade, "spanx 2");
-		add(sexo, "gapleft 70");
-		add(masc);
-		add(fem);
-		add(botoes, "spanx 3, gapleft 270");
+		painelPrincipal.add(separacao1, "spanx 3");
+		painelPrincipal.add(nome, "gapleft 70, gaptop 150");
+		painelPrincipal.add(textoNome,"spanx 2");
+		painelPrincipal.add(telefone, "gapleft 70");
+		painelPrincipal.add(textoTel, "spanx 2");
+		painelPrincipal.add(idade, "gapleft 70");
+		painelPrincipal.add(textoIdade, "spanx 2");
+		painelPrincipal.add(sexo, "gapleft 70");
+		painelPrincipal.add(masc);
+		painelPrincipal.add(fem);
+		painelPrincipal.add(botoes, "spanx 3, gapleft 270");
 
+		add(painelPrincipal);
+		
 		botaoSalvar.addActionListener(tratadorEventos);
 		botaoLimpar.addActionListener(tratadorEventos);
-		
+
 		setTitle("Cadastro de alunos");
-		setSize(800, 600);
+		repaint();
 		setVisible(true);
-		setLocationRelativeTo(null);
-		
-		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-		});
+	}
+	
+	public void Limpar() {
+		painelPrincipal.removeAll();
+		repaint();
+		setVisible(true);
 	}
 	
 	public JTextField getTextoNome() {
@@ -141,4 +172,11 @@ public class JanelaPrincipal extends JFrame {
 		this.botaoLimpar = botaoLimpar;
 	}
 
+	public MenuPrincipal getMenuJanela() {
+		return menuJanela;
+	}
+
+	public void setMenuJanela(MenuPrincipal menuJanela) {
+		this.menuJanela = menuJanela;
+	}
 }
