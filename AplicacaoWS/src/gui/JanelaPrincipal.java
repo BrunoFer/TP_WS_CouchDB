@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -128,13 +129,14 @@ public class JanelaPrincipal extends JFrame {
 		capturaJson = acessoBanco.getRegistro();
 		try {
 			json = new JSONObject(capturaJson.toString());
-			resultado = "Documentos no banco: "+json.getString("doc_count")+"\n\n";
+			resultado = "Documentos no banco: "+json.getString("total_rows")+"\n\n";
 			
 			arrayDocumentos = json.getJSONArray("rows");
-			for (int i=1;i<=arrayDocumentos.length();i++){
-				documento=arrayDocumentos.getJSONObject(i);
+			for (int i=0;i<arrayDocumentos.length();i++){
+				//System.out.println(i);
+				documento = arrayDocumentos.getJSONObject(i);
 				dadosAluno = documento.getJSONObject("doc");
-				resultado = "Nome: "+ dadosAluno.getString("nome")+"\n"+
+				resultado += "Nome: "+ dadosAluno.getString("nome")+"\n"+
 						"Telefone: "+ dadosAluno.getString("telefone")+"\n"+
 						"Idade: "+ dadosAluno.getString("idade")+"\n"+
 						"Sexo: "+ dadosAluno.getString("sexo")+"\n\n";
@@ -143,10 +145,9 @@ public class JanelaPrincipal extends JFrame {
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
-		areaTexto.setSize(100, 100);
-		areaTexto.setText(resultado);
-		add(areaTexto);
 		
+		areaTexto.append(resultado);
+		add(areaTexto);
 		setTitle("Consulta de alunos");
 		repaint();
 		setVisible(true);
