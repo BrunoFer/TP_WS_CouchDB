@@ -5,18 +5,14 @@ import gui.JanelaPrincipal;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import javax.swing.JOptionPane;
 
+import aplicacao.AcessoBanco;
+
 public class TratadorEventosCadastro implements ActionListener {
 	private JanelaPrincipal janela;
-	public static final String acessoBanco = "http://localhost:28017/";
-	public static final String nomeBanco = "bancodobrasil";
-	public static final String nomeColecao = "alunos";
-
+	private AcessoBanco acessoBanco;
 	public TratadorEventosCadastro(JanelaPrincipal janela) {
 		super();
 		this.janela = janela;
@@ -50,21 +46,8 @@ public class TratadorEventosCadastro implements ActionListener {
 						json += ", sexo: \"F\"}";
 					System.out.print(json);
 
-					URL url;
 					try {
-						url = new URL(acessoBanco + nomeBanco + "/"
-								+ nomeColecao);
-						HttpURLConnection httpCon = (HttpURLConnection) url
-								.openConnection();
-						httpCon.setDoOutput(true);
-						httpCon.setRequestMethod("PUT");
-						OutputStreamWriter out = new OutputStreamWriter(
-								httpCon.getOutputStream());
-						out.write(json);
-						JOptionPane.showMessageDialog(null, "Tentativa de gravar no banco efetuada!",
-								"Cadastro de alunos",
-								JOptionPane.INFORMATION_MESSAGE);
-						out.close();
+						acessoBanco.setRegistro(json);
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}

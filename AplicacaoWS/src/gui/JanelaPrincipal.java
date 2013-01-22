@@ -11,13 +11,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import tratador_eventos.TratadorEventosCadastro;
 import tratador_eventos.TratadorEventosMenu;
 
 import net.miginfocom.swing.MigLayout;
 
+import aplicacao.AcessoBanco;
 import aplicacao.MenuPrincipal;
 
 public class JanelaPrincipal extends JFrame {
@@ -43,10 +48,12 @@ public class JanelaPrincipal extends JFrame {
 	private MenuPrincipal menuJanela;
 	private MigLayout migLayout = new MigLayout("wrap 3");
 	private TratadorEventosMenu tratadorEventosMenu;
-
+	private JTextArea areaTexto = new JTextArea();
+	private AcessoBanco acessoBanco;
 	
 	public JanelaPrincipal() {
 		super();
+		acessoBanco = new AcessoBanco();
 	}
 
 	public void montarJanela() {
@@ -75,7 +82,7 @@ public class JanelaPrincipal extends JFrame {
 		});
 	}
 	
-	public void Cadastrar() {
+	public void telaCadastrar() {
 		tratadorEventos = new TratadorEventosCadastro(this);
 		
 		painelPrincipal.setLayout(migLayout);
@@ -106,6 +113,27 @@ public class JanelaPrincipal extends JFrame {
 		botaoLimpar.addActionListener(tratadorEventos);
 
 		setTitle("Cadastro de alunos");
+		repaint();
+		setVisible(true);
+	}
+	
+	public void telaConsultar(){
+		String capturaJson;
+		JSONObject json;
+		String qtdeDocumentos = "";
+		
+		capturaJson = acessoBanco.getRegistro();
+		try {
+			json = new JSONObject(capturaJson.toString());
+			qtdeDocumentos = json.getString("doc_count");
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		}
+		areaTexto.setSize(100, 100);
+		areaTexto.setText("Número de documentos cadastrados: "+qtdeDocumentos);
+		add(areaTexto);
+		
+		setTitle("Consulta de alunos");
 		repaint();
 		setVisible(true);
 	}
