@@ -13,6 +13,7 @@ import aplicacao.AcessoBanco;
 public class TratadorEventosCadastro implements ActionListener {
 	private JanelaPrincipal janela;
 	private AcessoBanco acessoBanco;
+
 	public TratadorEventosCadastro(JanelaPrincipal janela) {
 		super();
 		this.janela = janela;
@@ -21,8 +22,8 @@ public class TratadorEventosCadastro implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == janela.getBotaoSalvar()) {
-			System.out.println("Voce clicou no botao salvar");
-			String json = "{";
+			//System.out.println("Voce clicou no botao salvar");
+			
 			if (janela.getTextoNome().getText().equals(""))
 				JOptionPane.showMessageDialog(null,
 						"Você deve preencher o campo nome!",
@@ -34,18 +35,7 @@ public class TratadorEventosCadastro implements ActionListener {
 							"Cadastro de Aluno",
 							JOptionPane.INFORMATION_MESSAGE);
 				else {
-					json += "nome: \"" + janela.getTextoNome().getText() + "\"";
-					json += ", telefone: \"" + janela.getTextoTel().getText()
-							+ "\"";
-					json += ", idade: "
-							+ Integer
-									.parseInt(janela.getTextoIdade().getText());
-					if (janela.getMasc().isSelected())
-						json += ", sexo: \"M\"}";
-					else
-						json += ", sexo: \"F\"}";
-					System.out.print(json);
-
+					String json = montarJson();
 					try {
 						acessoBanco.setRegistro(json);
 					} catch (IOException e1) {
@@ -55,10 +45,27 @@ public class TratadorEventosCadastro implements ActionListener {
 			}
 
 		} else if (e.getSource() == janela.getBotaoLimpar()) {
-			System.out.println("Voce clicou no botao limpar");
+			// System.out.println("Voce clicou no botao limpar");
 			janela.getTextoNome().setText("");
 			janela.getTextoIdade().setText("");
 			janela.getTextoTel().setText("");
 		}
 	}
+	
+	public String montarJson(){
+		String json = "";
+		json += "nome: \"" + janela.getTextoNome().getText() + "\"";
+		json += ", telefone: \"" + janela.getTextoTel().getText()
+				+ "\"";
+		json += ", idade: "
+				+ Integer
+						.parseInt(janela.getTextoIdade().getText());
+		if (janela.getMasc().isSelected())
+			json += ", sexo: \"M\"}";
+		else
+			json += ", sexo: \"F\"}";
+		
+		return json;
+	}
+	
 }
