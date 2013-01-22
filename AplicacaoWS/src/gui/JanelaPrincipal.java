@@ -14,6 +14,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -119,18 +120,31 @@ public class JanelaPrincipal extends JFrame {
 	
 	public void telaConsultar(){
 		String capturaJson;
-		JSONObject json;
-		String qtdeDocumentos = "";
+		JSONObject json,documento,dadosAluno;
+		JSONArray arrayDocumentos;
+		String resultado = "";
 		
+		acessoBanco.setNomeBanco(acessoBanco.getNomebanco()+"/_all_docs?include_docs=true");
 		capturaJson = acessoBanco.getRegistro();
 		try {
 			json = new JSONObject(capturaJson.toString());
-			qtdeDocumentos = json.getString("doc_count");
+			resultado = "Documentos no banco: "+json.getString("doc_count")+"\n\n";
+			
+			arrayDocumentos = json.getJSONArray("rows");
+			for (int i=1;i<=arrayDocumentos.length();i++){
+				documento=arrayDocumentos.getJSONObject(i);
+				dadosAluno = documento.getJSONObject("doc");
+				resultado = "Nome: "+ dadosAluno.getString("nome")+"\n"+
+						"Telefone: "+ dadosAluno.getString("telefone")+"\n"+
+						"Idade: "+ dadosAluno.getString("idade")+"\n"+
+						"Sexo: "+ dadosAluno.getString("sexo")+"\n\n";
+			}
+			
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
 		areaTexto.setSize(100, 100);
-		areaTexto.setText("Número de documentos cadastrados: "+qtdeDocumentos);
+		areaTexto.setText(resultado);
 		add(areaTexto);
 		
 		setTitle("Consulta de alunos");
