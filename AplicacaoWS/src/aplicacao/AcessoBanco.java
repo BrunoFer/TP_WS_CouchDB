@@ -9,6 +9,9 @@ import java.net.URL;
 
 import javax.swing.JOptionPane;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AcessoBanco {
 	private String urlMongoRest = "http://localhost:5984/";
 	private String nomeBanco = "trabalho";
@@ -33,6 +36,22 @@ public class AcessoBanco {
 	
 	public void setNomeBanco(String nomeBanco) {
 		this.nomeBanco = nomeBanco;
+	}
+	
+	public boolean verificaBancoCriado(){
+		String jsonRetornado = getRegistro();
+		JSONObject json;
+		try {
+			json = new JSONObject(jsonRetornado.toString());
+			jsonRetornado = json.getString("ok");
+			return true;
+		} catch (JSONException e) {
+			return false;
+		}
+	}
+	
+	public void inicializaBanco(){
+		
 	}
 	
 	public String getRegistro(){
