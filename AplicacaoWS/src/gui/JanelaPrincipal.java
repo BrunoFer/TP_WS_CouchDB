@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -85,7 +84,7 @@ public class JanelaPrincipal extends JFrame {
 	}
 	
 	public void telaCadastrar() {
-		tratadorEventos = new TratadorEventosCadastro(this);
+		tratadorEventos = new TratadorEventosCadastro(this,acessoBanco);
 		
 		painelPrincipal.setLayout(migLayout);
 		
