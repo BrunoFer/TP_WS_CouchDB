@@ -14,9 +14,10 @@ public class TratadorEventosCadastro implements ActionListener {
 	private JanelaPrincipal janela;
 	private AcessoBanco acessoBanco;
 
-	public TratadorEventosCadastro(JanelaPrincipal janela) {
+	public TratadorEventosCadastro(JanelaPrincipal janela, AcessoBanco acessoBanco) {
 		super();
 		this.janela = janela;
+		this.acessoBanco = acessoBanco;
 	}
 
 	@Override
@@ -37,6 +38,7 @@ public class TratadorEventosCadastro implements ActionListener {
 				else {
 					String json = montarJson();
 					try {
+						
 						acessoBanco.setRegistro(json);
 					} catch (IOException e1) {
 						e1.printStackTrace();
