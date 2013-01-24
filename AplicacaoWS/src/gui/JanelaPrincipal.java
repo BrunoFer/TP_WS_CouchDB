@@ -3,6 +3,7 @@ package gui;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -118,13 +119,13 @@ public class JanelaPrincipal extends JFrame {
 		setVisible(true);
 	}
 	
-	public void telaConsultar(){
+	public void telaConsultar() throws IOException{
 		String capturaJson;
 		JSONObject json,documento,dadosAluno;
 		JSONArray arrayDocumentos;
 		String resultado = "";
 		
-		String url = acessoBanco.getUrlmongorest()+"/"+acessoBanco.getNomebanco()+"/_all_docs?include_docs=true";
+		String url = acessoBanco.getUrlmongorest()+acessoBanco.getNomebanco()+"/_all_docs?include_docs=true";
 		acessoBanco.setNomeBanco(url);
 		capturaJson = acessoBanco.getRegistro(url);
 		System.out.println(capturaJson);

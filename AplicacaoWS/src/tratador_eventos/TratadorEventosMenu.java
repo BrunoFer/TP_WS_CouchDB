@@ -4,6 +4,7 @@ import gui.JanelaPrincipal;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class TratadorEventosMenu implements ActionListener {
 
@@ -19,7 +20,11 @@ public class TratadorEventosMenu implements ActionListener {
 			janelaPrincipal.telaCadastrar();
 		} else if (e.getSource() == janelaPrincipal.getMenuJanela().getExibir()) {
 			janelaPrincipal.Limpar();
-			janelaPrincipal.telaConsultar();
+			try {
+				janelaPrincipal.telaConsultar();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			
 		} else if (e.getSource() == janelaPrincipal.getMenuJanela().getExit()) {
 			System.exit(0);

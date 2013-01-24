@@ -1,6 +1,7 @@
 package aplicacao;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -26,7 +27,9 @@ public class AcessoBanco {
 	private InputStreamReader iReader;
 	private String capturaJson;
 
-	public AcessoBanco() {
+	public AcessoBanco() throws ClientProtocolException, IOException {
+		if (!verificaBancoCriado())
+			inicializaBanco();
 	}
 
 	public int getNomeDocumento() {
@@ -53,18 +56,36 @@ public class AcessoBanco {
 		this.nomeBanco = nomeBanco;
 	}
 
-	public boolean verificaBancoCriado() {
+	public String getRegistro(String url) throws IOException {
+		try {
+			this.urlConsulta = new URL(url);
+
+			// Cria um stream de entrada do conteúdo.
+			this.iReader = new InputStreamReader(this.urlConsulta.openStream());
+			this.bReader = new BufferedReader(this.iReader);
+			System.out.println("print 2");
+			this.capturaJson = "";
+
+			// Capturando as linhas com a resposta da consulta ao site dos
+			// correios.
+			while (this.bReader.ready()) {
+				this.capturaJson += this.bReader.readLine();
+			}
+			// retorna a string de retorno da requisição
+			return capturaJson;
+		} catch (FileNotFoundException e1) {
+			System.out.println(capturaJson);
+			return null;
+		}
+	}
+
+	public boolean verificaBancoCriado() throws IOException {
 		setNomeBanco("trabalho");
 		String url = getUrlmongorest() + getNomebanco();
 		String jsonRetornado = getRegistro(url);
-		JSONObject json = new JSONObject();
-		try {
-			json = new JSONObject(jsonRetornado.toString());
-			jsonRetornado = json.getString("error");
+		if (jsonRetornado == null)
 			return false;
-		} catch (JSONException e) {
-			return true;
-		}
+		return true;
 	}
 
 	public void inicializaBanco() throws ClientProtocolException, IOException {
@@ -75,38 +96,9 @@ public class AcessoBanco {
 		System.out.println(response);
 	}
 
-	public String getRegistro(String url) {
-		try {
-			this.urlConsulta = new URL(url);
-
-			System.out.println(this.urlConsulta.openStream());
-			// Cria um stream de entrada do conteúdo.
-			this.iReader = new InputStreamReader(this.urlConsulta.openStream());
-			System.out.println("print 1");
-			this.bReader = new BufferedReader(this.iReader);
-			System.out.println("print 2");
-			this.capturaJson = "";
-			
-			// Capturando as linhas com a resposta da consulta ao site dos
-			// correios.
-			while (this.bReader.ready()) {
-				this.capturaJson += this.bReader.readLine();
-			}
-			System.out.println(capturaJson);
-			// retorna a string de retorno da requisição
-			return capturaJson;
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			System.out.println(capturaJson);
-
-		}
-		return null;
-	}
-
-	public void atualizaNomeDocumento() {
+	public void atualizaNomeDocumento() throws IOException {
 		setNomeBanco("trabalho");
-		String url = getUrlmongorest() + "/" + getNomebanco();
+		String url = getUrlmongorest() + getNomebanco();
 		String jsonRetornado = getRegistro(url);
 		JSONObject json;
 		try {
