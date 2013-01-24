@@ -12,12 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import tratador_eventos.TratadorEventosCadastro;
 import tratador_eventos.TratadorEventosMenu;
@@ -50,12 +45,13 @@ public class JanelaPrincipal extends JFrame {
 	private MenuPrincipal menuJanela;
 	private MigLayout migLayout = new MigLayout("wrap 3");
 	private TratadorEventosMenu tratadorEventosMenu;
-	private JTextArea areaTexto = new JTextArea();
+	private JLabel labelConsulta = new JLabel();
 	private AcessoBanco acessoBanco;
 	
 	public JanelaPrincipal(AcessoBanco acessoBanco) {
 		super();
 		this.acessoBanco = acessoBanco;
+		setTitle("Application Student");
 	}
 
 	public void montarJanela() {
@@ -114,42 +110,14 @@ public class JanelaPrincipal extends JFrame {
 		botaoSalvar.addActionListener(tratadorEventos);
 		botaoLimpar.addActionListener(tratadorEventos);
 
-		setTitle("Cadastro de alunos");
 		repaint();
 		setVisible(true);
 	}
 	
 	public void telaConsultar() throws IOException{
-		String capturaJson;
-		JSONObject json,documento,dadosAluno;
-		JSONArray arrayDocumentos;
-		String resultado = "";
-		
-		String url = acessoBanco.getUrlmongorest()+acessoBanco.getNomebanco()+"/_all_docs?include_docs=true";
-		acessoBanco.setNomeBanco(url);
-		capturaJson = acessoBanco.getRegistro(url);
-		System.out.println(capturaJson);
-		try {
-			json = new JSONObject(capturaJson.toString());
-			resultado = "Documentos no banco: "+json.getString("total_rows")+"\n\n";
-			
-			arrayDocumentos = json.getJSONArray("rows");
-			for (int i=0;i<arrayDocumentos.length();i++){
-				//System.out.println(i);
-				documento = arrayDocumentos.getJSONObject(i);
-				dadosAluno = documento.getJSONObject("doc");
-				resultado += "Nome: "+ dadosAluno.getString("nome")+"\n"+
-						"Telefone: "+ dadosAluno.getString("telefone")+"\n"+
-						"Idade: "+ dadosAluno.getString("idade")+"\n"+
-						"Sexo: "+ dadosAluno.getString("sexo")+"\n\n";
-			}
-			
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		}
-		
-		areaTexto.append(resultado);
-		add(areaTexto);
+		String json = acessoBanco.buscaDocumentos();
+		labelConsulta.setText(json);
+		add(labelConsulta);
 		setTitle("Consulta de alunos");
 		repaint();
 		setVisible(true);

@@ -15,6 +15,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -56,25 +57,57 @@ public class AcessoBanco {
 		this.nomeBanco = nomeBanco;
 	}
 
+	public String buscaDocumentos() throws IOException{
+		JSONObject json,documento,dadosAluno;
+		JSONArray arrayDocumentos;
+		String resultado = "";
+		
+		String url = getUrlmongorest()+getNomebanco()+"/_all_docs?include_docs=true";
+		System.out.println(url);
+		String jsonString = getRegistro(url);
+
+		try {
+			json = new JSONObject(jsonString.toString());
+			resultado = "Documentos no banco: "+json.getString("total_rows")+"\n\n";
+			
+			arrayDocumentos = json.getJSONArray("rows");
+			for (int i=0;i<arrayDocumentos.length();i++){
+				documento = arrayDocumentos.getJSONObject(i);
+				dadosAluno = documento.getJSONObject("doc");
+				resultado += "Nome: "+ dadosAluno.getString("nome")+"\n"+
+						"Telefone: "+ dadosAluno.getString("telefone")+"\n"+
+						"Idade: "+ dadosAluno.getString("idade")+"\n"+
+						"Sexo: "+ dadosAluno.getString("sexo")+"\n\n";
+			}
+			
+			return resultado;
+		} catch (JSONException e1) {
+			System.out.println("Não conseguiu recuperar o json!");
+		}
+		return null;
+	}
+	
 	public String getRegistro(String url) throws IOException {
 		try {
 			this.urlConsulta = new URL(url);
 
+			System.out.println("Entrei aqui 1");
 			// Cria um stream de entrada do conteúdo.
 			this.iReader = new InputStreamReader(this.urlConsulta.openStream());
+			System.out.println("Entrei aqui 2");
 			this.bReader = new BufferedReader(this.iReader);
-			System.out.println("print 2");
+			System.out.println("Entrei aqui 3");
 			this.capturaJson = "";
+			System.out.println("tenho isso no json"+capturaJson);
 
-			// Capturando as linhas com a resposta da consulta ao site dos
-			// correios.
+			// Capturando as linhas com a resposta do CouchDB
 			while (this.bReader.ready()) {
 				this.capturaJson += this.bReader.readLine();
 			}
 			// retorna a string de retorno da requisição
+			System.out.println("tem isso agora" + capturaJson);
 			return capturaJson;
 		} catch (FileNotFoundException e1) {
-			System.out.println(capturaJson);
 			return null;
 		}
 	}
