@@ -52,9 +52,9 @@ public class JanelaPrincipal extends JFrame {
 	private JTextArea areaTexto = new JTextArea();
 	private AcessoBanco acessoBanco;
 	
-	public JanelaPrincipal() {
+	public JanelaPrincipal(AcessoBanco acessoBanco) {
 		super();
-		acessoBanco = new AcessoBanco();
+		this.acessoBanco = acessoBanco;
 	}
 
 	public void montarJanela() {
@@ -127,6 +127,7 @@ public class JanelaPrincipal extends JFrame {
 		String url = acessoBanco.getUrlmongorest()+"/"+acessoBanco.getNomebanco()+"/_all_docs?include_docs=true";
 		acessoBanco.setNomeBanco(url);
 		capturaJson = acessoBanco.getRegistro(url);
+		System.out.println(capturaJson);
 		try {
 			json = new JSONObject(capturaJson.toString());
 			resultado = "Documentos no banco: "+json.getString("total_rows")+"\n\n";

@@ -8,6 +8,7 @@ import java.net.URL;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -25,7 +26,8 @@ public class AcessoBanco {
 	private InputStreamReader iReader;
 	private String capturaJson;
 
-	public AcessoBanco() {}
+	public AcessoBanco() {
+	}
 
 	public int getNomeDocumento() {
 		return nomeDocumento;
@@ -53,9 +55,9 @@ public class AcessoBanco {
 
 	public boolean verificaBancoCriado() {
 		setNomeBanco("trabalho");
-		String url = getUrlmongorest()+"/"+getNomebanco();
+		String url = getUrlmongorest() + getNomebanco();
 		String jsonRetornado = getRegistro(url);
-		JSONObject json;
+		JSONObject json = new JSONObject();
 		try {
 			json = new JSONObject(jsonRetornado.toString());
 			jsonRetornado = json.getString("error");
@@ -65,42 +67,52 @@ public class AcessoBanco {
 		}
 	}
 
-	public void inicializaBanco() {
-		
+	public void inicializaBanco() throws ClientProtocolException, IOException {
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		HttpPut putRequest = new HttpPut(URI.create(urlMongoRest + nomeBanco));
+
+		HttpResponse response = httpClient.execute(putRequest);
+		System.out.println(response);
 	}
 
 	public String getRegistro(String url) {
 		try {
 			this.urlConsulta = new URL(url);
 
+			System.out.println(this.urlConsulta.openStream());
 			// Cria um stream de entrada do conteúdo.
 			this.iReader = new InputStreamReader(this.urlConsulta.openStream());
+			System.out.println("print 1");
 			this.bReader = new BufferedReader(this.iReader);
+			System.out.println("print 2");
 			this.capturaJson = "";
-
+			
 			// Capturando as linhas com a resposta da consulta ao site dos
 			// correios.
 			while (this.bReader.ready()) {
 				this.capturaJson += this.bReader.readLine();
 			}
+			System.out.println(capturaJson);
 			// retorna a string de retorno da requisição
 			return capturaJson;
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			System.out.println(capturaJson);
+
 		}
 		return null;
 	}
-	
-	public void atualizaNomeDocumento(){
+
+	public void atualizaNomeDocumento() {
 		setNomeBanco("trabalho");
-		String url = getUrlmongorest()+"/"+getNomebanco();
+		String url = getUrlmongorest() + "/" + getNomebanco();
 		String jsonRetornado = getRegistro(url);
 		JSONObject json;
 		try {
 			json = new JSONObject(jsonRetornado.toString());
 			jsonRetornado = json.getString("doc_count");
-			setNomeDocumento(Integer.parseInt(jsonRetornado));			
+			setNomeDocumento(Integer.parseInt(jsonRetornado));
 		} catch (JSONException e) {
 		}
 	}
@@ -108,12 +120,13 @@ public class AcessoBanco {
 	public void setRegistro(String json) throws IOException {
 		atualizaNomeDocumento();
 		DefaultHttpClient httpClient = new DefaultHttpClient();
-		HttpPut putRequest = new HttpPut(URI.create(urlMongoRest+nomeBanco+"/"+nomeDocumento));
-		HttpEntity input = new StringEntity(json,ContentType.APPLICATION_JSON);
+		HttpPut putRequest = new HttpPut(URI.create(urlMongoRest + nomeBanco
+				+ "/" + nomeDocumento));
+		HttpEntity input = new StringEntity(json, ContentType.APPLICATION_JSON);
 
 		putRequest.setEntity(input);
 		HttpResponse response = httpClient.execute(putRequest);
 		System.out.println(response);
-		setNomeDocumento(getNomeDocumento()+1);
+		setNomeDocumento(getNomeDocumento() + 1);
 	}
 }
