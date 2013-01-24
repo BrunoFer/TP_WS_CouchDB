@@ -55,17 +55,17 @@ public class TratadorEventosCadastro implements ActionListener {
 	}
 	
 	public String montarJson(){
-		String json = "";
-		json += "nome: \"" + janela.getTextoNome().getText() + "\"";
-		json += ", telefone: \"" + janela.getTextoTel().getText()
+		String json = "{";
+		json += "\"nome\": \"" + janela.getTextoNome().getText() + "\"";
+		json += ", \"telefone\": \"" + janela.getTextoTel().getText()
 				+ "\"";
-		json += ", idade: "
+		json += ", \"idade\": "
 				+ Integer
 						.parseInt(janela.getTextoIdade().getText());
 		if (janela.getMasc().isSelected())
-			json += ", sexo: \"M\"}";
+			json += ", \"sexo\": \"M\"}";
 		else
-			json += ", sexo: \"F\"}";
+			json += ", \"sexo\": \"F\"}";
 		
 		return json;
 	}

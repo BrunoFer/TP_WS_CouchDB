@@ -124,8 +124,9 @@ public class JanelaPrincipal extends JFrame {
 		JSONArray arrayDocumentos;
 		String resultado = "";
 		
-		acessoBanco.setNomeBanco(acessoBanco.getNomebanco()+"/_all_docs?include_docs=true");
-		capturaJson = acessoBanco.getRegistro();
+		String url = acessoBanco.getUrlmongorest()+"/"+acessoBanco.getNomebanco()+"/_all_docs?include_docs=true";
+		acessoBanco.setNomeBanco(url);
+		capturaJson = acessoBanco.getRegistro(url);
 		try {
 			json = new JSONObject(capturaJson.toString());
 			resultado = "Documentos no banco: "+json.getString("total_rows")+"\n\n";
