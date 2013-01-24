@@ -91,21 +91,16 @@ public class AcessoBanco {
 		try {
 			this.urlConsulta = new URL(url);
 
-			System.out.println("Entrei aqui 1");
 			// Cria um stream de entrada do conteúdo.
 			this.iReader = new InputStreamReader(this.urlConsulta.openStream());
-			System.out.println("Entrei aqui 2");
 			this.bReader = new BufferedReader(this.iReader);
-			System.out.println("Entrei aqui 3");
 			this.capturaJson = "";
-			System.out.println("tenho isso no json"+capturaJson);
 
 			// Capturando as linhas com a resposta do CouchDB
 			while (this.bReader.ready()) {
 				this.capturaJson += this.bReader.readLine();
 			}
 			// retorna a string de retorno da requisição
-			System.out.println("tem isso agora" + capturaJson);
 			return capturaJson;
 		} catch (FileNotFoundException e1) {
 			return null;

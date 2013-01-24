@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import tratador_eventos.TratadorEventosCadastro;
@@ -45,7 +46,7 @@ public class JanelaPrincipal extends JFrame {
 	private MenuPrincipal menuJanela;
 	private MigLayout migLayout = new MigLayout("wrap 3");
 	private TratadorEventosMenu tratadorEventosMenu;
-	private JLabel labelConsulta = new JLabel();
+	private JTextArea labelConsulta = new JTextArea();
 	private AcessoBanco acessoBanco;
 	
 	public JanelaPrincipal(AcessoBanco acessoBanco) {
@@ -116,8 +117,11 @@ public class JanelaPrincipal extends JFrame {
 	
 	public void telaConsultar() throws IOException{
 		String json = acessoBanco.buscaDocumentos();
+		painelPrincipal.setLayout(migLayout);
+		
 		labelConsulta.setText(json);
-		add(labelConsulta);
+		painelPrincipal.add(labelConsulta);
+		add(painelPrincipal);
 		setTitle("Consulta de alunos");
 		repaint();
 		setVisible(true);
