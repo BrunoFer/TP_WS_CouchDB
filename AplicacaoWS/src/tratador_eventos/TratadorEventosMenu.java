@@ -16,10 +16,10 @@ public class TratadorEventosMenu implements ActionListener {
 
 	public void actionPerformed(ActionEvent e){
 		if (e.getSource() == janelaPrincipal.getMenuJanela().getCadastro()) {
-			janelaPrincipal.Limpar();
-			janelaPrincipal.telaCadastrar();
+			janelaPrincipal.limparTela();
+			janelaPrincipal.limparTela();
 		} else if (e.getSource() == janelaPrincipal.getMenuJanela().getExibir()) {
-			janelaPrincipal.Limpar();
+			janelaPrincipal.limparTela();
 			try {
 				janelaPrincipal.telaConsultar();
 			} catch (IOException e1) {

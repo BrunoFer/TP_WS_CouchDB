@@ -127,10 +127,17 @@ public class JanelaPrincipal extends JFrame {
 		setVisible(true);
 	}
 	
-	public void Limpar() {
+	public void limparTela() {
 		painelPrincipal.removeAll();
 		repaint();
 		setVisible(true);
+	}
+	
+	public void limparDados() {
+		// System.out.println("Voce clicou no botao limpar");
+		getTextoNome().setText("");
+		getTextoIdade().setText("");
+		getTextoTel().setText("");
 	}
 	
 	public JTextField getTextoNome() {
