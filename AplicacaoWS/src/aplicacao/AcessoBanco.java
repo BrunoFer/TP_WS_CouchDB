@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 
@@ -24,8 +25,6 @@ public class AcessoBanco {
 	private String nomeBanco = "trabalho";
 	private int nomeDocumento = 1;
 	private URL urlConsulta;
-	private BufferedReader bReader;
-	private InputStreamReader iReader;
 	private String capturaJson;
 
 	public AcessoBanco() throws ClientProtocolException, IOException {
@@ -57,49 +56,54 @@ public class AcessoBanco {
 		this.nomeBanco = nomeBanco;
 	}
 
-	public String buscaDocumentos() throws IOException{
-		JSONObject json,documento,dadosAluno;
+	public String buscaDocumentos() throws IOException {
+		JSONObject json, documento, dadosAluno;
 		JSONArray arrayDocumentos;
 		String resultado = "";
-		
-		String url = getUrlmongorest()+getNomebanco()+"/_all_docs?include_docs=true";
+
+		String url = getUrlmongorest() + getNomebanco()
+				+ "/_all_docs?include_docs=true";
 		System.out.println(url);
 		String jsonString = getRegistro(url);
 
 		try {
 			json = new JSONObject(jsonString.toString());
-			resultado = "Documentos no banco: "+json.getString("total_rows")+"\n\n";
-			
+			resultado = "Documentos no banco: " + json.getString("total_rows")
+					+ "\n\n";
+
 			arrayDocumentos = json.getJSONArray("rows");
-			for (int i=0;i<arrayDocumentos.length();i++){
+			for (int i = 0; i < arrayDocumentos.length(); i++) {
 				documento = arrayDocumentos.getJSONObject(i);
 				dadosAluno = documento.getJSONObject("doc");
-				resultado += "Nome: "+ dadosAluno.getString("nome")+"\n"+
-						"Telefone: "+ dadosAluno.getString("telefone")+"\n"+
-						"Idade: "+ dadosAluno.getString("idade")+"\n"+
-						"Sexo: "+ dadosAluno.getString("sexo")+"\n\n";
+				resultado += "Nome: " + dadosAluno.getString("nome") + "\n"
+						+ "Telefone: " + dadosAluno.getString("telefone")
+						+ "\n" + "Idade: " + dadosAluno.getString("idade")
+						+ "\n" + "Sexo: " + dadosAluno.getString("sexo")
+						+ "\n\n";
 			}
-			
+
 			return resultado;
 		} catch (JSONException e1) {
 			System.out.println("Não conseguiu recuperar o json!");
 		}
 		return null;
 	}
-	
+
 	public String getRegistro(String url) throws IOException {
+		HttpURLConnection conexao;
+		BufferedReader rd;
+		String linha;
 		try {
 			this.urlConsulta = new URL(url);
-
-			// Cria um stream de entrada do conteúdo.
-			this.iReader = new InputStreamReader(this.urlConsulta.openStream());
-			this.bReader = new BufferedReader(this.iReader);
-			this.capturaJson = "";
-
-			// Capturando as linhas com a resposta do CouchDB
-			while (this.bReader.ready()) {
-				this.capturaJson += this.bReader.readLine();
+			capturaJson = "";
+			conexao = (HttpURLConnection) urlConsulta.openConnection();
+			conexao.setRequestMethod("GET");
+			rd = new BufferedReader(new InputStreamReader(
+					conexao.getInputStream()));
+			while ((linha = rd.readLine()) != null) {
+				capturaJson += linha;
 			}
+			rd.close();
 			// retorna a string de retorno da requisição
 			return capturaJson;
 		} catch (FileNotFoundException e1) {
