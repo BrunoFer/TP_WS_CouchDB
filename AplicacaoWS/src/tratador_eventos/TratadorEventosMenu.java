@@ -17,7 +17,7 @@ public class TratadorEventosMenu implements ActionListener {
 	public void actionPerformed(ActionEvent e){
 		if (e.getSource() == janelaPrincipal.getMenuJanela().getCadastro()) {
 			janelaPrincipal.limparTela();
-			janelaPrincipal.limparTela();
+			janelaPrincipal.telaCadastrar();
 		} else if (e.getSource() == janelaPrincipal.getMenuJanela().getExibir()) {
 			janelaPrincipal.limparTela();
 			try {
