@@ -1,8 +1,5 @@
 package gui;
 
-import java.awt.Color;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -16,12 +13,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import tratador_eventos.TratadorEventosCadastro;
 import tratador_eventos.TratadorEventosMenu;
+import tratador_eventos.TratadorEventosTabela;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -46,15 +43,19 @@ public class JanelaPrincipal extends JFrame {
 	private JButton botaoLimpar = new JButton("Limpar");
 	private JPanel botoes = new JPanel();
 	private ButtonGroup botoesSexo = new ButtonGroup();
-	private JSeparator separacao1 = new JSeparator();
-	private TratadorEventosCadastro tratadorEventos;
-	private MenuPrincipal menuJanela;
+	
 	private MigLayout migLayout = new MigLayout("wrap 3");
+	
+	private MenuPrincipal menuJanela;
 	private TratadorEventosMenu tratadorEventosMenu;
+	private TratadorEventosCadastro tratadorEventos;
+	private TratadorEventosTabela tratadorTabela;
+	
 	private AcessoBanco acessoBanco;
 	
 	private JTable tabelaAlunos;
 	private TabelaAluno tabelaAlunosModelo;
+	
 	
 	public JanelaPrincipal(AcessoBanco acessoBanco) {
 		super();
@@ -100,9 +101,6 @@ public class JanelaPrincipal extends JFrame {
 		botoes.add(botaoLimpar);
 		botoes.add(botaoSalvar);
 		
-		separacao1.setSize(500, 500);
-		separacao1.setBackground(new Color(100,100,100));
-		painelPrincipal.add(separacao1, "spanx 3");
 		painelPrincipal.add(nome, "gapleft 70, gaptop 150");
 		painelPrincipal.add(textoNome,"spanx 2");
 		painelPrincipal.add(telefone, "gapleft 70");
@@ -136,25 +134,11 @@ public class JanelaPrincipal extends JFrame {
 	}
 	
 	public void telaConsultar() throws IOException{
+		tratadorTabela = new TratadorEventosTabela(this);
+		
 		painelPrincipal.setLayout(migLayout);
 		final JTable tabela = getTabelaAlunos();
-		tabela.addMouseListener(new MouseListener() {
-			
-			public void mouseReleased(MouseEvent e) {}
-			
-			public void mousePressed(MouseEvent e) {}
-			
-			public void mouseExited(MouseEvent e) {}
-			
-			public void mouseEntered(MouseEvent e) {}
-			
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount()==2){
-					int i = tabela.getSelectedRow();
-					System.out.println(i);
-				}
-			}
-		});
+		tabela.addMouseListener(tratadorTabela);
 		painelPrincipal.add(new JScrollPane(tabela));
 		add(painelPrincipal);
 		repaint();
