@@ -155,14 +155,15 @@ public class JanelaPrincipal extends JFrame {
 	
 	public void telaConsultar() throws IOException{
 		tratadorEventosTabela = new TratadorEventosTabela(this);
-		tratadorEventosConsulta = new TratadorEventosConsulta(this);
 		final JTable tabela = getTabelaAlunos();
+		
+		tratadorEventosConsulta = new TratadorEventosConsulta(this,tabela,acessoBanco);
 		
 		MigLayout migLayout = new MigLayout("wrap 4");
 		painelPrincipal.setLayout(migLayout);
 		
 		consulta.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		painelPrincipal.add(consulta,"gapleft 250, gaptop 30, spanx 4");
+		painelPrincipal.add(consulta,"gapleft 230, gaptop 30, spanx 4");
 		painelPrincipal.add(new JScrollPane(tabela), "spanx 4,gapleft 150, gaptop 30");
 		
 		iconeEditar = new ImageIcon(caminhoImgEditar);

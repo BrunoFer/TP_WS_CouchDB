@@ -63,28 +63,6 @@ public class AcessoBanco {
 		return null;
 	}
 
-	public String getRegistro(String url) throws IOException {
-		HttpURLConnection conexao;
-		BufferedReader rd;
-		String linha;
-		try {
-			this.urlConsulta = new URL(url);
-			capturaJson = "";
-			conexao = (HttpURLConnection) urlConsulta.openConnection();
-			conexao.setRequestMethod("GET");
-			rd = new BufferedReader(new InputStreamReader(
-					conexao.getInputStream()));
-			while ((linha = rd.readLine()) != null) {
-				capturaJson += linha;
-			}
-			rd.close();
-			// retorna a string de retorno da requisição
-			return capturaJson;
-		} catch (FileNotFoundException e1) {
-			return null;
-		}
-	}
-
 	public boolean verificaBancoCriado() throws IOException {
 		setNomeBanco("trabalho");
 		String url = getUrlmongorest() + getNomebanco();
@@ -114,6 +92,14 @@ public class AcessoBanco {
 		} catch (JSONException e) {
 		}
 	}
+	
+	public void atualizarAluno(int numeroDocumento){
+		System.out.println("Cheguei aqui - numero do documento:"+numeroDocumento);
+	}
+	
+	public void deletarAluno(int numeroDocumento){
+		System.out.println("Cheguei aqui - numero do documento:"+numeroDocumento);
+	}
 
 	public void setRegistro(String json) throws IOException {
 		atualizaNomeDocumento();
@@ -126,6 +112,28 @@ public class AcessoBanco {
 		HttpResponse response = httpClient.execute(putRequest);
 		System.out.println(response);
 		setNomeDocumento(getNomeDocumento() + 1);
+	}
+	
+	public String getRegistro(String url) throws IOException {
+		HttpURLConnection conexao;
+		BufferedReader rd;
+		String linha;
+		try {
+			this.urlConsulta = new URL(url);
+			capturaJson = "";
+			conexao = (HttpURLConnection) urlConsulta.openConnection();
+			conexao.setRequestMethod("GET");
+			rd = new BufferedReader(new InputStreamReader(
+					conexao.getInputStream()));
+			while ((linha = rd.readLine()) != null) {
+				capturaJson += linha;
+			}
+			rd.close();
+			// retorna a string de retorno da requisição
+			return capturaJson;
+		} catch (FileNotFoundException e1) {
+			return null;
+		}
 	}
 	
 	public int getNomeDocumento() {
