@@ -2,6 +2,7 @@ package aplicacao;
 
 public class Aluno {
 	String nome, telefone;
+	int id;
 	int idade;
 	String sexo;
 	int qtdeAlunos;
@@ -10,13 +11,22 @@ public class Aluno {
 		this.qtdeAlunos++;
 	}
 
-	public Aluno(String nome, String telefone, int idade, String sexo) {
+	public Aluno(int id, String nome, String telefone, int idade, String sexo) {
 		super();
+		this.id=id;
 		this.nome = nome;
 		this.telefone = telefone;
 		this.idade = idade;
 		this.sexo = sexo;
 		this.qtdeAlunos++;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getNome() {
