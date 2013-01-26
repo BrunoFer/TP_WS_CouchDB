@@ -3,5 +3,13 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="bib/miglayout-4.0-swing.jar"/>
+	<classpathentry kind="lib" path="bib/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="bib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="bib/fluent-hc-4.2.3.jar"/>
+	<classpathentry kind="lib" path="bib/httpclient-4.2.3.jar"/>
+	<classpathentry kind="lib" path="bib/httpclient-cache-4.2.3.jar"/>
+	<classpathentry kind="lib" path="bib/httpcore-4.2.2.jar"/>
+	<classpathentry kind="lib" path="bib/httpmime-4.2.3.jar"/>
+	<classpathentry kind="lib" path="bib/json-20080701.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
