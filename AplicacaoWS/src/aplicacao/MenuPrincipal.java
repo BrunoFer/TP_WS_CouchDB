@@ -22,7 +22,7 @@ public class MenuPrincipal extends JMenuBar {
 		
 		exit = new JMenuItem("Sair");
 		cadastro = new JMenuItem("Cadastro");
-		exibir = new JMenuItem("Exibir");
+		exibir = new JMenuItem("Exibir alunos");
 		
 		menuArquivo.add(exit);
 		

@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -95,10 +96,33 @@ public class AcessoBanco {
 	
 	public void atualizarAluno(int numeroDocumento){
 		System.out.println("Cheguei aqui - numero do documento:"+numeroDocumento);
+		
 	}
 	
-	public void deletarAluno(int numeroDocumento){
+	public void deletarAluno(int numeroDocumento) throws IOException{
 		System.out.println("Cheguei aqui - numero do documento:"+numeroDocumento);
+		String url = getUrlmongorest()+getNomebanco()+"/"+numeroDocumento;
+		
+		//fazendo a requisicao do hash do documento do aluno
+		String jsonRetornado = getRegistro(url);
+		JSONObject json;
+		try {
+			json = new JSONObject(jsonRetornado.toString());
+			jsonRetornado = json.getString("_rev");
+			
+			//montando a url para deletar o documento do aluno
+			url = getUrlmongorest()+getNomebanco()+"/"+numeroDocumento+"?rev="+jsonRetornado;
+			removeRegistro(url);
+		} catch (JSONException e) {
+		}
+	}
+	
+	public void removeRegistro(String url) throws ClientProtocolException, IOException {
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		HttpDelete deleteRequest = new HttpDelete(url);
+		HttpResponse response = httpClient.execute(deleteRequest);
+		System.out.println(response);
+		
 	}
 
 	public void setRegistro(String json) throws IOException {
@@ -111,7 +135,6 @@ public class AcessoBanco {
 		putRequest.setEntity(input);
 		HttpResponse response = httpClient.execute(putRequest);
 		System.out.println(response);
-		setNomeDocumento(getNomeDocumento() + 1);
 	}
 	
 	public String getRegistro(String url) throws IOException {
