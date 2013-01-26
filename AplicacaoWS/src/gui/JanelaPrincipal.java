@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -12,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
-import javax.swing.JTextArea;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import tratador_eventos.TratadorEventosCadastro;
@@ -21,6 +23,7 @@ import tratador_eventos.TratadorEventosMenu;
 import net.miginfocom.swing.MigLayout;
 
 import aplicacao.AcessoBanco;
+import aplicacao.Aluno;
 import aplicacao.MenuPrincipal;
 
 public class JanelaPrincipal extends JFrame {
@@ -34,7 +37,6 @@ public class JanelaPrincipal extends JFrame {
 	private JTextField textoTel = new JTextField(12);
 	private JTextField textoIdade = new JTextField(5);
 	private JPanel painelPrincipal;
-	//private JCheckBox textoSexo = new JCheckBox();
 	private JRadioButton masc = new JRadioButton("Masculino");
 	private JRadioButton fem = new JRadioButton("Feminino");
 	private JButton botaoSalvar = new JButton("Salvar");
@@ -46,15 +48,18 @@ public class JanelaPrincipal extends JFrame {
 	private MenuPrincipal menuJanela;
 	private MigLayout migLayout = new MigLayout("wrap 3");
 	private TratadorEventosMenu tratadorEventosMenu;
-	private JTextArea labelConsulta = new JTextArea();
 	private AcessoBanco acessoBanco;
+	
+	private JTable tabelaAlunos;
+	private TabelaAluno tabelaAlunosModelo;
 	
 	public JanelaPrincipal(AcessoBanco acessoBanco) {
 		super();
 		this.acessoBanco = acessoBanco;
 		setTitle("Application Student");
+		
 	}
-
+	
 	public void montarJanela() {
 		tratadorEventosMenu = new TratadorEventosMenu(this);
 		menuJanela = new MenuPrincipal();
@@ -116,16 +121,35 @@ public class JanelaPrincipal extends JFrame {
 	}
 	
 	public void telaConsultar() throws IOException{
-		String json = acessoBanco.buscaDocumentos();
 		painelPrincipal.setLayout(migLayout);
-		
-		labelConsulta.setText(json);
-		painelPrincipal.add(labelConsulta);
+		painelPrincipal.add(getTabelaAlunos());
 		add(painelPrincipal);
-		setTitle("Consulta de alunos");
 		repaint();
 		setVisible(true);
 	}
+	
+	public JTable getTabelaAlunos() throws IOException{
+
+		if (tabelaAlunos == null) {
+            tabelaAlunos = new JTable();
+            tabelaAlunos.setModel(getTabelaModelo());
+        }
+        return tabelaAlunos;
+	}
+	
+	private TabelaAluno getTabelaModelo() throws IOException {
+        if (tabelaAlunosModelo == null) {
+            tabelaAlunosModelo = new TabelaAluno(pegaAlunos());
+        }
+        return tabelaAlunosModelo;
+    }
+
+	private List<Aluno> pegaAlunos() throws IOException {
+        List<Aluno> alunos = new ArrayList<Aluno>();
+		alunos = acessoBanco.buscaDocumentos();
+        return alunos;
+    }
+
 	
 	public void limparTela() {
 		painelPrincipal.removeAll();

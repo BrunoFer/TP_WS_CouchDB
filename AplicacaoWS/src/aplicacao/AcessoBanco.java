@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -56,33 +58,30 @@ public class AcessoBanco {
 		this.nomeBanco = nomeBanco;
 	}
 
-	public String buscaDocumentos() throws IOException {
+	public List<Aluno> buscaDocumentos() throws IOException {
+		List<Aluno> listaAlunos = new ArrayList<Aluno>();
 		JSONObject json, documento, dadosAluno;
 		JSONArray arrayDocumentos;
-		String resultado = "";
 
 		String url = getUrlmongorest() + getNomebanco()
 				+ "/_all_docs?include_docs=true";
-		System.out.println(url);
 		String jsonString = getRegistro(url);
 
 		try {
 			json = new JSONObject(jsonString.toString());
-			resultado = "Documentos no banco: " + json.getString("total_rows")
-					+ "\n\n";
 
 			arrayDocumentos = json.getJSONArray("rows");
 			for (int i = 0; i < arrayDocumentos.length(); i++) {
+				Aluno aluno = new Aluno();
 				documento = arrayDocumentos.getJSONObject(i);
 				dadosAluno = documento.getJSONObject("doc");
-				resultado += "Nome: " + dadosAluno.getString("nome") + "\n"
-						+ "Telefone: " + dadosAluno.getString("telefone")
-						+ "\n" + "Idade: " + dadosAluno.getString("idade")
-						+ "\n" + "Sexo: " + dadosAluno.getString("sexo")
-						+ "\n\n";
+				aluno.setNome(dadosAluno.getString("nome"));
+				aluno.setTelefone(dadosAluno.getString("telefone"));
+				aluno.setIdade(Integer.parseInt(dadosAluno.getString("idade")));
+				aluno.setSexo(dadosAluno.getString("sexo"));
+				listaAlunos.add(aluno);
 			}
-
-			return resultado;
+			return listaAlunos;
 		} catch (JSONException e1) {
 			System.out.println("Não conseguiu recuperar o json!");
 		}

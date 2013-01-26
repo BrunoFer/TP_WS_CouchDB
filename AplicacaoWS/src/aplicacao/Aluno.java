@@ -3,16 +3,20 @@ package aplicacao;
 public class Aluno {
 	String nome, telefone;
 	int idade;
-	char sexo;
+	String sexo;
+	int qtdeAlunos;
 
-	public Aluno() {}
+	public Aluno() {
+		this.qtdeAlunos++;
+	}
 
-	public Aluno(String nome, String telefone, int idade, char sexo) {
+	public Aluno(String nome, String telefone, int idade, String sexo) {
 		super();
 		this.nome = nome;
 		this.telefone = telefone;
 		this.idade = idade;
 		this.sexo = sexo;
+		this.qtdeAlunos++;
 	}
 
 	public String getNome() {
@@ -39,12 +43,16 @@ public class Aluno {
 		this.idade = idade;
 	}
 
-	public char getSexo() {
+	public String getSexo() {
 		return sexo;
 	}
 
-	public void setSexo(char sexo) {
+	public void setSexo(String sexo) {
 		this.sexo = sexo;
+	}
+
+	public int getQtdeAlunos() {
+		return qtdeAlunos;
 	}
 
 }
