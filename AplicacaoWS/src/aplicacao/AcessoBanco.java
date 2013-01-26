@@ -26,13 +26,17 @@ import org.json.JSONObject;
 public class AcessoBanco {
 	private String urlMongoRest = "http://localhost:5984/";
 	private String nomeBanco = "trabalho";
-	private int nomeDocumento = 1;
+	private int nomeDocumento;
 	private URL urlConsulta;
 	private String capturaJson;
 
 	public AcessoBanco() throws ClientProtocolException, IOException {
-		if (!verificaBancoCriado())
+		if (!verificaBancoCriado()) {
 			inicializaBanco();
+			this.nomeDocumento = 1;
+		} else {
+			this.nomeDocumento = maiorNumeroDocumento()+1;
+		}
 	}
 
 	public List<Aluno> buscaDocumentos() throws IOException {
@@ -82,52 +86,69 @@ public class AcessoBanco {
 		System.out.println(response);
 	}
 
-	public void atualizaNomeDocumento() throws IOException {
-		setNomeBanco("trabalho");
-		String url = getUrlmongorest() + getNomebanco();
+	public int maiorNumeroDocumento() throws IOException {
+		String sufixo = "/_all_docs";
+		String url = getUrlmongorest() + getNomebanco() + sufixo;
 		String jsonRetornado = getRegistro(url);
-		JSONObject json;
-		try {
-			json = new JSONObject(jsonRetornado.toString());
-			jsonRetornado = json.getString("doc_count");
-			setNomeDocumento(Integer.parseInt(jsonRetornado));
-		} catch (JSONException e) {
+		JSONArray arrayDocumentos;
+		JSONObject documento;
+		if (jsonRetornado == null) {
+			return 0;
+		} else {
+			JSONObject json;
+			int maiorNumero = 0;
+			try {
+				json = new JSONObject(jsonRetornado.toString());
+				arrayDocumentos = json.getJSONArray("rows");
+				for (int i = 0; i < arrayDocumentos.length(); i++) {
+					documento = arrayDocumentos.getJSONObject(i);
+					int numeroDocumento = Integer.parseInt(documento.getString("id"));
+					if (numeroDocumento>maiorNumero){
+						maiorNumero=numeroDocumento;
+					}
+				}
+			} catch (JSONException e) {
+				System.out.println("Erro ao manipular JSON!");
+			}
+			System.out.println(maiorNumero);
+			return maiorNumero;
 		}
 	}
-	
-	public void atualizarAluno(int numeroDocumento){
-		System.out.println("Cheguei aqui - numero do documento:"+numeroDocumento);
-		
+
+	public void atualizarAluno(int numeroDocumento) {
+		System.out.println("Cheguei aqui - numero do documento:"
+				+ numeroDocumento);
+
 	}
-	
-	public void deletarAluno(int numeroDocumento) throws IOException{
-		System.out.println("Cheguei aqui - numero do documento:"+numeroDocumento);
-		String url = getUrlmongorest()+getNomebanco()+"/"+numeroDocumento;
-		
-		//fazendo a requisicao do hash do documento do aluno
+
+	public void deletarAluno(int numeroDocumento) throws IOException {
+		String url = getUrlmongorest() + getNomebanco() + "/" + numeroDocumento;
+
+		// fazendo a requisicao do hash do documento do aluno
 		String jsonRetornado = getRegistro(url);
 		JSONObject json;
 		try {
 			json = new JSONObject(jsonRetornado.toString());
 			jsonRetornado = json.getString("_rev");
-			
-			//montando a url para deletar o documento do aluno
-			url = getUrlmongorest()+getNomebanco()+"/"+numeroDocumento+"?rev="+jsonRetornado;
+
+			// montando a url para deletar o documento do aluno
+			url = getUrlmongorest() + getNomebanco() + "/" + numeroDocumento
+					+ "?rev=" + jsonRetornado;
 			removeRegistro(url);
 		} catch (JSONException e) {
 		}
 	}
-	
-	public void removeRegistro(String url) throws ClientProtocolException, IOException {
+
+	public void removeRegistro(String url) throws ClientProtocolException,
+			IOException {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpDelete deleteRequest = new HttpDelete(url);
 		HttpResponse response = httpClient.execute(deleteRequest);
 		System.out.println(response);
-		
+
 	}
 
 	public void setRegistro(String json) throws IOException {
-		atualizaNomeDocumento();
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpPut putRequest = new HttpPut(URI.create(urlMongoRest + nomeBanco
 				+ "/" + nomeDocumento));
@@ -136,8 +157,9 @@ public class AcessoBanco {
 		putRequest.setEntity(input);
 		HttpResponse response = httpClient.execute(putRequest);
 		System.out.println(response);
+		setNomeDocumento(nomeDocumento+1);
 	}
-	
+
 	public String getRegistro(String url) throws IOException {
 		HttpURLConnection conexao;
 		BufferedReader rd;
@@ -159,7 +181,7 @@ public class AcessoBanco {
 			return null;
 		}
 	}
-	
+
 	public int getNomeDocumento() {
 		return nomeDocumento;
 	}
