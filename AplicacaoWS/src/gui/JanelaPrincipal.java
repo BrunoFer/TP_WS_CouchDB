@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import tratador_eventos.TratadorEventosCadastro;
+import tratador_eventos.TratadorEventosConsulta;
 import tratador_eventos.TratadorEventosMenu;
 import tratador_eventos.TratadorEventosTabela;
 
@@ -30,17 +33,21 @@ import aplicacao.MenuPrincipal;
 public class JanelaPrincipal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField textoNome = new JTextField(50);
 	
+	//Elementos usado em todas as interfaces
+	private MenuPrincipal menuJanela;
+	private JPanel painelPrincipal;
+	private AcessoBanco acessoBanco;
+	
+	//Elementos da Janela de Cadastro
 	private JLabel cadastro = new JLabel("Cadastro de aluno");
-	private JLabel consulta = new JLabel("Gerenciamento de Alunos");
 	private JLabel nome = new JLabel("Nome: ");
 	private JLabel telefone = new JLabel("Telefone: ");
 	private JLabel idade = new JLabel("Idade: ");
 	private JLabel sexo = new JLabel("Sexo: ");
+	private JTextField textoNome = new JTextField(50);
 	private JTextField textoTel = new JTextField(12);
 	private JTextField textoIdade = new JTextField(5);
-	private JPanel painelPrincipal;
 	private JRadioButton masc = new JRadioButton("Masculino");
 	private JRadioButton fem = new JRadioButton("Feminino");
 	private JButton botaoSalvar = new JButton("Salvar");
@@ -48,17 +55,23 @@ public class JanelaPrincipal extends JFrame {
 	private JPanel botoes = new JPanel();
 	private ButtonGroup botoesSexo = new ButtonGroup();
 	
-	private MigLayout migLayout = new MigLayout("wrap 3");
-	
-	private MenuPrincipal menuJanela;
-	private TratadorEventosMenu tratadorEventosMenu;
-	private TratadorEventosCadastro tratadorEventos;
-	private TratadorEventosTabela tratadorTabela;
-	
-	private AcessoBanco acessoBanco;
-	
+	//Elementos da janela de Consulta
 	private JTable tabelaAlunos;
+	private JPanel painelIcones;
 	private TabelaAluno tabelaAlunosModelo;
+	private String caminhoImgEditar;
+	private String caminhoImgExcluir;
+	private Icon iconeEditar;
+	private JButton botaoEditar;
+	private Icon iconeExcluir;
+	private JButton botaoExcluir;	
+	private JLabel consulta = new JLabel("Gerenciamento de Alunos");
+	
+	//Tratadores de eventos das janelas
+	private TratadorEventosMenu tratadorEventosMenu;
+	private TratadorEventosCadastro tratadorEventosCadastro;
+	private TratadorEventosTabela tratadorEventosTabela;
+	private TratadorEventosConsulta tratadorEventosConsulta;
 	
 	
 	public JanelaPrincipal(AcessoBanco acessoBanco) {
@@ -94,9 +107,22 @@ public class JanelaPrincipal extends JFrame {
 		});
 	}
 	
+	public void limparTela() {
+		painelPrincipal.removeAll();
+		repaint();
+		setVisible(true);
+	}
+	
+	public void limparDados() {
+		getTextoNome().setText("");
+		getTextoIdade().setText("");
+		getTextoTel().setText("");
+	}
+	
 	public void telaCadastrar() {
-		tratadorEventos = new TratadorEventosCadastro(this,acessoBanco);
+		tratadorEventosCadastro = new TratadorEventosCadastro(this,acessoBanco);
 		
+		MigLayout migLayout = new MigLayout("wrap 3");
 		painelPrincipal.setLayout(migLayout);
 		
 		botoesSexo.add(masc);
@@ -120,33 +146,40 @@ public class JanelaPrincipal extends JFrame {
 
 		add(painelPrincipal);
 		
-		botaoSalvar.addActionListener(tratadorEventos);
-		botaoLimpar.addActionListener(tratadorEventos);
+		botaoSalvar.addActionListener(tratadorEventosCadastro);
+		botaoLimpar.addActionListener(tratadorEventosCadastro);
 
 		repaint();
 		setVisible(true);
 	}
 	
-	public void limparTela() {
-		painelPrincipal.removeAll();
-		repaint();
-		setVisible(true);
-	}
-	
-	public void limparDados() {
-		getTextoNome().setText("");
-		getTextoIdade().setText("");
-		getTextoTel().setText("");
-	}
-	
 	public void telaConsultar() throws IOException{
-		tratadorTabela = new TratadorEventosTabela(this);
+		tratadorEventosTabela = new TratadorEventosTabela(this);
+		tratadorEventosConsulta = new TratadorEventosConsulta(this);
 		final JTable tabela = getTabelaAlunos();
 		
+		MigLayout migLayout = new MigLayout("wrap 4");
 		painelPrincipal.setLayout(migLayout);
 		
-		tabela.addMouseListener(tratadorTabela);
-		painelPrincipal.add(new JScrollPane(tabela));
+		consulta.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		painelPrincipal.add(consulta,"gapleft 250, gaptop 30, spanx 4");
+		painelPrincipal.add(new JScrollPane(tabela), "spanx 4,gapleft 150, gaptop 30");
+		
+		iconeEditar = new ImageIcon(caminhoImgEditar);
+		botaoEditar = new JButton(iconeEditar);
+		iconeExcluir = new ImageIcon(caminhoImgExcluir);
+		botaoExcluir = new JButton(iconeExcluir);
+		
+		painelIcones = new JPanel();
+		painelIcones.add(botaoEditar);
+		painelIcones.add(botaoExcluir);
+		
+		botaoEditar.addActionListener(tratadorEventosConsulta);
+		botaoExcluir.addActionListener(tratadorEventosConsulta);
+		
+		tabela.addMouseListener(tratadorEventosTabela);
+		
+		painelPrincipal.add(painelIcones,"gaptop 30,gapleft 220, gapbottom 40, spanx 4");
 		add(painelPrincipal);
 		repaint();
 		setVisible(true);
@@ -174,6 +207,30 @@ public class JanelaPrincipal extends JFrame {
         return alunos;
     }
 	
+	public JButton getBotaoEditar() {
+		return botaoEditar;
+	}
+
+	public JButton getBotaoExcluir() {
+		return botaoExcluir;
+	}
+
+	public String getCaminhoImgEditar() {
+		return caminhoImgEditar;
+	}
+
+	public void setCaminhoImgEditar(String caminhoImgEditar) {
+		this.caminhoImgEditar = caminhoImgEditar;
+	}
+
+	public String getCaminhoImgExcluir() {
+		return caminhoImgExcluir;
+	}
+
+	public void setCaminhoImgExcluir(String caminhoImgExcluir) {
+		this.caminhoImgExcluir = caminhoImgExcluir;
+	}
+
 	public JTextField getTextoNome() {
 		return textoNome;
 	}
