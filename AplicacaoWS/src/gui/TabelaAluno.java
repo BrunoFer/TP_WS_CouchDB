@@ -8,7 +8,6 @@ import javax.swing.table.AbstractTableModel;
 import aplicacao.Aluno;
 
 public class TabelaAluno extends AbstractTableModel{
-
 	/**
 	 * 
 	 */
@@ -22,8 +21,6 @@ public class TabelaAluno extends AbstractTableModel{
 	private static final int IDADE = 2;
 	private static final int SEXO = 3;
 
-
-
 	public TabelaAluno() {
         linhas = new ArrayList<Aluno>();
     }
@@ -32,7 +29,6 @@ public class TabelaAluno extends AbstractTableModel{
         linhas = new ArrayList<Aluno>(listaAlunos);
     }
 
-	
 	@Override
 	public int getColumnCount() {
 		return colunas.length;
@@ -56,7 +52,7 @@ public class TabelaAluno extends AbstractTableModel{
 	    case TELEFONE:
 	        return String.class;
 	    case IDADE:
-	    	return String.class;
+	    	return Integer.class;
 	    case SEXO:
 	    	return String.class;
 	    default:

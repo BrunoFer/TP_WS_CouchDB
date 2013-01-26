@@ -34,30 +34,6 @@ public class AcessoBanco {
 			inicializaBanco();
 	}
 
-	public int getNomeDocumento() {
-		return nomeDocumento;
-	}
-
-	public void setNomeDocumento(int nomeDocumento) {
-		this.nomeDocumento = nomeDocumento;
-	}
-
-	public String getUrlmongorest() {
-		return urlMongoRest;
-	}
-
-	public String getNomebanco() {
-		return nomeBanco;
-	}
-
-	public void setUrlMongoRest(String urlMongoRest) {
-		this.urlMongoRest = urlMongoRest;
-	}
-
-	public void setNomeBanco(String nomeBanco) {
-		this.nomeBanco = nomeBanco;
-	}
-
 	public List<Aluno> buscaDocumentos() throws IOException {
 		List<Aluno> listaAlunos = new ArrayList<Aluno>();
 		JSONObject json, documento, dadosAluno;
@@ -69,7 +45,6 @@ public class AcessoBanco {
 
 		try {
 			json = new JSONObject(jsonString.toString());
-
 			arrayDocumentos = json.getJSONArray("rows");
 			for (int i = 0; i < arrayDocumentos.length(); i++) {
 				Aluno aluno = new Aluno();
@@ -151,5 +126,29 @@ public class AcessoBanco {
 		HttpResponse response = httpClient.execute(putRequest);
 		System.out.println(response);
 		setNomeDocumento(getNomeDocumento() + 1);
+	}
+	
+	public int getNomeDocumento() {
+		return nomeDocumento;
+	}
+
+	public void setNomeDocumento(int nomeDocumento) {
+		this.nomeDocumento = nomeDocumento;
+	}
+
+	public String getUrlmongorest() {
+		return urlMongoRest;
+	}
+
+	public String getNomebanco() {
+		return nomeBanco;
+	}
+
+	public void setUrlMongoRest(String urlMongoRest) {
+		this.urlMongoRest = urlMongoRest;
+	}
+
+	public void setNomeBanco(String nomeBanco) {
+		this.nomeBanco = nomeBanco;
 	}
 }

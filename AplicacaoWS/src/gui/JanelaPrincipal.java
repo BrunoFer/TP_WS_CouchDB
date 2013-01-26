@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -120,9 +123,39 @@ public class JanelaPrincipal extends JFrame {
 		setVisible(true);
 	}
 	
+	public void limparTela() {
+		painelPrincipal.removeAll();
+		repaint();
+		setVisible(true);
+	}
+	
+	public void limparDados() {
+		getTextoNome().setText("");
+		getTextoIdade().setText("");
+		getTextoTel().setText("");
+	}
+	
 	public void telaConsultar() throws IOException{
 		painelPrincipal.setLayout(migLayout);
-		painelPrincipal.add(getTabelaAlunos());
+		final JTable tabela = getTabelaAlunos();
+		tabela.addMouseListener(new MouseListener() {
+			
+			public void mouseReleased(MouseEvent e) {}
+			
+			public void mousePressed(MouseEvent e) {}
+			
+			public void mouseExited(MouseEvent e) {}
+			
+			public void mouseEntered(MouseEvent e) {}
+			
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount()==2){
+					int i = tabela.getSelectedRow();
+					System.out.println(i);
+				}
+			}
+		});
+		painelPrincipal.add(new JScrollPane(tabela));
 		add(painelPrincipal);
 		repaint();
 		setVisible(true);
@@ -149,20 +182,6 @@ public class JanelaPrincipal extends JFrame {
 		alunos = acessoBanco.buscaDocumentos();
         return alunos;
     }
-
-	
-	public void limparTela() {
-		painelPrincipal.removeAll();
-		repaint();
-		setVisible(true);
-	}
-	
-	public void limparDados() {
-		// System.out.println("Voce clicou no botao limpar");
-		getTextoNome().setText("");
-		getTextoIdade().setText("");
-		getTextoTel().setText("");
-	}
 	
 	public JTextField getTextoNome() {
 		return textoNome;
