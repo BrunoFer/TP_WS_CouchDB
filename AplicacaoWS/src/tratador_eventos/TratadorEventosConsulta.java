@@ -33,7 +33,7 @@ public class TratadorEventosConsulta implements ActionListener{
 					janela.limparTela();
 					janela.telaConsultar();
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("Erro IOException- botao editar - actionPerformed()/TratadorEventosConsulta.java");
 				}
 			}
 		} else if (evento.getSource()==janela.getBotaoExcluir()){
@@ -47,7 +47,7 @@ public class TratadorEventosConsulta implements ActionListener{
 						janela.limparTela();
 						janela.telaConsultar();
 					} catch (IOException e) {
-						e.printStackTrace();
+						System.out.println("Erro IOException - botao excluir - actionPerformed()/TratadorEventosConsulta.java");
 					}
 				}
 			}

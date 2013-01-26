@@ -10,6 +10,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -64,7 +66,7 @@ public class AcessoBanco {
 			}
 			return listaAlunos;
 		} catch (JSONException e1) {
-			System.out.println("Não conseguiu recuperar o json!");
+			System.out.println("Erro ao manipular JSON! - buscaDocumentos()/AcessoBanco.java");
 		}
 		return null;
 	}
@@ -108,9 +110,9 @@ public class AcessoBanco {
 					}
 				}
 			} catch (JSONException e) {
-				System.out.println("Erro ao manipular JSON!");
+				System.out.println("Erro ao manipular JSON! - maiorNumeroDocumento()/AcessoBanco.java");
 			}
-			System.out.println(maiorNumero);
+			//System.out.println(maiorNumero);
 			return maiorNumero;
 		}
 	}
@@ -136,6 +138,7 @@ public class AcessoBanco {
 					+ "?rev=" + jsonRetornado;
 			removeRegistro(url);
 		} catch (JSONException e) {
+			System.out.println("Erro ao manipular JSON! - deletarAluno()/AcessoBanco.java");
 		}
 	}
 
@@ -145,7 +148,7 @@ public class AcessoBanco {
 		HttpDelete deleteRequest = new HttpDelete(url);
 		HttpResponse response = httpClient.execute(deleteRequest);
 		System.out.println(response);
-
+		JOptionPane.showMessageDialog(null, "Registro excluído com sucesso!",  "Exclusão" , JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public void setRegistro(String json) throws IOException {
@@ -158,6 +161,7 @@ public class AcessoBanco {
 		HttpResponse response = httpClient.execute(putRequest);
 		System.out.println(response);
 		setNomeDocumento(nomeDocumento+1);
+		JOptionPane.showMessageDialog(null, "Registro incluído com sucesso!",  "Cadastro" , JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public String getRegistro(String url) throws IOException {
@@ -178,6 +182,7 @@ public class AcessoBanco {
 			// retorna a string de retorno da requisição
 			return capturaJson;
 		} catch (FileNotFoundException e1) {
+			System.out.println("Erro na conexão! - setRegistro()/AcessoBanco.java");
 			return null;
 		}
 	}

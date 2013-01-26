@@ -36,17 +36,14 @@ public class TratadorEventosCadastro implements ActionListener {
 					String json = montarJson();
 					try {
 						acessoBanco.setRegistro(json);
-						showMessageDialog(null, "Aluno Cadastrado com sucesso!", 
-								"Cadastro de Aluno", INFORMATION_MESSAGE);
 						janela.limparDados();
 					} catch (IOException e1) {
-						e1.printStackTrace();
+						System.out.println("Erro IOException- botao salvar - actionPerformed()/TratadorEventosCadastro.java");
 					}
 				}
 			}
 
 		} else if (e.getSource() == janela.getBotaoLimpar()) {
-			// System.out.println("Voce clicou no botao limpar");
 			janela.limparDados();
 		}
 	}

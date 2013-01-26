@@ -111,6 +111,7 @@ public class JanelaPrincipal extends JFrame {
 	public void limparTela() {
 		painelPrincipal.removeAll();
 		repaint();
+		limparDados();
 		setVisible(true);
 	}
 	

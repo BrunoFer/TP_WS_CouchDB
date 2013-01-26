@@ -23,7 +23,7 @@ public class TratadorEventosMenu implements ActionListener {
 				janelaPrincipal.limparTela();
 				janelaPrincipal.telaConsultar();
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				System.out.println("Erro IOException - getexibir() - actionPerformed()/TratadorEventosMenu.java");
 			}
 			
 		} else if (e.getSource() == janelaPrincipal.getMenuJanela().getExit()) {
