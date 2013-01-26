@@ -51,6 +51,7 @@ public class AcessoBanco {
 				Aluno aluno = new Aluno();
 				documento = arrayDocumentos.getJSONObject(i);
 				dadosAluno = documento.getJSONObject("doc");
+				aluno.setId(Integer.parseInt(dadosAluno.getString("_id")));
 				aluno.setNome(dadosAluno.getString("nome"));
 				aluno.setTelefone(dadosAluno.getString("telefone"));
 				aluno.setIdade(Integer.parseInt(dadosAluno.getString("idade")));

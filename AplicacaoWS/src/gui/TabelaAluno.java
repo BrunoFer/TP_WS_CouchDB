@@ -9,17 +9,17 @@ import aplicacao.Aluno;
 
 public class TabelaAluno extends AbstractTableModel{
 	/**
-	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private List<Aluno> linhas;
 	
-	private String[] colunas = new String[] { "Nome", "Endereço", "Idade", "Sexo"};
+	private String[] colunas = new String[] { "Id", "Nome", "Endereço", "Idade", "Sexo"};
 	
-	private static final int NOME = 0;
-	private static final int TELEFONE = 1;
-	private static final int IDADE = 2;
-	private static final int SEXO = 3;
+	private static final int ID = 0;
+	private static final int NOME = 1;
+	private static final int TELEFONE = 2;
+	private static final int IDADE = 3;
+	private static final int SEXO = 4;
 
 	public TabelaAluno() {
         linhas = new ArrayList<Aluno>();
@@ -47,6 +47,8 @@ public class TabelaAluno extends AbstractTableModel{
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 	    switch (columnIndex) {
+	    case ID:
+	    	return Integer.class;
 	    case NOME:
 	        return String.class;
 	    case TELEFONE:
@@ -72,6 +74,8 @@ public class TabelaAluno extends AbstractTableModel{
 	    Aluno aluno = linhas.get(rowIndex);
 	 
 	    switch (columnIndex) {
+	    case ID:
+	    	return aluno.getId();
 	    case NOME:
 	        return aluno.getNome();
 	    case TELEFONE:
@@ -92,6 +96,8 @@ public class TabelaAluno extends AbstractTableModel{
 	    Aluno aluno = linhas.get(rowIndex);
 	 
 	    switch (columnIndex) {
+	    case ID:
+	    	aluno.setId((Integer) valor);
 	    case NOME:
 	        aluno.setNome((String) valor);
 	        break;
@@ -118,9 +124,9 @@ public class TabelaAluno extends AbstractTableModel{
 	}
 	 
 	// Adiciona o sócio especificado ao modelo
-	public void addSocio(Aluno socio) {
+	public void addAluno(Aluno aluno) {
 	    // Adiciona o registro.
-	    linhas.add(socio);
+	    linhas.add(aluno);
 	 
 	    // Pega a quantidade de registros e subtrai 1 para
 	    // achar o último índice. A subtração é necessária

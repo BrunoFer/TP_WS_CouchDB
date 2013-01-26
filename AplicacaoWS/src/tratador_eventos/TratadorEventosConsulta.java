@@ -41,9 +41,9 @@ public class TratadorEventosConsulta implements ActionListener{
 			if (tabelaAlunos.getSelectedRowCount()==1){
 				int confirma = JOptionPane.showConfirmDialog(null, "Deseja excluir aluno?", "Exclusão", JOptionPane.YES_NO_CANCEL_OPTION);
 				if (confirma==JOptionPane.YES_OPTION){
-					int linhaSelecionada = tabelaAlunos.getSelectedRow();
 					try {
-						acessoBanco.deletarAluno(linhaSelecionada);
+						int aluno = (Integer) tabelaAlunos.getValueAt(tabelaAlunos.getSelectedRow(), 0);
+						acessoBanco.deletarAluno(aluno);
 						janela.limparTela();
 						janela.telaConsultar();
 					} catch (IOException e) {
@@ -53,5 +53,4 @@ public class TratadorEventosConsulta implements ActionListener{
 			}
 		}
 	}
-
 }

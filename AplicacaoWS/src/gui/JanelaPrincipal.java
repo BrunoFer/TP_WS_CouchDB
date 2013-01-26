@@ -56,16 +56,17 @@ public class JanelaPrincipal extends JFrame {
 	private ButtonGroup botoesSexo = new ButtonGroup();
 	
 	//Elementos da janela de Consulta
+	JLabel consulta = new JLabel("Alunos cadastrados");
 	private JTable tabelaAlunos;
-	private JPanel painelIcones;
 	private TabelaAluno tabelaAlunosModelo;
+	
+	private JPanel painelIcones;
 	private String caminhoImgEditar;
 	private String caminhoImgExcluir;
 	private Icon iconeEditar;
 	private JButton botaoEditar;
 	private Icon iconeExcluir;
 	private JButton botaoExcluir;	
-	private JLabel consulta = new JLabel("Gerenciamento de Alunos");
 	
 	//Tratadores de eventos das janelas
 	private TratadorEventosMenu tratadorEventosMenu;
@@ -191,6 +192,8 @@ public class JanelaPrincipal extends JFrame {
 		if (tabelaAlunos == null) {
             tabelaAlunos = new JTable();
             tabelaAlunos.setModel(getTabelaModelo());
+        } else {
+            tabelaAlunos.setModel(getTabelaModelo());
         }
         return tabelaAlunos;
 	}
@@ -198,6 +201,8 @@ public class JanelaPrincipal extends JFrame {
 	private TabelaAluno getTabelaModelo() throws IOException {
         if (tabelaAlunosModelo == null) {
             tabelaAlunosModelo = new TabelaAluno(pegaAlunos());
+        } else {
+        	tabelaAlunosModelo = new TabelaAluno(pegaAlunos());
         }
         return tabelaAlunosModelo;
     }
