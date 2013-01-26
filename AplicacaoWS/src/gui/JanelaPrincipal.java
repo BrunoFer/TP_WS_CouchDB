@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -30,6 +31,9 @@ public class JanelaPrincipal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField textoNome = new JTextField(50);
+	
+	private JLabel cadastro = new JLabel("Cadastro de aluno");
+	private JLabel consulta = new JLabel("Gerenciamento de Alunos");
 	private JLabel nome = new JLabel("Nome: ");
 	private JLabel telefone = new JLabel("Telefone: ");
 	private JLabel idade = new JLabel("Idade: ");
@@ -101,13 +105,15 @@ public class JanelaPrincipal extends JFrame {
 		botoes.add(botaoLimpar);
 		botoes.add(botaoSalvar);
 		
-		painelPrincipal.add(nome, "gapleft 70, gaptop 150");
+		cadastro.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		painelPrincipal.add(cadastro,"gapleft 250, gaptop 140, spanx 3");
+		painelPrincipal.add(nome, "gapleft 70, gaptop 40");
 		painelPrincipal.add(textoNome,"spanx 2");
 		painelPrincipal.add(telefone, "gapleft 70");
 		painelPrincipal.add(textoTel, "spanx 2");
 		painelPrincipal.add(idade, "gapleft 70");
 		painelPrincipal.add(textoIdade, "spanx 2");
-		painelPrincipal.add(sexo, "gapleft 70");
+		painelPrincipal.add(sexo, "gapleft70");
 		painelPrincipal.add(masc);
 		painelPrincipal.add(fem);
 		painelPrincipal.add(botoes, "spanx 3, gapleft 270");
@@ -135,9 +141,10 @@ public class JanelaPrincipal extends JFrame {
 	
 	public void telaConsultar() throws IOException{
 		tratadorTabela = new TratadorEventosTabela(this);
+		final JTable tabela = getTabelaAlunos();
 		
 		painelPrincipal.setLayout(migLayout);
-		final JTable tabela = getTabelaAlunos();
+		
 		tabela.addMouseListener(tratadorTabela);
 		painelPrincipal.add(new JScrollPane(tabela));
 		add(painelPrincipal);
