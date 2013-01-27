@@ -92,6 +92,10 @@ public class JanelaPrincipal extends JFrame {
 		menuJanela.getCadastro().addActionListener(tratadorEventosMenu);
 		menuJanela.getExibir().addActionListener(tratadorEventosMenu);
 		menuJanela.getExit().addActionListener(tratadorEventosMenu);
+		menuJanela.getMetal().addActionListener(tratadorEventosMenu);
+		menuJanela.getMotif().addActionListener(tratadorEventosMenu);
+		menuJanela.getGtk().addActionListener(tratadorEventosMenu);
+		menuJanela.getNimbus().addActionListener(tratadorEventosMenu);
 
 		painelPrincipal = new JPanel();
 		add(painelPrincipal);

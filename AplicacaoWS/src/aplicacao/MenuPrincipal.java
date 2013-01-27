@@ -1,36 +1,63 @@
 package aplicacao;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 
 public class MenuPrincipal extends JMenuBar {
-	
+
 	private static final long serialVersionUID = 1L;
-	private JMenu menuArquivo,menuAluno, menuSobre;
+	private JMenu menuArquivo, menuEditar, menuSobre, menuAparencia;
 	private JMenuItem exit, cadastro, exibir;
+	private JRadioButtonMenuItem metal, motif, gtk, nimbus;
+	private ButtonGroup grupoAparencia;
 	
 	public MenuPrincipal() {
 		montarMenu();
 	}
 
-	public void montarMenu(){
-		
-		menuAluno = new JMenu("Alunos");
+	public void montarMenu() {
+
+		// menu arquivo
 		menuArquivo = new JMenu("Arquivo");
-		menuSobre = new JMenu("Sobre");
-		
 		exit = new JMenuItem("Sair");
-		cadastro = new JMenuItem("Cadastro");
-		exibir = new JMenuItem("Exibir alunos");
 		
 		menuArquivo.add(exit);
+
+		// menu alunos
+		menuEditar = new JMenu("Editar");
+		cadastro = new JMenuItem("Cadastro alunos");
+		exibir = new JMenuItem("Exibir alunos");
+
+		menuEditar.add(cadastro);
+		menuEditar.add(exibir);
 		
-		menuAluno.add(cadastro);
-		menuAluno.add(exibir);
 		
+		// menu configuracoes
+		menuAparencia = new JMenu("Aparência");
+		metal = new JRadioButtonMenuItem("Metal");
+		motif = new JRadioButtonMenuItem("Motif");
+		gtk = new JRadioButtonMenuItem("Gtk");
+		nimbus = new JRadioButtonMenuItem("Nimbus");
+		grupoAparencia = new ButtonGroup();
+		
+		grupoAparencia.add(metal);
+		grupoAparencia.add(motif);
+		grupoAparencia.add(gtk);
+		grupoAparencia.add(nimbus);
+		menuAparencia.add(metal);
+		menuAparencia.add(motif);
+		menuAparencia.add(gtk);
+		menuAparencia.add(nimbus);
+		
+		// menu sobre
+		menuSobre = new JMenu("Sobre");
+
 		add(menuArquivo);
-		add(menuAluno);
+		add(menuEditar);
+		add(menuAparencia);
 		add(menuSobre);
 	}
 
@@ -65,6 +92,22 @@ public class MenuPrincipal extends JMenuBar {
 	public void setExibir(JMenuItem exibir) {
 		this.exibir = exibir;
 	}
-	
+
+	public JRadioButtonMenuItem getMetal() {
+		return metal;
+	}
+
+	public JRadioButtonMenuItem getMotif() {
+		return motif;
+	}
+
+	public JRadioButtonMenuItem getGtk() {
+		return gtk;
+	}
+
+	public JRadioButtonMenuItem getNimbus() {
+		return nimbus;
+	}
+
 	
 }

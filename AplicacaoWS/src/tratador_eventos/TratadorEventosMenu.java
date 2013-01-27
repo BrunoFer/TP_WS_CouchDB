@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 public class TratadorEventosMenu implements ActionListener {
 
 	private JanelaPrincipal janelaPrincipal;
@@ -15,6 +18,7 @@ public class TratadorEventosMenu implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e){
+		String aparencia = "";
 		if (e.getSource() == janelaPrincipal.getMenuJanela().getCadastro()) {
 			janelaPrincipal.limparTela();
 			janelaPrincipal.telaCadastrar();
@@ -28,7 +32,19 @@ public class TratadorEventosMenu implements ActionListener {
 			
 		} else if (e.getSource() == janelaPrincipal.getMenuJanela().getExit()) {
 			System.exit(0);
+		} else if (e.getSource() == janelaPrincipal.getMenuJanela().getMetal()){
+			aparencia="javax.swing.plaf.metal.MetalLookAndFeel";
+		} else if (e.getSource() == janelaPrincipal.getMenuJanela().getMotif()){
+			aparencia="com.sun.java.swing.plaf.motif.MotifLookAndFeel";
+		} else if (e.getSource() == janelaPrincipal.getMenuJanela().getGtk()){
+			aparencia="com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+		} else if (e.getSource() == janelaPrincipal.getMenuJanela().getNimbus()){
+			aparencia="com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
+		}
+		try {
+			UIManager.setLookAndFeel(aparencia);
+			SwingUtilities.updateComponentTreeUI(janelaPrincipal);
+		} catch (Exception e1) {
 		}
 	}
-
 }
