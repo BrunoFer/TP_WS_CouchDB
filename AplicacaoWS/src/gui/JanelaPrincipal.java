@@ -28,7 +28,6 @@ import net.miginfocom.swing.MigLayout;
 
 import aplicacao.AcessoBanco;
 import aplicacao.Aluno;
-import aplicacao.MenuPrincipal;
 
 public class JanelaPrincipal extends JFrame {
 
@@ -79,7 +78,8 @@ public class JanelaPrincipal extends JFrame {
 		super();
 		this.acessoBanco = acessoBanco;
 		setTitle("Application Student");
-		
+		setSize(800, 600);
+		setLocationRelativeTo(null);
 	}
 	
 	public void montarJanela() {
@@ -100,10 +100,8 @@ public class JanelaPrincipal extends JFrame {
 		painelPrincipal = new JPanel();
 		add(painelPrincipal);
 		
-		setSize(800, 600);
 		repaint();
 		setVisible(true);
-		setLocationRelativeTo(null);
 		
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
