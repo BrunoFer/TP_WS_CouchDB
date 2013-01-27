@@ -1,6 +1,7 @@
 package tratador_eventos;
 
 import gui.JanelaPrincipal;
+import gui.JanelaSobre;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +13,7 @@ import javax.swing.UIManager;
 public class TratadorEventosMenu implements ActionListener {
 
 	private JanelaPrincipal janelaPrincipal;
+	private JanelaSobre janelaSobre;
 	
 	public TratadorEventosMenu(JanelaPrincipal janelaPrincipal) {
 		this.janelaPrincipal = janelaPrincipal;
@@ -29,7 +31,9 @@ public class TratadorEventosMenu implements ActionListener {
 			} catch (IOException e1) {
 				System.out.println("Erro IOException - getexibir() - actionPerformed()/TratadorEventosMenu.java");
 			}
-			
+		} else if (e.getSource()==janelaPrincipal.getMenuJanela().getAplicacao()){
+			janelaSobre = new JanelaSobre();
+			janelaSobre.montarJanelaSobre();
 		} else if (e.getSource() == janelaPrincipal.getMenuJanela().getExit()) {
 			System.exit(0);
 		} else if (e.getSource() == janelaPrincipal.getMenuJanela().getMetal()){

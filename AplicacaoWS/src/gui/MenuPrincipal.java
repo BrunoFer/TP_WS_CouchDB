@@ -10,7 +10,7 @@ public class MenuPrincipal extends JMenuBar {
 
 	private static final long serialVersionUID = 1L;
 	private JMenu menuArquivo, menuEditar, menuSobre, menuAparencia;
-	private JMenuItem exit, cadastro, exibir;
+	private JMenuItem exit, cadastro, exibir, aplicacao;
 	private JRadioButtonMenuItem metal, motif, gtk, nimbus;
 	private ButtonGroup grupoAparencia;
 	
@@ -54,11 +54,17 @@ public class MenuPrincipal extends JMenuBar {
 		
 		// menu sobre
 		menuSobre = new JMenu("Sobre");
-
+		aplicacao = new JMenuItem("Aplicação");
+		menuSobre.add(aplicacao);
+		
 		add(menuArquivo);
 		add(menuEditar);
 		add(menuAparencia);
 		add(menuSobre);
+	}
+	
+	public JMenuItem getAplicacao() {
+		return aplicacao;
 	}
 
 	public JMenu getMenuSobre() {

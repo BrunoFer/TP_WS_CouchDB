@@ -65,7 +65,7 @@ public class JanelaPrincipal extends JFrame {
 	private Icon iconeEditar;
 	private JButton botaoEditar;
 	private Icon iconeExcluir;
-	private JButton botaoExcluir;	
+	private JButton botaoExcluir;
 	
 	//Tratadores de eventos das janelas
 	private TratadorEventosMenu tratadorEventosMenu;
@@ -92,6 +92,7 @@ public class JanelaPrincipal extends JFrame {
 		menuJanela.getCadastro().addActionListener(tratadorEventosMenu);
 		menuJanela.getExibir().addActionListener(tratadorEventosMenu);
 		menuJanela.getExit().addActionListener(tratadorEventosMenu);
+		menuJanela.getAplicacao().addActionListener(tratadorEventosMenu);
 		menuJanela.getMetal().addActionListener(tratadorEventosMenu);
 		menuJanela.getMotif().addActionListener(tratadorEventosMenu);
 		menuJanela.getGtk().addActionListener(tratadorEventosMenu);
