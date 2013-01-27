@@ -5,5 +5,4 @@ TP_WS_CouchDB
 <b>Alunos:</b>Bruno Ferreira e Guilherme J. Anselmo<br>
 <b>Instituição:</b> IFSEMG - Câmpus Barbacena<br>
 <b>Prof.:</b> Rafael Alencar<br>
-<b><center>Barbacena</center></b><br>
-<b><center>01/2013</center></b><br>
+<b>Cidade/Data:</b> Barbacena - 01/2013<br>
