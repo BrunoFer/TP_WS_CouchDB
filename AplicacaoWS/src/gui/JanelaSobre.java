@@ -18,7 +18,7 @@ public class JanelaSobre extends JDialog{
 	
 	public JanelaSobre(){
 		setTitle("Sobre Application Student");
-		setSize(500,400);
+		setSize(510,400);
 	}
 	
 	public void montarJanelaSobre(){
@@ -26,7 +26,7 @@ public class JanelaSobre extends JDialog{
 		
 		JLabel projeto = new JLabel();
 		String texto1 = "<html><b>Aplicação desenvolvida para a aula de WebServices.</b> <br><br>" +
-				"O objetivo da aplicação era utilizar um banco de dados relacional,porém<br>" +
+				"O objetivo da aplicação era utilizar um banco de dados não relacional,porém<br>" +
 				"a comunicação da aplicação com o banco deveria ser usando os métodos <br>" +
 				"do Protocolo HTTP (GET,POST,PUT e DELETE), através do REST.<br><br>" +
 				"<b>Ferramentas utilizadas:</b> <br>" +

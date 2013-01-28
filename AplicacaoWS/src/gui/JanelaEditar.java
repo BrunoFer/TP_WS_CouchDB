@@ -73,6 +73,7 @@ public class JanelaEditar extends JDialog{
 		painelPrincipal.add(idade);
 		painelPrincipal.add(textoIdade, "wrap");
 		painelPrincipal.add(sexo);
+		masc.setSelected(true);
 		painelPrincipal.add(masc, "wrap");
 		painelPrincipal.add(fem, "spanx 2,gapleft 65, wrap");
 		painelPrincipal.add(botoes, "gapleft 55, spanx 2");

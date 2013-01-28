@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -29,7 +31,7 @@ import net.miginfocom.swing.MigLayout;
 import aplicacao.AcessoBanco;
 import aplicacao.Aluno;
 
-public class JanelaPrincipal extends JFrame {
+public class JanelaPrincipal extends JFrame implements KeyListener{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -136,8 +138,8 @@ public class JanelaPrincipal extends JFrame {
 		botoes.add(botaoLimpar);
 		botoes.add(botaoSalvar);
 		
-		cadastro.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		painelPrincipal.add(cadastro,"gapleft 250, gaptop 140, spanx 3");
+		cadastro.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		painelPrincipal.add(cadastro,"gapleft 260, gaptop 140, spanx 3");
 		painelPrincipal.add(nome, "gapleft 70, gaptop 40");
 		painelPrincipal.add(textoNome,"spanx 2");
 		painelPrincipal.add(telefone, "gapleft 70");
@@ -145,6 +147,7 @@ public class JanelaPrincipal extends JFrame {
 		painelPrincipal.add(idade, "gapleft 70");
 		painelPrincipal.add(textoIdade, "spanx 2");
 		painelPrincipal.add(sexo, "gapleft70");
+		masc.setSelected(true);
 		painelPrincipal.add(masc);
 		painelPrincipal.add(fem);
 		painelPrincipal.add(botoes, "spanx 3, gapleft 270");
@@ -167,8 +170,8 @@ public class JanelaPrincipal extends JFrame {
 		MigLayout migLayout = new MigLayout("wrap 4");
 		painelPrincipal.setLayout(migLayout);
 		
-		consulta.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		painelPrincipal.add(consulta,"gapleft 230, gaptop 30, spanx 4");
+		consulta.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		painelPrincipal.add(consulta,"gapleft 250, gaptop 30, spanx 4");
 		painelPrincipal.add(new JScrollPane(tabela), "spanx 4,gapleft 150, gaptop 30");
 		
 		iconeEditar = new ImageIcon(caminhoImgEditar);
@@ -188,6 +191,8 @@ public class JanelaPrincipal extends JFrame {
 		botaoExcluir.addActionListener(tratadorEventosConsulta);
 		
 		tabela.addMouseListener(tratadorEventosTabela);
+		
+		addKeyListener(this);
 		
 		painelPrincipal.add(painelIcones,"gaptop 30,gapleft 220, gapbottom 40, spanx 4");
 		add(painelPrincipal);
@@ -308,4 +313,17 @@ public class JanelaPrincipal extends JFrame {
 	public void setMenuJanela(MenuPrincipal menuJanela) {
 		this.menuJanela = menuJanela;
 	}
+
+	@Override
+	public void keyPressed(KeyEvent evento) {
+		if (evento.getKeyCode() == KeyEvent.VK_F5){
+			limparTela();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {}
+
+	@Override
+	public void keyTyped(KeyEvent e) {}
 }
