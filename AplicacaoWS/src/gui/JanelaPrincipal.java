@@ -173,12 +173,16 @@ public class JanelaPrincipal extends JFrame {
 		
 		iconeEditar = new ImageIcon(caminhoImgEditar);
 		botaoEditar = new JButton(iconeEditar);
+		botaoEditar.setToolTipText("Editar");
 		iconeExcluir = new ImageIcon(caminhoImgExcluir);
 		botaoExcluir = new JButton(iconeExcluir);
+		botaoExcluir.setToolTipText("Excluir");
 		
 		painelIcones = new JPanel();
-		painelIcones.add(botaoEditar);
-		painelIcones.add(botaoExcluir);
+		MigLayout migLayoutIcones = new MigLayout("wrap 3");
+		painelIcones.setLayout(migLayoutIcones);
+		painelIcones.add(botaoEditar,"gapleft 10");
+		painelIcones.add(botaoExcluir,"gapleft 20");
 		
 		botaoEditar.addActionListener(tratadorEventosConsulta);
 		botaoExcluir.addActionListener(tratadorEventosConsulta);
