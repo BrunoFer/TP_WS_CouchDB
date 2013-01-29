@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
@@ -64,6 +65,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 	JLabel consulta = new JLabel("Contatos cadastrados");
 	private JTable tabelaContatos;
 	private TabelaContatos tabelaContatosModelo;
+	private JTable tabela;
 	
 	private JPanel painelIcones;
 	private String caminhoImgEditar;
@@ -83,7 +85,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 	public JanelaPrincipal(AcessoBanco acessoBanco) {
 		super();
 		this.acessoBanco = acessoBanco;
-		setTitle("Application Contact");
+		setTitle("Contact Application");
 		setSize(900, 700);
 		setLocationRelativeTo(null);
 	}
@@ -168,25 +170,14 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 	
 	public void telaConsultar() throws IOException{
 		tratadorEventosTabela = new TratadorEventosTabela(this);
-		final JTable tabela = getTabelaContatos();
+		tabela = getTabelaContatos();
 		
 		tratadorEventosConsulta = new TratadorEventosConsulta(this,tabela,acessoBanco,tabelaContatosModelo);
 		
 		MigLayout migLayout = new MigLayout("wrap 4");
 		painelPrincipal.setLayout(migLayout);
-		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		tabela.getColumnModel().getColumn(0).setPreferredWidth(40);
-		tabela.getColumnModel().getColumn(1).setPreferredWidth(145);
-		tabela.getColumnModel().getColumn(2).setPreferredWidth(100);
-		tabela.getColumnModel().getColumn(3).setPreferredWidth(110);
-		tabela.getColumnModel().getColumn(4).setPreferredWidth(110);
-		tabela.getColumnModel().getColumn(5).setPreferredWidth(150);
-		tabela.getColumnModel().getColumn(6).setPreferredWidth(55);
-		tabela.setRowHeight(23);
-		tabela.setFont(new Font("Verdana", Font.PLAIN, 15));
+		propriedadesTabela(); 
 		JScrollPane barraRolagem = new JScrollPane(tabela);
-		tabela.setPreferredScrollableViewportSize(new Dimension(720,500));    
-
 		
 		consulta.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		painelPrincipal.add(consulta,"gapleft 270, gaptop 30, spanx 4");
@@ -216,6 +207,22 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 		add(painelPrincipal);
 		repaint();
 		setVisible(true);
+	}
+	
+	public void propriedadesTabela(){
+		tabela.getColumnModel().getColumn(0).setPreferredWidth(40);
+		tabela.getColumnModel().getColumn(1).setPreferredWidth(145);
+		tabela.getColumnModel().getColumn(2).setPreferredWidth(100);
+		tabela.getColumnModel().getColumn(3).setPreferredWidth(110);
+		tabela.getColumnModel().getColumn(4).setPreferredWidth(110);
+		tabela.getColumnModel().getColumn(5).setPreferredWidth(150);
+		tabela.getColumnModel().getColumn(6).setPreferredWidth(55);
+		tabela.setRowHeight(23);
+		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		tabela.setGridColor(new Color(40,255,40));
+		tabela.setBackground(new Color(240,255,240));
+		tabela.setFont(new Font("Verdana", Font.BOLD, 15));
+		tabela.setPreferredScrollableViewportSize(new Dimension(720,500)); 
 	}
 	
 	public JTable getTabelaContatos() throws IOException{
