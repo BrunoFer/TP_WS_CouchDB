@@ -5,6 +5,8 @@ import gui.JanelaEditar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
+
 import aplicacao.AcessoBanco;
 
 public class TratadorEventosEditar implements ActionListener{
@@ -23,9 +25,15 @@ public class TratadorEventosEditar implements ActionListener{
 		if (evento.getSource()==janelaEditar.getBotaoCancelar()){
 			janelaEditar.dispose();
 		} else if (evento.getSource() == janelaEditar.getBotaoSalvar()){
-			json = montarJson();
-			acessoBanco.atualizarAluno(janelaEditar.getNumeroDocumento(),json);
-			janelaEditar.dispose();
+			if (janelaEditar.getTextoNome().getText().equals("")){
+				JOptionPane.showMessageDialog(null, "Preencha campo nome!", "Edição de contato", JOptionPane.ERROR_MESSAGE);
+			} else if ( janelaEditar.getTextoTelRes().getText().equals("") && janelaEditar.getTextoTelCel().getText().equals("")){
+				JOptionPane.showMessageDialog(null, "Informe ao menos um telefone!", "Edição de contato", JOptionPane.ERROR_MESSAGE);
+			} else{
+				json = montarJson();
+				acessoBanco.atualizarAluno(janelaEditar.getNumeroDocumento(),json);
+				janelaEditar.dispose();
+			}
 		}
 	}
 	

@@ -5,7 +5,7 @@ import gui.JanelaPrincipal;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static javax.swing.JOptionPane.*;
+import javax.swing.JOptionPane;
 
 import aplicacao.AcessoBanco;
 
@@ -26,9 +26,12 @@ public class TratadorEventosCadastro implements ActionListener {
 			// System.out.println("Voce clicou no botao salvar");
 
 			if (janela.getTextoNome().getText().equals(""))
-				showMessageDialog(null, "Você deve preencher o campo nome!",
-						"Cadastro de Contato", INFORMATION_MESSAGE);
-			else {
+				JOptionPane.showMessageDialog(null, "Você deve preencher o campo nome!",
+						"Cadastro de Contato", JOptionPane.ERROR_MESSAGE);
+			else if ( janela.getTextoTelRes().getText().equals("") && janela.getTextoTelCel().getText().equals("")){
+				JOptionPane.showMessageDialog(null, "Informe ao menos um telefone!",
+						"Cadastro de Contato", JOptionPane.ERROR_MESSAGE);
+			} else {
 				String json = montarJson();
 				acessoBanco.setRegistro(json);
 				janela.limparDados();
