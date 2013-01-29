@@ -28,7 +28,7 @@ import org.json.JSONObject;
 
 public class AcessoBanco {
 	private String urlMongoRest = "http://localhost:5984/";
-	private String nomeBanco = "trabalho";
+	private String nomeBanco = "agenda";
 	private int nomeDocumento;
 	private URL urlConsulta;
 	private String capturaJson;
@@ -76,7 +76,7 @@ public class AcessoBanco {
 	}
 
 	public boolean verificaBancoCriado() throws IOException {
-		setNomeBanco("trabalho");
+		setNomeBanco("agenda");
 		String url = getUrlmongorest() + getNomebanco();
 		String jsonRetornado = getRegistro(url);
 		if (jsonRetornado == null)
