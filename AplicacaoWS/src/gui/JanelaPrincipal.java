@@ -84,7 +84,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 		super();
 		this.acessoBanco = acessoBanco;
 		setTitle("Application Contact");
-		setSize(800, 600);
+		setSize(900, 700);
 		setLocationRelativeTo(null);
 	}
 	
@@ -170,7 +170,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 		tratadorEventosTabela = new TratadorEventosTabela(this);
 		final JTable tabela = getTabelaContatos();
 		
-		tratadorEventosConsulta = new TratadorEventosConsulta(this,tabela,acessoBanco);
+		tratadorEventosConsulta = new TratadorEventosConsulta(this,tabela,acessoBanco,tabelaContatosModelo);
 		
 		MigLayout migLayout = new MigLayout("wrap 4");
 		painelPrincipal.setLayout(migLayout);
@@ -179,16 +179,18 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 		tabela.getColumnModel().getColumn(1).setPreferredWidth(145);
 		tabela.getColumnModel().getColumn(2).setPreferredWidth(100);
 		tabela.getColumnModel().getColumn(3).setPreferredWidth(110);
-		tabela.getColumnModel().getColumn(4).setPreferredWidth(100);
+		tabela.getColumnModel().getColumn(4).setPreferredWidth(110);
 		tabela.getColumnModel().getColumn(5).setPreferredWidth(150);
 		tabela.getColumnModel().getColumn(6).setPreferredWidth(55);
+		tabela.setRowHeight(23);
+		tabela.setFont(new Font("Verdana", Font.PLAIN, 15));
 		JScrollPane barraRolagem = new JScrollPane(tabela);
-		tabela.setPreferredScrollableViewportSize(new Dimension(710,500));    
+		tabela.setPreferredScrollableViewportSize(new Dimension(720,500));    
 
 		
 		consulta.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		painelPrincipal.add(consulta,"gapleft 250, gaptop 30, spanx 4");
-		painelPrincipal.add(barraRolagem, "spanx 4,gapleft 30, gaptop 30");
+		painelPrincipal.add(consulta,"gapleft 270, gaptop 30, spanx 4");
+		painelPrincipal.add(barraRolagem, "spanx 4,gapleft 80, gaptop 30");
 		
 		iconeEditar = new ImageIcon(caminhoImgEditar);
 		botaoEditar = new JButton(iconeEditar);
@@ -200,8 +202,8 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 		painelIcones = new JPanel();
 		MigLayout migLayoutIcones = new MigLayout("wrap 3");
 		painelIcones.setLayout(migLayoutIcones);
-		painelIcones.add(botaoEditar,"gapleft 10");
-		painelIcones.add(botaoExcluir,"gapleft 20");
+		painelIcones.add(botaoEditar,"gapleft 40");
+		painelIcones.add(botaoExcluir,"gapleft 70");
 		
 		botaoEditar.addActionListener(tratadorEventosConsulta);
 		botaoExcluir.addActionListener(tratadorEventosConsulta);

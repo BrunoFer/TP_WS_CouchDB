@@ -2,6 +2,7 @@ package tratador_eventos;
 
 import gui.JanelaEditar;
 import gui.JanelaPrincipal;
+import gui.TabelaContatos;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,29 +17,25 @@ import aplicacao.Contato;
 public class TratadorEventosConsulta implements ActionListener{
 
 	private JanelaPrincipal janelaPrincipal;
-	private JTable tabelaContatos;
+	private JTable tabela;
+	private TabelaContatos tabelaContatos;
 	private AcessoBanco acessoBanco;
 	private JanelaEditar janelaEditar;
 	private Contato contato = new Contato();
 	
-	public TratadorEventosConsulta(JanelaPrincipal janelaPrincipal, JTable tabelaContatos, AcessoBanco acessoBanco){
+	public TratadorEventosConsulta(JanelaPrincipal janelaPrincipal, JTable tabela, AcessoBanco acessoBanco, TabelaContatos tabelaContatos){
 		this.janelaPrincipal = janelaPrincipal;
-		this.tabelaContatos = tabelaContatos;
+		this.tabela = tabela;
 		this.acessoBanco = acessoBanco;
+		this.tabelaContatos = tabelaContatos;
 	}
 	
 	public void actionPerformed(ActionEvent evento) {
 		if (evento.getSource()==janelaPrincipal.getBotaoEditar()){
 			//System.out.println("Botao EDITAR pressionado!");
-			if (tabelaContatos.getSelectedRowCount()==1){
-				int linhaSelecionada = tabelaContatos.getSelectedRow();
-				contato.setId((Integer) tabelaContatos.getValueAt(linhaSelecionada, 0));
-				contato.setNome((String) tabelaContatos.getValueAt(linhaSelecionada, 1));
-				contato.setApelido((String) tabelaContatos.getValueAt(linhaSelecionada, 2));
-				contato.setTelefoneResidencial((String) tabelaContatos.getValueAt(linhaSelecionada, 3));
-				contato.setTelefoneCelular((String) tabelaContatos.getValueAt(linhaSelecionada, 4));
-				contato.setCidade((String) tabelaContatos.getValueAt(linhaSelecionada, 5));
-				contato.setEstado((String) tabelaContatos.getValueAt(linhaSelecionada, 6));
+			if (tabela.getSelectedRowCount()==1){
+				int linhaSelecionada = tabela.getSelectedRow();
+				contato = tabelaContatos.getContato(linhaSelecionada);
 				
 				abreJanelaEditar(contato);
 				try {
@@ -50,11 +47,11 @@ public class TratadorEventosConsulta implements ActionListener{
 			}
 		} else if (evento.getSource()==janelaPrincipal.getBotaoExcluir()){
 			//System.out.println("Botao EXCLUIR pressionado!");
-			if (tabelaContatos.getSelectedRowCount()==1){
+			if (tabela.getSelectedRowCount()==1){
 				int confirma = JOptionPane.showConfirmDialog(null, "Deseja excluir contato?", "Exclusão", JOptionPane.YES_NO_CANCEL_OPTION);
 				if (confirma==JOptionPane.YES_OPTION){
 					try {
-						int contato = (Integer) tabelaContatos.getValueAt(tabelaContatos.getSelectedRow(), 0);
+						int contato = (Integer) tabelaContatos.getValueAt(tabela.getSelectedRow(), 0);
 						acessoBanco.deletarContato(contato);
 						janelaPrincipal.limparTela();
 						janelaPrincipal.telaConsultar();
