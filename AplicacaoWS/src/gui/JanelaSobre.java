@@ -17,7 +17,7 @@ public class JanelaSobre extends JDialog{
 	private JTabbedPane tabs = new JTabbedPane();
 	
 	public JanelaSobre(){
-		setTitle("Sobre Application Student");
+		setTitle("Sobre Application Contact");
 		setSize(510,400);
 	}
 	

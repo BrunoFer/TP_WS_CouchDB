@@ -4,18 +4,17 @@ import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
 import aplicacao.AcessoBanco;
-import aplicacao.Aluno;
+import aplicacao.Contato;
 
 import tratador_eventos.TratadorEventosEditar;
 
@@ -26,31 +25,35 @@ public class JanelaEditar extends JDialog{
 	private JPanel painelPrincipal;
 	private JLabel edicao = new JLabel("Edição");
 	private JLabel nome = new JLabel("Nome: ");
-	private JLabel telefone = new JLabel("Telefone: ");
-	private JLabel idade = new JLabel("Idade: ");
-	private JLabel sexo = new JLabel("Sexo: ");
+	private JLabel apelido = new JLabel("Apelido");
+	private JLabel telefoneResidencial = new JLabel("Telefone Residencial: ");
+	private JLabel telefoneCelular = new JLabel("Telefone Celular: ");
+	private JLabel cidade = new JLabel("Cidade: ");
+	private JLabel estado = new JLabel("Estado: ");
 	private JTextField textoNome = new JTextField(50);
-	private JTextField textoTel = new JTextField(12);
-	private JTextField textoIdade = new JTextField(5);
-	private JRadioButton masc = new JRadioButton("Masculino");
-	private JRadioButton fem = new JRadioButton("Feminino");
+	private JTextField textoApelido = new JTextField(30);
+	private JTextField textoTelRes = new JTextField(12);
+	private JTextField textoTelCel = new JTextField(12);
+	private JTextField textoCidade = new JTextField(30);
+	private String[] estados = {"AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PR","PB","PA","PE",
+			"PI","RJ","RN","RS","RO","RR","SC","SE","SP","TO"};
+	private JComboBox comboEstados = new JComboBox(estados);
 	private JButton botaoSalvar = new JButton("Salvar");
 	private JButton botaoCancelar = new JButton("Cancelar");
 	private JPanel botoes = new JPanel();
-	private ButtonGroup botoesSexo = new ButtonGroup();
 	private TratadorEventosEditar tratadorEventosEditar;
 	private AcessoBanco acessoBanco;
-	private Aluno aluno;
+	private Contato contato;
 	private int numeroDocumento;
 	
-	public JanelaEditar(AcessoBanco acessoBanco, Aluno aluno){
+	public JanelaEditar(AcessoBanco acessoBanco, Contato contato){
 		this.acessoBanco = acessoBanco;
-		this.aluno = aluno;
-		this.numeroDocumento = aluno.getId();
-		setTitle("Editar aluno");
-		setSize(250, 300);
+		this.contato = contato;
+		this.numeroDocumento = contato.getId();
+		setTitle("Editar Contato");
+		setSize(300, 350);
 	}
-	
+
 	public void montarJanelaEditar(){
 		tratadorEventosEditar = new TratadorEventosEditar(acessoBanco,this);
 		painelPrincipal = new JPanel();
@@ -58,29 +61,35 @@ public class JanelaEditar extends JDialog{
 		MigLayout migLayout = new MigLayout("wrap 3");
 		painelPrincipal.setLayout(migLayout);
 		
-		botoesSexo.add(masc);
-		botoesSexo.add(fem);
-
 		botoes.add(botaoCancelar);
 		botoes.add(botaoSalvar);
 		
 		edicao.setFont(new Font("Times New Roman", Font.BOLD, 20));
 		painelPrincipal.add(edicao,"gaptop 10, spanx 2, wrap");
-		painelPrincipal.add(nome, "gaptop 20");
+		painelPrincipal.add(nome, "gaptop 10");
 		painelPrincipal.add(textoNome, "wrap");
-		painelPrincipal.add(telefone);
-		painelPrincipal.add(textoTel, "wrap");
-		painelPrincipal.add(idade);
-		painelPrincipal.add(textoIdade, "wrap");
-		painelPrincipal.add(sexo);
-		masc.setSelected(true);
-		painelPrincipal.add(masc, "wrap");
-		painelPrincipal.add(fem, "spanx 2,gapleft 65, wrap");
-		painelPrincipal.add(botoes, "gapleft 55, spanx 2");
+		painelPrincipal.add(apelido);
+		painelPrincipal.add(textoApelido,"wrap");
+		painelPrincipal.add(telefoneResidencial);
+		painelPrincipal.add(textoTelRes, "wrap");
+		painelPrincipal.add(telefoneCelular);
+		painelPrincipal.add(textoTelCel, "wrap");
+		painelPrincipal.add(cidade);
+		painelPrincipal.add(textoCidade, "wrap");
+		painelPrincipal.add(estado);
+		painelPrincipal.add(comboEstados, "wrap");
+		painelPrincipal.add(botoes, "gapleft 70, spanx 2");
 
-		textoNome.setText((String) aluno.getNome());
-		textoTel.setText((String) aluno.getTelefone());
-		textoIdade.setText(String.valueOf(aluno.getIdade()));
+		textoNome.setText((String) contato.getNome());
+		textoApelido.setText((String) contato.getApelido());
+		textoTelRes.setText((String) contato.getTelefoneResidencial());
+		textoTelCel.setText((String) contato.getTelefoneCelular());
+		textoCidade.setText((String) contato.getCidade());
+		int i;
+		for (i=0;i<estados.length;i++)
+			if (estados[i].equals(contato.getEstado()))
+				break;
+		comboEstados.setSelectedIndex(i);
 		add(painelPrincipal);
 		
 		botaoSalvar.addActionListener(tratadorEventosEditar);
@@ -98,6 +107,10 @@ public class JanelaEditar extends JDialog{
 			}
 		});
 	}
+	
+	public JComboBox getComboEstados() {
+		return comboEstados;
+	}
 
 	public int getNumeroDocumento() {
 		return numeroDocumento;
@@ -111,20 +124,20 @@ public class JanelaEditar extends JDialog{
 		this.textoNome = textoNome;
 	}
 
-	public JTextField getTextoTel() {
-		return textoTel;
+	public JTextField getTextoApelido() {
+		return textoApelido;
 	}
 
-	public void setTextoTel(JTextField textoTel) {
-		this.textoTel = textoTel;
+	public JTextField getTextoTelRes() {
+		return textoTelRes;
 	}
 
-	public JTextField getTextoIdade() {
-		return textoIdade;
+	public JTextField getTextoTelCel() {
+		return textoTelCel;
 	}
 
-	public void setTextoIdade(JTextField textoIdade) {
-		this.textoIdade = textoIdade;
+	public JTextField getTextoCidade() {
+		return textoCidade;
 	}
 
 	public JButton getBotaoSalvar() {
@@ -142,14 +155,5 @@ public class JanelaEditar extends JDialog{
 	public void setNome(JLabel nome) {
 		this.nome = nome;
 	}
-
-	public JRadioButton getMasc() {
-		return masc;
-	}
-
-	public void setMasc(JRadioButton masc) {
-		this.masc = masc;
-	}
-	
 	
 }

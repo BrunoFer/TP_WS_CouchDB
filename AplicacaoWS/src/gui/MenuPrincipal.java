@@ -28,8 +28,8 @@ public class MenuPrincipal extends JMenuBar {
 
 		// menu alunos
 		menuEditar = new JMenu("Editar");
-		cadastro = new JMenuItem("Cadastro alunos");
-		exibir = new JMenuItem("Exibir alunos");
+		cadastro = new JMenuItem("Cadastro contato");
+		exibir = new JMenuItem("Exibir contato");
 
 		menuEditar.add(cadastro);
 		menuEditar.add(exibir);

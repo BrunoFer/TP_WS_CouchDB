@@ -17,10 +17,10 @@ public class TratadorEventosTabela implements MouseListener{
 	public void mouseClicked(MouseEvent event) {
 		if(event.getClickCount()==2){
 			try {
-				int linha = janela.getTabelaAlunos().getSelectedRow();
+				int linha = janela.getTabelaContatos().getSelectedRow();
 				System.out.println("Linha selecionada foi "+linha);
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("Erro IOException! - mouseClicked()/TratadorEventosTabela.java");
 			}
 		} else if (event.getClickCount()==1){
 			

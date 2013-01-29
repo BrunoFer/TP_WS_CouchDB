@@ -42,9 +42,9 @@ public class AcessoBanco {
 		}
 	}
 
-	public List<Aluno> buscaDocumentos() throws IOException {
-		List<Aluno> listaAlunos = new ArrayList<Aluno>();
-		JSONObject json, documento, dadosAluno;
+	public List<Contato> buscaDocumentos() throws IOException {
+		List<Contato> listaContatos = new ArrayList<Contato>();
+		JSONObject json, documento, dadosContato;
 		JSONArray arrayDocumentos;
 
 		String url = getUrlmongorest() + getNomebanco()
@@ -55,17 +55,19 @@ public class AcessoBanco {
 			json = new JSONObject(jsonString.toString());
 			arrayDocumentos = json.getJSONArray("rows");
 			for (int i = 0; i < arrayDocumentos.length(); i++) {
-				Aluno aluno = new Aluno();
+				Contato contato = new Contato();
 				documento = arrayDocumentos.getJSONObject(i);
-				dadosAluno = documento.getJSONObject("doc");
-				aluno.setId(Integer.parseInt(dadosAluno.getString("_id")));
-				aluno.setNome(dadosAluno.getString("nome"));
-				aluno.setTelefone(dadosAluno.getString("telefone"));
-				aluno.setIdade(Integer.parseInt(dadosAluno.getString("idade")));
-				aluno.setSexo(dadosAluno.getString("sexo"));
-				listaAlunos.add(aluno);
+				dadosContato = documento.getJSONObject("doc");
+				contato.setId(Integer.parseInt(dadosContato.getString("_id")));
+				contato.setNome(dadosContato.getString("nome"));
+				contato.setApelido(dadosContato.getString("apelido"));
+				contato.setTelefoneResidencial(dadosContato.getString("telres"));
+				contato.setTelefoneCelular(dadosContato.getString("telcel"));
+				contato.setCidade(dadosContato.getString("cidade"));
+				contato.setEstado(dadosContato.getString("estado"));
+				listaContatos.add(contato);
 			}
-			return listaAlunos;
+			return listaContatos;
 		} catch (JSONException e1) {
 			System.out
 					.println("Erro ao manipular JSON! - buscaDocumentos()/AcessoBanco.java");
@@ -121,7 +123,7 @@ public class AcessoBanco {
 		}
 	}
 
-	public String buscarHashAluno(int numeroDocumento) throws IOException {
+	public String buscarHashContato(int numeroDocumento) throws IOException {
 		String url = getUrlmongorest() + getNomebanco() + "/" + numeroDocumento;
 
 		// fazendo a requisicao do hash do documento do aluno
@@ -138,11 +140,11 @@ public class AcessoBanco {
 		}
 	}
 
-	public void deletarAluno(int numeroDocumento){
+	public void deletarContato(int numeroDocumento){
 		//busca o hash do aluno que será deletado
 		String hash;
 		try {
-			hash = buscarHashAluno(numeroDocumento);
+			hash = buscarHashContato(numeroDocumento);
 			// montando a url para deletar o documento do aluno
 			String url = getUrlmongorest() + getNomebanco() + "/" + numeroDocumento
 					+ "?rev=" + hash;
@@ -153,10 +155,9 @@ public class AcessoBanco {
 	}
 	
 	public void atualizarAluno(int numeroDocumento, String json) {
-		System.out.println("Cheguei aqui - numero do documento:"
-				+ numeroDocumento);
+		//System.out.println("Cheguei aqui - numero do documento:"+ numeroDocumento);
 		try {
-			String hash = buscarHashAluno(numeroDocumento);
+			String hash = buscarHashContato(numeroDocumento);
 			// montando a url para deletar o documento do aluno
 			String url = getUrlmongorest() + getNomebanco() + "/";
 			/*acrescenta o id e o hash do aluno à string json, sem isso o documento
@@ -204,6 +205,7 @@ public class AcessoBanco {
 	}
 
 	public void setRegistro(String json){
+		System.out.println(json);
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpPut putRequest = new HttpPut(URI.create(urlMongoRest + nomeBanco
 				+ "/" + nomeDocumento));

@@ -11,33 +11,36 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 import aplicacao.AcessoBanco;
-import aplicacao.Aluno;
+import aplicacao.Contato;
 
 public class TratadorEventosConsulta implements ActionListener{
 
 	private JanelaPrincipal janelaPrincipal;
-	private JTable tabelaAlunos;
+	private JTable tabelaContatos;
 	private AcessoBanco acessoBanco;
 	private JanelaEditar janelaEditar;
-	private Aluno aluno = new Aluno();
+	private Contato contato = new Contato();
 	
-	public TratadorEventosConsulta(JanelaPrincipal janelaPrincipal, JTable tabelaAlunos, AcessoBanco acessoBanco){
+	public TratadorEventosConsulta(JanelaPrincipal janelaPrincipal, JTable tabelaContatos, AcessoBanco acessoBanco){
 		this.janelaPrincipal = janelaPrincipal;
-		this.tabelaAlunos = tabelaAlunos;
+		this.tabelaContatos = tabelaContatos;
 		this.acessoBanco = acessoBanco;
 	}
 	
 	public void actionPerformed(ActionEvent evento) {
 		if (evento.getSource()==janelaPrincipal.getBotaoEditar()){
-			System.out.println("Botao EDITAR pressionado!");
-			if (tabelaAlunos.getSelectedRowCount()==1){
-				int linhaSelecionada = tabelaAlunos.getSelectedRow();
-				aluno.setId((Integer) tabelaAlunos.getValueAt(linhaSelecionada, 0));
-				aluno.setNome((String) tabelaAlunos.getValueAt(linhaSelecionada, 1));
-				aluno.setTelefone((String) tabelaAlunos.getValueAt(linhaSelecionada, 2));
-				aluno.setIdade((Integer) tabelaAlunos.getValueAt(linhaSelecionada, 3));
-				aluno.setSexo((String) tabelaAlunos.getValueAt(linhaSelecionada, 4));
-				abreJanelaEditar(aluno);
+			//System.out.println("Botao EDITAR pressionado!");
+			if (tabelaContatos.getSelectedRowCount()==1){
+				int linhaSelecionada = tabelaContatos.getSelectedRow();
+				contato.setId((Integer) tabelaContatos.getValueAt(linhaSelecionada, 0));
+				contato.setNome((String) tabelaContatos.getValueAt(linhaSelecionada, 1));
+				contato.setApelido((String) tabelaContatos.getValueAt(linhaSelecionada, 2));
+				contato.setTelefoneResidencial((String) tabelaContatos.getValueAt(linhaSelecionada, 3));
+				contato.setTelefoneCelular((String) tabelaContatos.getValueAt(linhaSelecionada, 4));
+				contato.setCidade((String) tabelaContatos.getValueAt(linhaSelecionada, 5));
+				contato.setEstado((String) tabelaContatos.getValueAt(linhaSelecionada, 6));
+				
+				abreJanelaEditar(contato);
 				try {
 					janelaPrincipal.limparTela();
 					janelaPrincipal.telaConsultar();
@@ -46,13 +49,13 @@ public class TratadorEventosConsulta implements ActionListener{
 				}
 			}
 		} else if (evento.getSource()==janelaPrincipal.getBotaoExcluir()){
-			System.out.println("Botao EXCLUIR pressionado!");
-			if (tabelaAlunos.getSelectedRowCount()==1){
-				int confirma = JOptionPane.showConfirmDialog(null, "Deseja excluir aluno?", "Exclusão", JOptionPane.YES_NO_CANCEL_OPTION);
+			//System.out.println("Botao EXCLUIR pressionado!");
+			if (tabelaContatos.getSelectedRowCount()==1){
+				int confirma = JOptionPane.showConfirmDialog(null, "Deseja excluir contato?", "Exclusão", JOptionPane.YES_NO_CANCEL_OPTION);
 				if (confirma==JOptionPane.YES_OPTION){
 					try {
-						int aluno = (Integer) tabelaAlunos.getValueAt(tabelaAlunos.getSelectedRow(), 0);
-						acessoBanco.deletarAluno(aluno);
+						int contato = (Integer) tabelaContatos.getValueAt(tabelaContatos.getSelectedRow(), 0);
+						acessoBanco.deletarContato(contato);
 						janelaPrincipal.limparTela();
 						janelaPrincipal.telaConsultar();
 					} catch (IOException e) {
@@ -63,8 +66,8 @@ public class TratadorEventosConsulta implements ActionListener{
 		}
 	}
 	
-	public void abreJanelaEditar(Aluno aluno){
-		janelaEditar = new JanelaEditar(acessoBanco, aluno);
+	public void abreJanelaEditar(Contato contato){
+		janelaEditar = new JanelaEditar(acessoBanco, contato);
 		janelaEditar.montarJanelaEditar();
 	}
 }

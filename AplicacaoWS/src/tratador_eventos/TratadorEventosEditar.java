@@ -32,15 +32,13 @@ public class TratadorEventosEditar implements ActionListener{
 	public String montarJson(){
 		String json = "";
 		json += "\"nome\": \"" + janelaEditar.getTextoNome().getText() + "\"";
-		json += ", \"telefone\": \"" + janelaEditar.getTextoTel().getText()
+		json += ", \"apelido\": \"" + janelaEditar.getTextoApelido().getText() + "\"";
+		json += ", \"telres\": \"" + janelaEditar.getTextoTelRes().getText()
 				+ "\"";
-		json += ", \"idade\": "
-				+ Integer
-						.parseInt(janelaEditar.getTextoIdade().getText());
-		if (janelaEditar.getMasc().isSelected())
-			json += ", \"sexo\": \"M\"}";
-		else
-			json += ", \"sexo\": \"F\"}";
+		json += ", \"telcel\": \"" + janelaEditar.getTextoTelCel().getText()
+				+ "\"";
+		json += ", \"cidade\": \"" + janelaEditar.getTextoCidade().getText()+ "\"";
+		json += ", \"estado\": \"" + janelaEditar.getComboEstados().getSelectedItem()+ "\"}";
 		
 		return json;
 	}

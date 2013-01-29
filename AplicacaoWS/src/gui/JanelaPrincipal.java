@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -9,14 +10,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -29,7 +29,7 @@ import tratador_eventos.TratadorEventosTabela;
 import net.miginfocom.swing.MigLayout;
 
 import aplicacao.AcessoBanco;
-import aplicacao.Aluno;
+import aplicacao.Contato;
 
 public class JanelaPrincipal extends JFrame implements KeyListener{
 
@@ -41,25 +41,29 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 	private AcessoBanco acessoBanco;
 	
 	//Elementos da Janela de Cadastro
-	private JLabel cadastro = new JLabel("Cadastro de aluno");
+	private JLabel cadastro = new JLabel("Cadastro de Contato");
 	private JLabel nome = new JLabel("Nome: ");
-	private JLabel telefone = new JLabel("Telefone: ");
-	private JLabel idade = new JLabel("Idade: ");
-	private JLabel sexo = new JLabel("Sexo: ");
-	private JTextField textoNome = new JTextField(50);
-	private JTextField textoTel = new JTextField(12);
-	private JTextField textoIdade = new JTextField(5);
-	private JRadioButton masc = new JRadioButton("Masculino");
-	private JRadioButton fem = new JRadioButton("Feminino");
+	private JLabel apelido = new JLabel("Apelido: ");
+	private JLabel telefoneResidencial = new JLabel("Tel. Residencial: ");
+	private JLabel telefoneCelular = new JLabel("Tel. Cel.: ");
+	private JLabel cidade = new JLabel("Cidade: ");
+	private JLabel estado = new JLabel("Estado: ");
+	private JTextField textoNome = new JTextField(45);
+	private JTextField textoApelido = new JTextField(20);
+	private JTextField textoTelRes = new JTextField(12);
+	private JTextField textoTelCel = new JTextField(12);
+	private JTextField textoCidade = new JTextField(25);
+	private String[] estados = {"AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PR","PB","PA","PE",
+			"PI","RJ","RN","RS","RO","RR","SC","SE","SP","TO"};
+	private JComboBox comboEstados = new JComboBox(estados);
 	private JButton botaoSalvar = new JButton("Salvar");
 	private JButton botaoLimpar = new JButton("Limpar");
 	private JPanel botoes = new JPanel();
-	private ButtonGroup botoesSexo = new ButtonGroup();
 	
 	//Elementos da janela de Consulta
-	JLabel consulta = new JLabel("Alunos cadastrados");
-	private JTable tabelaAlunos;
-	private TabelaAluno tabelaAlunosModelo;
+	JLabel consulta = new JLabel("Contatos cadastrados");
+	private JTable tabelaContatos;
+	private TabelaContatos tabelaContatosModelo;
 	
 	private JPanel painelIcones;
 	private String caminhoImgEditar;
@@ -79,7 +83,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 	public JanelaPrincipal(AcessoBanco acessoBanco) {
 		super();
 		this.acessoBanco = acessoBanco;
-		setTitle("Application Student");
+		setTitle("Application Contact");
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 	}
@@ -122,8 +126,10 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 	
 	public void limparDados() {
 		getTextoNome().setText("");
-		getTextoIdade().setText("");
-		getTextoTel().setText("");
+		getTextoApelido().setText("");
+		getTextoTelRes().setText("");
+		getTextoTelCel().setText("");
+		getTextoCidade().setText("");
 	}
 	
 	public void telaCadastrar() {
@@ -131,25 +137,24 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 		
 		MigLayout migLayout = new MigLayout("wrap 3");
 		painelPrincipal.setLayout(migLayout);
-		
-		botoesSexo.add(masc);
-		botoesSexo.add(fem);
 
 		botoes.add(botaoLimpar);
 		botoes.add(botaoSalvar);
 		
 		cadastro.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		painelPrincipal.add(cadastro,"gapleft 260, gaptop 140, spanx 3");
+		painelPrincipal.add(cadastro,"gapleft 260, gaptop 120, spanx 3");
 		painelPrincipal.add(nome, "gapleft 70, gaptop 40");
 		painelPrincipal.add(textoNome,"spanx 2");
-		painelPrincipal.add(telefone, "gapleft 70");
-		painelPrincipal.add(textoTel, "spanx 2");
-		painelPrincipal.add(idade, "gapleft 70");
-		painelPrincipal.add(textoIdade, "spanx 2");
-		painelPrincipal.add(sexo, "gapleft70");
-		masc.setSelected(true);
-		painelPrincipal.add(masc);
-		painelPrincipal.add(fem);
+		painelPrincipal.add(apelido, "gapleft 70");
+		painelPrincipal.add(textoApelido, "spanx 2");
+		painelPrincipal.add(telefoneResidencial, "gapleft 70");
+		painelPrincipal.add(textoTelRes, "spanx 2");
+		painelPrincipal.add(telefoneCelular, "gapleft 70");
+		painelPrincipal.add(textoTelCel, "spanx 2");
+		painelPrincipal.add(cidade, "gapleft 70");
+		painelPrincipal.add(textoCidade, "spanx 2");
+		painelPrincipal.add(estado, "gapleft 70");
+		painelPrincipal.add(comboEstados, "spanx 2");
 		painelPrincipal.add(botoes, "spanx 3, gapleft 270");
 
 		add(painelPrincipal);
@@ -163,16 +168,27 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 	
 	public void telaConsultar() throws IOException{
 		tratadorEventosTabela = new TratadorEventosTabela(this);
-		final JTable tabela = getTabelaAlunos();
+		final JTable tabela = getTabelaContatos();
 		
 		tratadorEventosConsulta = new TratadorEventosConsulta(this,tabela,acessoBanco);
 		
 		MigLayout migLayout = new MigLayout("wrap 4");
 		painelPrincipal.setLayout(migLayout);
+		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tabela.getColumnModel().getColumn(0).setPreferredWidth(40);
+		tabela.getColumnModel().getColumn(1).setPreferredWidth(145);
+		tabela.getColumnModel().getColumn(2).setPreferredWidth(100);
+		tabela.getColumnModel().getColumn(3).setPreferredWidth(110);
+		tabela.getColumnModel().getColumn(4).setPreferredWidth(100);
+		tabela.getColumnModel().getColumn(5).setPreferredWidth(150);
+		tabela.getColumnModel().getColumn(6).setPreferredWidth(55);
+		JScrollPane barraRolagem = new JScrollPane(tabela);
+		tabela.setPreferredScrollableViewportSize(new Dimension(710,500));    
+
 		
 		consulta.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		painelPrincipal.add(consulta,"gapleft 250, gaptop 30, spanx 4");
-		painelPrincipal.add(new JScrollPane(tabela), "spanx 4,gapleft 150, gaptop 30");
+		painelPrincipal.add(barraRolagem, "spanx 4,gapleft 30, gaptop 30");
 		
 		iconeEditar = new ImageIcon(caminhoImgEditar);
 		botaoEditar = new JButton(iconeEditar);
@@ -200,30 +216,30 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 		setVisible(true);
 	}
 	
-	public JTable getTabelaAlunos() throws IOException{
+	public JTable getTabelaContatos() throws IOException{
 
-		if (tabelaAlunos == null) {
-            tabelaAlunos = new JTable();
-            tabelaAlunos.setModel(getTabelaModelo());
+		if (tabelaContatos == null) {
+			tabelaContatos = new JTable();
+			tabelaContatos.setModel(getTabelaModelo());
         } else {
-            tabelaAlunos.setModel(getTabelaModelo());
+        	tabelaContatos.setModel(getTabelaModelo());
         }
-        return tabelaAlunos;
+        return tabelaContatos;
 	}
 	
-	private TabelaAluno getTabelaModelo() throws IOException {
-        if (tabelaAlunosModelo == null) {
-            tabelaAlunosModelo = new TabelaAluno(pegaAlunos());
+	private TabelaContatos getTabelaModelo() throws IOException {
+        if (tabelaContatosModelo == null) {
+        	tabelaContatosModelo = new TabelaContatos(pegaContatos());
         } else {
-        	tabelaAlunosModelo = new TabelaAluno(pegaAlunos());
+        	tabelaContatosModelo = new TabelaContatos(pegaContatos());
         }
-        return tabelaAlunosModelo;
+        return tabelaContatosModelo;
     }
 
-	private List<Aluno> pegaAlunos() throws IOException {
-        List<Aluno> alunos = new ArrayList<Aluno>();
-		alunos = acessoBanco.buscaDocumentos();
-        return alunos;
+	private List<Contato> pegaContatos() throws IOException {
+        List<Contato> contatos = new ArrayList<Contato>();
+		contatos = acessoBanco.buscaDocumentos();
+        return contatos;
     }
 	
 	public JButton getBotaoEditar() {
@@ -249,6 +265,14 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 	public void setCaminhoImgExcluir(String caminhoImgExcluir) {
 		this.caminhoImgExcluir = caminhoImgExcluir;
 	}
+	
+	public JComboBox getComboEstados() {
+		return comboEstados;
+	}
+
+	public void setComboEstados(JComboBox comboEstados) {
+		this.comboEstados = comboEstados;
+	}
 
 	public JTextField getTextoNome() {
 		return textoNome;
@@ -258,40 +282,40 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 		this.textoNome = textoNome;
 	}
 
-	public JTextField getTextoTel() {
-		return textoTel;
+	public JTextField getTextoApelido() {
+		return textoApelido;
 	}
 
-	public void setTextoTel(JTextField textoTel) {
-		this.textoTel = textoTel;
+	public JTextField getTextoTelRes() {
+		return textoTelRes;
 	}
 
-	public JTextField getTextoIdade() {
-		return textoIdade;
+	public JTextField getTextoTelCel() {
+		return textoTelCel;
 	}
 
-	public void setTextoIdade(JTextField textoIdade) {
-		this.textoIdade = textoIdade;
-	}
-
-	public JRadioButton getMasc() {
-		return masc;
-	}
-
-	public void setMasc(JRadioButton masc) {
-		this.masc = masc;
-	}
-
-	public JRadioButton getFem() {
-		return fem;
-	}
-
-	public void setFem(JRadioButton fem) {
-		this.fem = fem;
+	public JTextField getTextoCidade() {
+		return textoCidade;
 	}
 
 	public JButton getBotaoSalvar() {
 		return botaoSalvar;
+	}
+	
+	public void setTextoApelido(JTextField textoApelido) {
+		this.textoApelido = textoApelido;
+	}
+
+	public void setTextoTelRes(JTextField textoTelRes) {
+		this.textoTelRes = textoTelRes;
+	}
+
+	public void setTextoTelCel(JTextField textoTelCel) {
+		this.textoTelCel = textoTelCel;
+	}
+
+	public void setTextoCidade(JTextField textoCidade) {
+		this.textoCidade = textoCidade;
 	}
 
 	public void setBotaoSalvar(JButton botaoSalvar) {
