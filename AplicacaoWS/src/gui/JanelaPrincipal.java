@@ -77,11 +77,10 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	private JButton botaoEditar;
 	private Icon iconeExcluir;
 	private JButton botaoExcluir;
-	
-	private JButton botaoInicio;
-	private JButton botaoLimite;
+
+	private JButton botaoCondicao;
 	private JTextField textoLimite;
-	private JTextField textoInicio;
+	private JTextField registroInicio;
 
 	// Tratadores de eventos das janelas
 	private TratadorEventosMenu tratadorEventosMenu;
@@ -219,36 +218,33 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		JScrollPane barraRolagem = new JScrollPane(tabela);
 		painelPrincipal.add(barraRolagem, "spanx 4,gapleft 80, gaptop 10");
 
+		// montando o painel de id inicial
+		JPanel painelInicio = new JPanel();
+		TitledBorder bordaInicio = new TitledBorder("ID inicio");
+		registroInicio = new JTextField(5);
+		painelInicio.add(registroInicio);
+		painelInicio.setBorder(bordaInicio);
+
 		// montando o painel de limite
 		JPanel painelLimite = new JPanel();
 		TitledBorder bordaLimite = new TitledBorder("Limite");
 		textoLimite = new JTextField(5);
-		botaoLimite = new JButton("OK");
 		painelLimite.add(textoLimite);
-		painelLimite.add(botaoLimite);
 		painelLimite.setBorder(bordaLimite);
 
-		// montando o painel de id inicial
-		JPanel painelInicio = new JPanel();
-		TitledBorder bordaInicio = new TitledBorder("ID inicio");
-		textoInicio = new JTextField(5);
-		botaoInicio = new JButton("OK");
-		painelInicio.add(textoInicio);
-		painelInicio.add(botaoInicio);
-		painelInicio.setBorder(bordaInicio);
+		// adiciona tratador de eventos para botao inicio e limite
+		botaoCondicao = new JButton("OK");
+		botaoCondicao.addActionListener(tratadorEventosConsulta);
 
-		//adiciona tratador de eventos para botao inicio e limite
-		botaoInicio.addActionListener(tratadorEventosConsulta);
-		botaoLimite.addActionListener(tratadorEventosConsulta);
-		
 		// montando o painel de ferramentas de pesquisa com o painel de limite e
 		// o painel de id inicial
 		JPanel painelFerramentas = new JPanel();
 		TitledBorder tituloPainelFerramentas = new TitledBorder(
 				"Ferramentas de pesquisa");
 		painelFerramentas.setBorder(tituloPainelFerramentas);
-		painelFerramentas.add(painelLimite);
 		painelFerramentas.add(painelInicio);
+		painelFerramentas.add(painelLimite);
+		painelFerramentas.add(botaoCondicao);
 
 		// acrescenta ao painel principal, o painel inferior
 		painelPrincipal.add(painelFerramentas,
@@ -311,7 +307,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		contatos = acessoBanco.buscaDocumentos(condicao);
 		return contatos;
 	}
-	
+
 	public JTextField getTextoLimite() {
 		return textoLimite;
 	}
@@ -320,20 +316,16 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		this.textoLimite = textoLimite;
 	}
 
-	public JTextField getTextoInicio() {
-		return textoInicio;
+	public JTextField getRegistroInicio() {
+		return registroInicio;
 	}
 
-	public void setTextoInicio(JTextField textoInicio) {
-		this.textoInicio = textoInicio;
+	public void setRegistroInicio(JTextField registroInicio) {
+		this.registroInicio = registroInicio;
 	}
 
-	public JButton getBotaoInicio() {
-		return botaoInicio;
-	}
-
-	public JButton getBotaoLimite() {
-		return botaoLimite;
+	public JButton getBotaoCondicao() {
+		return botaoCondicao;
 	}
 
 	public JButton getBotaoCadastrar() {
