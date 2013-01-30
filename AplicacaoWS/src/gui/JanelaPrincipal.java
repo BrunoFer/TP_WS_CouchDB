@@ -37,8 +37,9 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 
 	// Elementos usado em todas as interfaces
 	private MenuPrincipal menuJanela;
-	private JPanel painelPrincipal;
+	private PainelPrincipal painelPrincipal;
 	private AcessoBanco acessoBanco;
+	private String imagemFundo;
 
 	// Elementos da Janela de Cadastro
 	private JLabel nome = new JLabel("Nome: ");
@@ -61,7 +62,6 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	private JPanel botoes = new JPanel();
 
 	// Elementos da janela de Consulta
-	JLabel consulta = new JLabel("Contatos cadastrados");
 	private JTable tabelaContatos;
 	private TabelaContatos tabelaContatosModelo;
 	private JTable tabela;
@@ -91,7 +91,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		super();
 		this.acessoBanco = acessoBanco;
 		setTitle("Contact Application");
-		setSize(900, 700);
+		setSize(900, 750);
 		setLocationRelativeTo(null);
 	}
 
@@ -111,8 +111,8 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		menuJanela.getGtk().addActionListener(tratadorEventosMenu);
 		menuJanela.getNimbus().addActionListener(tratadorEventosMenu);
 
-		painelPrincipal = new JPanel();
-		add(painelPrincipal);
+		painelPrincipal = new PainelPrincipal(imagemFundo);
+		getContentPane().add(painelPrincipal);
 
 		repaint();
 		setVisible(true);
@@ -217,7 +217,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelIcones.add(botaoCadastrar);
 
 		// acrescenta o painel icones no painel Principal
-		painelDentro.add(painelIcones, "spanx 4,gapleft 650, gaptop 10");
+		painelDentro.add(painelIcones, "spanx 4,gapleft 580, gaptop 10");
 
 		// acrescentando a tabela com os dados no painel principal
 		propriedadesTabela();
@@ -253,12 +253,11 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelFerramentas.add(botaoCondicao);
 
 		// acrescenta ao painel principal, o painel inferior
-		painelDentro.add(painelFerramentas,
-				"gaptop 20,gapleft 300, gapbottom 20, spanx 4");
+		painelDentro.add(painelFerramentas,"gaptop 10,gapleft 300, spanx 4");
 
 		MigLayout layoutFora = new MigLayout();
 		painelPrincipal.setLayout(layoutFora);
-		painelPrincipal.add(painelDentro,"gap 10 10 10 10");
+		painelPrincipal.add(painelDentro,"gap 20 20 20 20");
 		
 		// acrescenta o painel principal na janela JFrame
 		add(painelPrincipal);
@@ -287,7 +286,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		tabela.setGridColor(new Color(40, 255, 40));
 		tabela.setBackground(new Color(240, 255, 240));
 		tabela.setFont(new Font("Verdana", Font.BOLD, 15));
-		tabela.setPreferredScrollableViewportSize(new Dimension(720, 450));
+		tabela.setPreferredScrollableViewportSize(new Dimension(720, 300));
 	}
 
 	public JTable getTabelaContatos(String condicao) throws IOException {
@@ -314,6 +313,14 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		List<Contato> contatos = new ArrayList<Contato>();
 		contatos = acessoBanco.buscaDocumentos(condicao);
 		return contatos;
+	}
+
+	public String getImagemFundo() {
+		return imagemFundo;
+	}
+
+	public void setImagemFundo(String imagemFundo) {
+		this.imagemFundo = imagemFundo;
 	}
 
 	public JTextField getTextoLimite() {
@@ -424,16 +431,8 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		this.textoCidade = textoCidade;
 	}
 
-	public void setBotaoSalvar(JButton botaoSalvar) {
-		this.botaoSalvar = botaoSalvar;
-	}
-
 	public JButton getBotaoLimpar() {
 		return botaoLimpar;
-	}
-
-	public void setBotaoLimpar(JButton botaoLimpar) {
-		this.botaoLimpar = botaoLimpar;
 	}
 
 	public MenuPrincipal getMenuJanela() {
