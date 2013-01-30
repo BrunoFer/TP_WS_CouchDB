@@ -42,15 +42,17 @@ public class AcessoBanco {
 		}
 	}
 
-	public List<Contato> buscaDocumentos() throws IOException {
+	public List<Contato> buscaDocumentos(String condicao) throws IOException {
 		List<Contato> listaContatos = new ArrayList<Contato>();
 		JSONObject json, documento, dadosContato;
 		JSONArray arrayDocumentos;
-
 		String url = getUrlmongorest() + getNomebanco()
 				+ "/_all_docs?include_docs=true";
+		
+		if (!condicao.equals("todos"))
+			url += condicao;
+		
 		String jsonString = getRegistro(url);
-
 		try {
 			json = new JSONObject(jsonString.toString());
 			arrayDocumentos = json.getJSONArray("rows");
@@ -140,38 +142,43 @@ public class AcessoBanco {
 		}
 	}
 
-	public void deletarContato(int numeroDocumento){
-		//busca o hash do aluno que será deletado
+	public void deletarContato(int numeroDocumento) {
+		// busca o hash do aluno que será deletado
 		String hash;
 		try {
 			hash = buscarHashContato(numeroDocumento);
 			// montando a url para deletar o documento do aluno
-			String url = getUrlmongorest() + getNomebanco() + "/" + numeroDocumento
-					+ "?rev=" + hash;
+			String url = getUrlmongorest() + getNomebanco() + "/"
+					+ numeroDocumento + "?rev=" + hash;
 			removeRegistro(url);
 		} catch (IOException e) {
-			System.out.println("Erro IOException - deletarAluno()/AcessoBanco.java");
+			System.out
+					.println("Erro IOException - deletarAluno()/AcessoBanco.java");
 		}
 	}
-	
+
 	public void atualizarAluno(int numeroDocumento, String json) {
-		//System.out.println("Cheguei aqui - numero do documento:"+ numeroDocumento);
+		// System.out.println("Cheguei aqui - numero do documento:"+
+		// numeroDocumento);
 		try {
 			String hash = buscarHashContato(numeroDocumento);
 			// montando a url para deletar o documento do aluno
 			String url = getUrlmongorest() + getNomebanco() + "/";
-			/*acrescenta o id e o hash do aluno à string json, sem isso o documento
-			 *  não é alterado corretamente
+			/*
+			 * acrescenta o id e o hash do aluno à string json, sem isso o
+			 * documento não é alterado corretamente
 			 */
-			String jsonFinal = "{ \"_id\":\""+numeroDocumento+"\",\"_rev\":\""+hash+"\","+json;
+			String jsonFinal = "{ \"_id\":\"" + numeroDocumento
+					+ "\",\"_rev\":\"" + hash + "\"," + json;
 			updateRegistro(url, jsonFinal);
 		} catch (IOException e) {
-			System.out.println("Erro IOException - atualizarAluno()/AcessoBanco.java");
+			System.out
+					.println("Erro IOException - atualizarAluno()/AcessoBanco.java");
 		}
-		
+
 	}
-	
-	public void updateRegistro(String url, String json){
+
+	public void updateRegistro(String url, String json) {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpPost requisicaoPost = new HttpPost(URI.create(url));
 		HttpEntity input = new StringEntity(json, ContentType.APPLICATION_JSON);
@@ -181,30 +188,32 @@ public class AcessoBanco {
 		try {
 			response = httpClient.execute(requisicaoPost);
 			System.out.println(response);
-			JOptionPane.showMessageDialog(null, "Registro alterado com sucesso!",
-					"Cadastro", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null,
+					"Registro alterado com sucesso!", "Cadastro",
+					JOptionPane.INFORMATION_MESSAGE);
 		} catch (IOException e) {
 			System.out
-			.println("Erro na conexão! - updateRegistro()/AcessoBanco.java");
+					.println("Erro na conexão! - updateRegistro()/AcessoBanco.java");
 		}
 	}
 
-	public void removeRegistro(String url){
+	public void removeRegistro(String url) {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpDelete deleteRequest = new HttpDelete(url);
 		HttpResponse response;
 		try {
 			response = httpClient.execute(deleteRequest);
 			System.out.println(response);
-			JOptionPane.showMessageDialog(null, "Registro excluído com sucesso!",
-					"Exclusão", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null,
+					"Registro excluído com sucesso!", "Exclusão",
+					JOptionPane.INFORMATION_MESSAGE);
 		} catch (IOException e) {
 			System.out
-			.println("Erro na conexão! - removeRegistro()/AcessoBanco.java");
+					.println("Erro na conexão! - removeRegistro()/AcessoBanco.java");
 		}
 	}
 
-	public void setRegistro(String json){
+	public void setRegistro(String json) {
 		System.out.println(json);
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpPut putRequest = new HttpPut(URI.create(urlMongoRest + nomeBanco
@@ -217,10 +226,12 @@ public class AcessoBanco {
 			response = httpClient.execute(putRequest);
 			System.out.println(response);
 			setNomeDocumento(nomeDocumento + 1);
-			JOptionPane.showMessageDialog(null, "Registro incluído com sucesso!",
-					"Cadastro", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null,
+					"Registro incluído com sucesso!", "Cadastro",
+					JOptionPane.INFORMATION_MESSAGE);
 		} catch (IOException e) {
-			System.out.println("Erro na conexão! - setRegistro()/AcessoBanco.java");
+			System.out
+					.println("Erro na conexão! - setRegistro()/AcessoBanco.java");
 		}
 	}
 

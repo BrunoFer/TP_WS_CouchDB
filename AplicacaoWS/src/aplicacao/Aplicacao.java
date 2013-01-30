@@ -32,6 +32,7 @@ public class Aplicacao {
 	public static void setandoCaminhosImagens(JanelaPrincipal janela) throws IOException{
 		janela.setCaminhoImgEditar(new File(".").getCanonicalPath()+"/img/editar.png");
 		janela.setCaminhoImgExcluir(new File(".").getCanonicalPath()+"/img/excluir.png");
+		janela.setCaminhoImgCadastrar(new File(".").getCanonicalPath()+"/img/cadastro.png");
 	}
 
 }

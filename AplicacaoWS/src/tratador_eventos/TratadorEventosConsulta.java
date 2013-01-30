@@ -36,11 +36,10 @@ public class TratadorEventosConsulta implements ActionListener{
 			if (tabela.getSelectedRowCount()==1){
 				int linhaSelecionada = tabela.getSelectedRow();
 				contato = tabelaContatos.getContato(linhaSelecionada);
-				
 				abreJanelaEditar(contato);
 				try {
 					janelaPrincipal.limparTela();
-					janelaPrincipal.telaConsultar();
+					janelaPrincipal.telaConsultar("todos");
 				} catch (IOException e) {
 					System.out.println("Erro IOException- botao editar - actionPerformed()/TratadorEventosConsulta.java");
 				}
@@ -54,10 +53,39 @@ public class TratadorEventosConsulta implements ActionListener{
 						int contato = (Integer) tabelaContatos.getValueAt(tabela.getSelectedRow(), 0);
 						acessoBanco.deletarContato(contato);
 						janelaPrincipal.limparTela();
-						janelaPrincipal.telaConsultar();
+						janelaPrincipal.telaConsultar("todos");
 					} catch (IOException e) {
 						System.out.println("Erro IOException - botao excluir - actionPerformed()/TratadorEventosConsulta.java");
 					}
+				}
+			}
+		} else if (evento.getSource()==janelaPrincipal.getBotaoCadastrar()){
+			janelaPrincipal.limparTela();
+			janelaPrincipal.telaCadastrar();
+		} else if (evento.getSource()==janelaPrincipal.getBotaoInicio()){
+			String condicao="";
+			if (!janelaPrincipal.getTextoInicio().getText().equals("")){
+				condicao+="&startkey=\""+janelaPrincipal.getTextoInicio().getText()+"\"";
+				if (!janelaPrincipal.getTextoLimite().getText().equals(""))
+					condicao+="&limit="+janelaPrincipal.getTextoLimite().getText();
+				try {
+					janelaPrincipal.limparTela();
+					janelaPrincipal.telaConsultar(condicao);
+				} catch (IOException e) {
+					System.out.println("Erro de condicao! - TratadorEventosConsulta");
+				}
+			}
+		} else if (evento.getSource()==janelaPrincipal.getBotaoLimite()){
+			String condicao="";
+			if (!janelaPrincipal.getTextoLimite().getText().equals("")){
+				condicao+="&startkey=\""+janelaPrincipal.getTextoInicio().getText()+"\"";
+				if (!janelaPrincipal.getTextoLimite().getText().equals(""))
+					condicao+="&limit="+janelaPrincipal.getTextoLimite().getText();
+				try {
+					janelaPrincipal.limparTela();
+					janelaPrincipal.telaConsultar(condicao);
+				} catch (IOException e) {
+					System.out.println("Erro de condicao! - TratadorEventosConsulta");
 				}
 			}
 		}

@@ -21,27 +21,26 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
+import net.miginfocom.swing.MigLayout;
 import tratador_eventos.TratadorEventosCadastro;
 import tratador_eventos.TratadorEventosConsulta;
 import tratador_eventos.TratadorEventosMenu;
 import tratador_eventos.TratadorEventosTabela;
-
-import net.miginfocom.swing.MigLayout;
-
 import aplicacao.AcessoBanco;
 import aplicacao.Contato;
 
-public class JanelaPrincipal extends JFrame implements KeyListener{
+public class JanelaPrincipal extends JFrame implements KeyListener {
 
 	private static final long serialVersionUID = 1L;
-	
-	//Elementos usado em todas as interfaces
+
+	// Elementos usado em todas as interfaces
 	private MenuPrincipal menuJanela;
 	private JPanel painelPrincipal;
 	private AcessoBanco acessoBanco;
-	
-	//Elementos da Janela de Cadastro
+
+	// Elementos da Janela de Cadastro
 	private JLabel cadastro = new JLabel("Cadastro de Contato");
 	private JLabel nome = new JLabel("Nome: ");
 	private JLabel apelido = new JLabel("Apelido: ");
@@ -54,34 +53,42 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 	private JTextField textoTelRes = new JTextField(12);
 	private JTextField textoTelCel = new JTextField(12);
 	private JTextField textoCidade = new JTextField(25);
-	private String[] estados = {"AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PR","PB","PA","PE",
-			"PI","RJ","RN","RS","RO","RR","SC","SE","SP","TO"};
+	private String[] estados = { "AC", "AL", "AP", "AM", "BA", "CE", "DF",
+			"ES", "GO", "MA", "MT", "MS", "MG", "PR", "PB", "PA", "PE", "PI",
+			"RJ", "RN", "RS", "RO", "RR", "SC", "SE", "SP", "TO" };
 	private JComboBox comboEstados = new JComboBox(estados);
 	private JButton botaoSalvar = new JButton("Salvar");
 	private JButton botaoLimpar = new JButton("Limpar");
 	private JPanel botoes = new JPanel();
-	
-	//Elementos da janela de Consulta
+
+	// Elementos da janela de Consulta
 	JLabel consulta = new JLabel("Contatos cadastrados");
 	private JTable tabelaContatos;
 	private TabelaContatos tabelaContatosModelo;
 	private JTable tabela;
-	
+
 	private JPanel painelIcones;
 	private String caminhoImgEditar;
 	private String caminhoImgExcluir;
+	private String caminhoImgCadastrar;
+	private Icon iconeCadastrar;
 	private Icon iconeEditar;
+	private JButton botaoCadastrar;
 	private JButton botaoEditar;
 	private Icon iconeExcluir;
 	private JButton botaoExcluir;
 	
-	//Tratadores de eventos das janelas
+	private JButton botaoInicio;
+	private JButton botaoLimite;
+	private JTextField textoLimite;
+	private JTextField textoInicio;
+
+	// Tratadores de eventos das janelas
 	private TratadorEventosMenu tratadorEventosMenu;
 	private TratadorEventosCadastro tratadorEventosCadastro;
 	private TratadorEventosTabela tratadorEventosTabela;
 	private TratadorEventosConsulta tratadorEventosConsulta;
-	
-	
+
 	public JanelaPrincipal(AcessoBanco acessoBanco) {
 		super();
 		this.acessoBanco = acessoBanco;
@@ -89,13 +96,13 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 		setSize(900, 700);
 		setLocationRelativeTo(null);
 	}
-	
+
 	public void montarJanela() {
 		tratadorEventosMenu = new TratadorEventosMenu(this);
 		menuJanela = new MenuPrincipal();
-	
+
 		setJMenuBar(menuJanela);
-	
+
 		// Evento gerados pelo Menu
 		menuJanela.getCadastro().addActionListener(tratadorEventosMenu);
 		menuJanela.getExibir().addActionListener(tratadorEventosMenu);
@@ -108,24 +115,24 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 
 		painelPrincipal = new JPanel();
 		add(painelPrincipal);
-		
+
 		repaint();
 		setVisible(true);
-		
+
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}
 		});
 	}
-	
+
 	public void limparTela() {
 		painelPrincipal.removeAll();
 		repaint();
 		limparDados();
 		setVisible(true);
 	}
-	
+
 	public void limparDados() {
 		getTextoNome().setText("");
 		getTextoApelido().setText("");
@@ -133,20 +140,20 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 		getTextoTelCel().setText("");
 		getTextoCidade().setText("");
 	}
-	
+
 	public void telaCadastrar() {
-		tratadorEventosCadastro = new TratadorEventosCadastro(this,acessoBanco);
-		
+		tratadorEventosCadastro = new TratadorEventosCadastro(this, acessoBanco);
+
 		MigLayout migLayout = new MigLayout("wrap 3");
 		painelPrincipal.setLayout(migLayout);
 
 		botoes.add(botaoLimpar);
 		botoes.add(botaoSalvar);
-		
+
 		cadastro.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		painelPrincipal.add(cadastro,"gapleft 260, gaptop 120, spanx 3");
+		painelPrincipal.add(cadastro, "gapleft 260, gaptop 120, spanx 3");
 		painelPrincipal.add(nome, "gapleft 70, gaptop 40");
-		painelPrincipal.add(textoNome,"spanx 2");
+		painelPrincipal.add(textoNome, "spanx 2");
 		painelPrincipal.add(apelido, "gapleft 70");
 		painelPrincipal.add(textoApelido, "spanx 2");
 		painelPrincipal.add(telefoneResidencial, "gapleft 70");
@@ -160,56 +167,110 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 		painelPrincipal.add(botoes, "spanx 3, gapleft 270");
 
 		add(painelPrincipal);
-		
+
 		botaoSalvar.addActionListener(tratadorEventosCadastro);
 		botaoLimpar.addActionListener(tratadorEventosCadastro);
 
 		repaint();
 		setVisible(true);
 	}
-	
-	public void telaConsultar() throws IOException{
+
+	public void telaConsultar(String condicao) throws IOException {
 		tratadorEventosTabela = new TratadorEventosTabela(this);
-		tabela = getTabelaContatos();
-		
-		tratadorEventosConsulta = new TratadorEventosConsulta(this,tabela,acessoBanco,tabelaContatosModelo);
-		
+		tabela = getTabelaContatos(condicao);
+		tabela.addMouseListener(tratadorEventosTabela);
+
+		tratadorEventosConsulta = new TratadorEventosConsulta(this, tabela,
+				acessoBanco, tabelaContatosModelo);
+
+		// setando o layout do painel principal
 		MigLayout migLayout = new MigLayout("wrap 4");
 		painelPrincipal.setLayout(migLayout);
-		propriedadesTabela(); 
-		JScrollPane barraRolagem = new JScrollPane(tabela);
-		
+
+		// colocando o label do titulo no painel principal
 		consulta.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		painelPrincipal.add(consulta,"gapleft 270, gaptop 30, spanx 4");
-		painelPrincipal.add(barraRolagem, "spanx 4,gapleft 80, gaptop 30");
-		
+		painelPrincipal.add(consulta, "gapleft 300, gaptop 20, spanx 4");
+
+		// setando as imagens dos botões de manipulação de contatos
 		iconeEditar = new ImageIcon(caminhoImgEditar);
 		botaoEditar = new JButton(iconeEditar);
 		botaoEditar.setToolTipText("Editar");
 		iconeExcluir = new ImageIcon(caminhoImgExcluir);
 		botaoExcluir = new JButton(iconeExcluir);
 		botaoExcluir.setToolTipText("Excluir");
-		
-		painelIcones = new JPanel();
-		MigLayout migLayoutIcones = new MigLayout("wrap 3");
-		painelIcones.setLayout(migLayoutIcones);
-		painelIcones.add(botaoEditar,"gapleft 40");
-		painelIcones.add(botaoExcluir,"gapleft 70");
-		
+		iconeCadastrar = new ImageIcon(caminhoImgCadastrar);
+		botaoCadastrar = new JButton(iconeCadastrar);
+		botaoCadastrar.setToolTipText("Cadastrar");
+		botaoCadastrar.addActionListener(tratadorEventosConsulta);
 		botaoEditar.addActionListener(tratadorEventosConsulta);
 		botaoExcluir.addActionListener(tratadorEventosConsulta);
+
+		// montanto o painel de botões de manipulação de contatos
+		painelIcones = new JPanel();
+		painelIcones.add(botaoEditar);
+		painelIcones.add(botaoExcluir);
+		painelIcones.add(botaoCadastrar);
+
+		// acrescenta o painel icones no painel Principal
+		painelPrincipal.add(painelIcones, "spanx 4,gapleft 650, gaptop 10");
+
+		// acrescentando a tabela com os dados no painel principal
+		propriedadesTabela();
+		JScrollPane barraRolagem = new JScrollPane(tabela);
+		painelPrincipal.add(barraRolagem, "spanx 4,gapleft 80, gaptop 10");
+
+		// montando o painel de limite
+		JPanel painelLimite = new JPanel();
+		TitledBorder bordaLimite = new TitledBorder("Limite");
+		textoLimite = new JTextField(5);
+		botaoLimite = new JButton("OK");
+		painelLimite.add(textoLimite);
+		painelLimite.add(botaoLimite);
+		painelLimite.setBorder(bordaLimite);
+
+		// montando o painel de id inicial
+		JPanel painelInicio = new JPanel();
+		TitledBorder bordaInicio = new TitledBorder("ID inicio");
+		textoInicio = new JTextField(5);
+		botaoInicio = new JButton("OK");
+		painelInicio.add(textoInicio);
+		painelInicio.add(botaoInicio);
+		painelInicio.setBorder(bordaInicio);
+
+		//adiciona tratador de eventos para botao inicio e limite
+		botaoInicio.addActionListener(tratadorEventosConsulta);
+		botaoLimite.addActionListener(tratadorEventosConsulta);
 		
-		tabela.addMouseListener(tratadorEventosTabela);
-		
-		addKeyListener(this);
-		
-		painelPrincipal.add(painelIcones,"gaptop 30,gapleft 220, gapbottom 40, spanx 4");
+		// montando o painel de ferramentas de pesquisa com o painel de limite e
+		// o painel de id inicial
+		JPanel painelFerramentas = new JPanel();
+		TitledBorder tituloPainelFerramentas = new TitledBorder(
+				"Ferramentas de pesquisa");
+		painelFerramentas.setBorder(tituloPainelFerramentas);
+		painelFerramentas.add(painelLimite);
+		painelFerramentas.add(painelInicio);
+
+		// acrescenta ao painel principal, o painel inferior
+		painelPrincipal.add(painelFerramentas,
+				"gaptop 30,gapleft 300, gapbottom 40, spanx 4");
+
+		// acrescenta o painel principal na janela JFrame
 		add(painelPrincipal);
+
+		addKeyListener(this);
+
 		repaint();
 		setVisible(true);
 	}
-	
-	public void propriedadesTabela(){
+
+	/*
+	 * Esta função seta as propriedades da tabela que receberá os contatos
+	 * cadastrados no banco. Dentro das funções utilizadas estão o
+	 * redimensionamento da tabela, com os respectivos tamanhos de colunas e
+	 * linhas. Além disso, é definido a cor das suas linhas, do preenchimento de
+	 * fundo e a fonte utilizada no texto.
+	 */
+	public void propriedadesTabela() {
 		tabela.getColumnModel().getColumn(0).setPreferredWidth(40);
 		tabela.getColumnModel().getColumn(1).setPreferredWidth(145);
 		tabela.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -219,38 +280,66 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 		tabela.getColumnModel().getColumn(6).setPreferredWidth(55);
 		tabela.setRowHeight(23);
 		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		tabela.setGridColor(new Color(40,255,40));
-		tabela.setBackground(new Color(240,255,240));
+		tabela.setGridColor(new Color(40, 255, 40));
+		tabela.setBackground(new Color(240, 255, 240));
 		tabela.setFont(new Font("Verdana", Font.BOLD, 15));
-		tabela.setPreferredScrollableViewportSize(new Dimension(720,500)); 
+		tabela.setPreferredScrollableViewportSize(new Dimension(720, 450));
 	}
-	
-	public JTable getTabelaContatos() throws IOException{
+
+	public JTable getTabelaContatos(String condicao) throws IOException {
 
 		if (tabelaContatos == null) {
 			tabelaContatos = new JTable();
-			tabelaContatos.setModel(getTabelaModelo());
-        } else {
-        	tabelaContatos.setModel(getTabelaModelo());
-        }
-        return tabelaContatos;
+			tabelaContatos.setModel(getTabelaModelo(condicao));
+		} else {
+			tabelaContatos.setModel(getTabelaModelo(condicao));
+		}
+		return tabelaContatos;
+	}
+
+	private TabelaContatos getTabelaModelo(String condicao) throws IOException {
+		if (tabelaContatosModelo == null) {
+			tabelaContatosModelo = new TabelaContatos(pegaContatos(condicao));
+		} else {
+			tabelaContatosModelo = new TabelaContatos(pegaContatos(condicao));
+		}
+		return tabelaContatosModelo;
+	}
+
+	private List<Contato> pegaContatos(String condicao) throws IOException {
+		List<Contato> contatos = new ArrayList<Contato>();
+		contatos = acessoBanco.buscaDocumentos(condicao);
+		return contatos;
 	}
 	
-	private TabelaContatos getTabelaModelo() throws IOException {
-        if (tabelaContatosModelo == null) {
-        	tabelaContatosModelo = new TabelaContatos(pegaContatos());
-        } else {
-        	tabelaContatosModelo = new TabelaContatos(pegaContatos());
-        }
-        return tabelaContatosModelo;
-    }
+	public JTextField getTextoLimite() {
+		return textoLimite;
+	}
 
-	private List<Contato> pegaContatos() throws IOException {
-        List<Contato> contatos = new ArrayList<Contato>();
-		contatos = acessoBanco.buscaDocumentos();
-        return contatos;
-    }
-	
+	public void setTextoLimite(JTextField textoLimite) {
+		this.textoLimite = textoLimite;
+	}
+
+	public JTextField getTextoInicio() {
+		return textoInicio;
+	}
+
+	public void setTextoInicio(JTextField textoInicio) {
+		this.textoInicio = textoInicio;
+	}
+
+	public JButton getBotaoInicio() {
+		return botaoInicio;
+	}
+
+	public JButton getBotaoLimite() {
+		return botaoLimite;
+	}
+
+	public JButton getBotaoCadastrar() {
+		return botaoCadastrar;
+	}
+
 	public JButton getBotaoEditar() {
 		return botaoEditar;
 	}
@@ -261,6 +350,14 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 
 	public String getCaminhoImgEditar() {
 		return caminhoImgEditar;
+	}
+
+	public String getCaminhoImgCadastrar() {
+		return caminhoImgCadastrar;
+	}
+
+	public void setCaminhoImgCadastrar(String caminhoImgCadastrar) {
+		this.caminhoImgCadastrar = caminhoImgCadastrar;
 	}
 
 	public void setCaminhoImgEditar(String caminhoImgEditar) {
@@ -274,7 +371,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 	public void setCaminhoImgExcluir(String caminhoImgExcluir) {
 		this.caminhoImgExcluir = caminhoImgExcluir;
 	}
-	
+
 	public JComboBox getComboEstados() {
 		return comboEstados;
 	}
@@ -310,7 +407,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 	public JButton getBotaoSalvar() {
 		return botaoSalvar;
 	}
-	
+
 	public void setTextoApelido(JTextField textoApelido) {
 		this.textoApelido = textoApelido;
 	}
@@ -349,14 +446,16 @@ public class JanelaPrincipal extends JFrame implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent evento) {
-		if (evento.getKeyCode() == KeyEvent.VK_F5){
+		if (evento.getKeyCode() == KeyEvent.VK_F5) {
 			limparTela();
 		}
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {}
+	public void keyReleased(KeyEvent e) {
+	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {}
+	public void keyTyped(KeyEvent e) {
+	}
 }
