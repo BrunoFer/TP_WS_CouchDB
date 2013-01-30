@@ -33,7 +33,8 @@ public class Aplicacao {
 		janela.setCaminhoImgEditar(new File(".").getCanonicalPath()+"/img/editar.png");
 		janela.setCaminhoImgExcluir(new File(".").getCanonicalPath()+"/img/excluir.png");
 		janela.setCaminhoImgCadastrar(new File(".").getCanonicalPath()+"/img/cadastro.png");
-		janela.setImagemFundo(new File(".").getCanonicalPath()+"/img/Fundo.png");
+		janela.setImagemFundo(new File(".").getCanonicalPath()+"/img/images.jpg");
+		janela.setIconeTitulo(new File(".").getCanonicalPath()+"/img/couchdb.jpg");
 	}
 
 }

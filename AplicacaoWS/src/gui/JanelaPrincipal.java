@@ -3,6 +3,8 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
@@ -40,6 +42,11 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	private PainelPrincipal painelPrincipal;
 	private AcessoBanco acessoBanco;
 	private String imagemFundo;
+	private String caminhoImgEditar;
+	private String caminhoImgExcluir;
+	private String caminhoImgCadastrar;
+	private String iconeTitulo;
+	private Image iconeBarra;
 
 	// Elementos da Janela de Cadastro
 	private JLabel nome = new JLabel("Nome: ");
@@ -67,9 +74,6 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	private JTable tabela;
 
 	private JPanel painelIcones;
-	private String caminhoImgEditar;
-	private String caminhoImgExcluir;
-	private String caminhoImgCadastrar;
 	private Icon iconeCadastrar;
 	private Icon iconeEditar;
 	private JButton botaoCadastrar;
@@ -113,7 +117,10 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 
 		painelPrincipal = new PainelPrincipal(imagemFundo);
 		getContentPane().add(painelPrincipal);
-
+		Toolkit kit = Toolkit.getDefaultToolkit();
+		iconeBarra = kit.getImage(iconeTitulo);  
+		setIconImage(iconeBarra);
+		
 		repaint();
 		setVisible(true);
 
@@ -167,6 +174,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelDentro.add(comboEstados, "spanx 2");
 		painelDentro.add(botoes, "spanx 3, gapleft 270");
 
+		painelDentro.setBackground(new Color(255,255,255,0));
 		MigLayout layoutFora = new MigLayout();
 		painelPrincipal.setLayout(layoutFora);
 		painelPrincipal.add(painelDentro,"gapleft 50, gaptop 120");
@@ -229,6 +237,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		TitledBorder bordaInicio = new TitledBorder("ID inicio");
 		registroInicio = new JTextField(5);
 		painelInicio.add(registroInicio);
+		painelInicio.setBackground(new Color(255,255,255,0));
 		painelInicio.setBorder(bordaInicio);
 
 		// montando o painel de limite
@@ -236,6 +245,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		TitledBorder bordaLimite = new TitledBorder("Limite");
 		textoLimite = new JTextField(5);
 		painelLimite.add(textoLimite);
+		painelLimite.setBackground(new Color(255,255,255,0));
 		painelLimite.setBorder(bordaLimite);
 
 		// adiciona tratador de eventos para botao inicio e limite
@@ -255,6 +265,8 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		// acrescenta ao painel principal, o painel inferior
 		painelDentro.add(painelFerramentas,"gaptop 10,gapleft 300, spanx 4");
 
+		painelFerramentas.setBackground(new Color(255,255,255,0));
+		painelDentro.setBackground(new Color(255,255,255,0));
 		MigLayout layoutFora = new MigLayout();
 		painelPrincipal.setLayout(layoutFora);
 		painelPrincipal.add(painelDentro,"gap 20 20 20 20");
@@ -313,6 +325,14 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		List<Contato> contatos = new ArrayList<Contato>();
 		contatos = acessoBanco.buscaDocumentos(condicao);
 		return contatos;
+	}
+	
+	public String getIconeTitulo() {
+		return iconeTitulo;
+	}
+
+	public void setIconeTitulo(String iconeTitulo) {
+		this.iconeTitulo = iconeTitulo;
 	}
 
 	public String getImagemFundo() {
