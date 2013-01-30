@@ -41,7 +41,6 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	private AcessoBanco acessoBanco;
 
 	// Elementos da Janela de Cadastro
-	private JLabel cadastro = new JLabel("Cadastro de Contato");
 	private JLabel nome = new JLabel("Nome: ");
 	private JLabel apelido = new JLabel("Apelido: ");
 	private JLabel telefoneResidencial = new JLabel("Tel. Residencial: ");
@@ -143,28 +142,35 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	public void telaCadastrar() {
 		tratadorEventosCadastro = new TratadorEventosCadastro(this, acessoBanco);
 
-		MigLayout migLayout = new MigLayout("wrap 3");
-		painelPrincipal.setLayout(migLayout);
-
+		MigLayout layoutDentro = new MigLayout("wrap 3");
+		JPanel painelDentro = new JPanel();
+		painelDentro.setLayout(layoutDentro);
+		TitledBorder bordaPainelDentro = new TitledBorder("Cadastro de Contatos");
+		bordaPainelDentro.setTitleFont(new Font("Times New Roman", Font.BOLD, 25));
+		painelDentro.setBorder(bordaPainelDentro);
+		
 		botoes.add(botaoLimpar);
 		botoes.add(botaoSalvar);
+		
+		//cadastro.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		painelDentro.add(nome, "gapleft 70, gaptop 40");
+		painelDentro.add(textoNome, "spanx 2, gapright 50");
+		painelDentro.add(apelido, "gapleft 70");
+		painelDentro.add(textoApelido, "spanx 2");
+		painelDentro.add(telefoneResidencial, "gapleft 70");
+		painelDentro.add(textoTelRes, "spanx 2");
+		painelDentro.add(telefoneCelular, "gapleft 70");
+		painelDentro.add(textoTelCel, "spanx 2");
+		painelDentro.add(cidade, "gapleft 70");
+		painelDentro.add(textoCidade, "spanx 2");
+		painelDentro.add(estado, "gapleft 70");
+		painelDentro.add(comboEstados, "spanx 2");
+		painelDentro.add(botoes, "spanx 3, gapleft 270");
 
-		cadastro.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		painelPrincipal.add(cadastro, "gapleft 260, gaptop 120, spanx 3");
-		painelPrincipal.add(nome, "gapleft 70, gaptop 40");
-		painelPrincipal.add(textoNome, "spanx 2");
-		painelPrincipal.add(apelido, "gapleft 70");
-		painelPrincipal.add(textoApelido, "spanx 2");
-		painelPrincipal.add(telefoneResidencial, "gapleft 70");
-		painelPrincipal.add(textoTelRes, "spanx 2");
-		painelPrincipal.add(telefoneCelular, "gapleft 70");
-		painelPrincipal.add(textoTelCel, "spanx 2");
-		painelPrincipal.add(cidade, "gapleft 70");
-		painelPrincipal.add(textoCidade, "spanx 2");
-		painelPrincipal.add(estado, "gapleft 70");
-		painelPrincipal.add(comboEstados, "spanx 2");
-		painelPrincipal.add(botoes, "spanx 3, gapleft 270");
-
+		MigLayout layoutFora = new MigLayout();
+		painelPrincipal.setLayout(layoutFora);
+		painelPrincipal.add(painelDentro,"gapleft 50, gaptop 120");
+		
 		add(painelPrincipal);
 
 		botaoSalvar.addActionListener(tratadorEventosCadastro);
@@ -181,14 +187,14 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 
 		tratadorEventosConsulta = new TratadorEventosConsulta(this, tabela,
 				acessoBanco, tabelaContatosModelo);
-
+		
 		// setando o layout do painel principal
+		JPanel painelDentro = new JPanel();
 		MigLayout migLayout = new MigLayout("wrap 4");
-		painelPrincipal.setLayout(migLayout);
-
-		// colocando o label do titulo no painel principal
-		consulta.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		painelPrincipal.add(consulta, "gapleft 300, gaptop 20, spanx 4");
+		painelDentro.setLayout(migLayout);
+		TitledBorder bordaPainelPrincipal = new TitledBorder("Contatos");
+		bordaPainelPrincipal.setTitleFont(new Font("Times New Roman", Font.BOLD, 25));
+		painelDentro.setBorder(bordaPainelPrincipal);
 
 		// setando as imagens dos botões de manipulação de contatos
 		iconeEditar = new ImageIcon(caminhoImgEditar);
@@ -211,12 +217,12 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelIcones.add(botaoCadastrar);
 
 		// acrescenta o painel icones no painel Principal
-		painelPrincipal.add(painelIcones, "spanx 4,gapleft 650, gaptop 10");
+		painelDentro.add(painelIcones, "spanx 4,gapleft 650, gaptop 10");
 
 		// acrescentando a tabela com os dados no painel principal
 		propriedadesTabela();
 		JScrollPane barraRolagem = new JScrollPane(tabela);
-		painelPrincipal.add(barraRolagem, "spanx 4,gapleft 80, gaptop 10");
+		painelDentro.add(barraRolagem, "spanx 4,gapleft 40, gaptop 10");
 
 		// montando o painel de id inicial
 		JPanel painelInicio = new JPanel();
@@ -247,14 +253,16 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelFerramentas.add(botaoCondicao);
 
 		// acrescenta ao painel principal, o painel inferior
-		painelPrincipal.add(painelFerramentas,
-				"gaptop 30,gapleft 300, gapbottom 40, spanx 4");
+		painelDentro.add(painelFerramentas,
+				"gaptop 20,gapleft 300, gapbottom 20, spanx 4");
 
+		MigLayout layoutFora = new MigLayout();
+		painelPrincipal.setLayout(layoutFora);
+		painelPrincipal.add(painelDentro,"gap 10 10 10 10");
+		
 		// acrescenta o painel principal na janela JFrame
 		add(painelPrincipal);
-
 		addKeyListener(this);
-
 		repaint();
 		setVisible(true);
 	}
