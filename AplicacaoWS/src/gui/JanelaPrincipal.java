@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,6 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -84,6 +86,8 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	private JButton botaoCondicao;
 	private JTextField textoLimite;
 	private JTextField registroInicio;
+	private JRadioButton decrescente;
+	private JRadioButton crescente;
 
 	// Tratadores de eventos das janelas
 	private TratadorEventosMenu tratadorEventosMenu;
@@ -247,6 +251,13 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelLimite.add(textoLimite);
 		painelLimite.setBackground(new Color(255,255,255,0));
 		painelLimite.setBorder(bordaLimite);
+		
+		decrescente = new JRadioButton("Decrescente");
+		crescente = new JRadioButton("Crescente");
+		crescente.setSelected(true);
+		ButtonGroup g = new ButtonGroup();
+		g.add(crescente);
+		g.add(decrescente);
 
 		// adiciona tratador de eventos para botao inicio e limite
 		botaoCondicao = new JButton("OK");
@@ -260,10 +271,12 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelFerramentas.setBorder(tituloPainelFerramentas);
 		painelFerramentas.add(painelInicio);
 		painelFerramentas.add(painelLimite);
+		painelFerramentas.add(crescente);
+		painelFerramentas.add(decrescente);
 		painelFerramentas.add(botaoCondicao);
 
 		// acrescenta ao painel principal, o painel inferior
-		painelDentro.add(painelFerramentas,"gaptop 10,gapleft 300, spanx 4");
+		painelDentro.add(painelFerramentas,"gaptop 10,gapleft 200, spanx 4");
 
 		painelFerramentas.setBackground(new Color(255,255,255,0));
 		painelDentro.setBackground(new Color(255,255,255,0));
@@ -327,6 +340,22 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		return contatos;
 	}
 	
+	public JRadioButton getDecrescente() {
+		return decrescente;
+	}
+
+	public void setDecrescente(JRadioButton decrescente) {
+		this.decrescente = decrescente;
+	}
+
+	public JRadioButton getCrescente() {
+		return crescente;
+	}
+
+	public void setCrescente(JRadioButton crescente) {
+		this.crescente = crescente;
+	}
+
 	public String getIconeTitulo() {
 		return iconeTitulo;
 	}

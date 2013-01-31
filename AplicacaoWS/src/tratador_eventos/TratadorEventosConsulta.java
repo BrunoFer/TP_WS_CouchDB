@@ -71,27 +71,28 @@ public class TratadorEventosConsulta implements ActionListener {
 			janelaPrincipal.telaCadastrar();
 		} else if (evento.getSource() == janelaPrincipal.getBotaoCondicao()) {
 			String condicao = "";
-			if (!janelaPrincipal.getRegistroInicio().getText().equals("")) {
+			if (!janelaPrincipal.getRegistroInicio().getText().equals(""))
 				condicao += "&startkey=\""
 						+ janelaPrincipal.getRegistroInicio().getText() + "\"";
-				if (!janelaPrincipal.getTextoLimite().getText().equals("")){
-					try {
-						int i = Integer.parseInt(janelaPrincipal
-								.getTextoLimite().getText());
-						condicao += "&limit=" + i;
-					} catch (NumberFormatException event) {
-						JOptionPane.showMessageDialog(null,
-								"Limite deve ser um inteiro",
-								"Edição de contato", JOptionPane.ERROR_MESSAGE);
-					}
-				}
+			if (!janelaPrincipal.getTextoLimite().getText().equals("")) {
 				try {
-					janelaPrincipal.limparTela();
-					janelaPrincipal.telaConsultar(condicao);
-				} catch (IOException e) {
-					System.out
-							.println("Erro de condicao! - TratadorEventosConsulta");
+					int i = Integer.parseInt(janelaPrincipal.getTextoLimite()
+							.getText());
+					condicao += "&limit=" + i;
+				} catch (NumberFormatException event) {
+					JOptionPane.showMessageDialog(null,
+							"Limite deve ser um inteiro", "Edição de contato",
+							JOptionPane.ERROR_MESSAGE);
 				}
+			}
+			if (janelaPrincipal.getDecrescente().isSelected())
+				condicao += "&descending=true";
+			try {
+				janelaPrincipal.limparTela();
+				janelaPrincipal.telaConsultar(condicao);
+			} catch (IOException e) {
+				System.out
+						.println("Erro de condicao! - TratadorEventosConsulta");
 			}
 		}
 	}
