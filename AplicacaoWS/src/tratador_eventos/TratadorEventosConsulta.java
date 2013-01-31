@@ -33,6 +33,9 @@ public class TratadorEventosConsulta implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent evento) {
+		
+		//Caso o botão selecionado na janela consulta seja o botão editar.
+		
 		if (evento.getSource() == janelaPrincipal.getBotaoEditar()) {
 			// System.out.println("Botao EDITAR pressionado!");
 			if (tabela.getSelectedRowCount() == 1) {
@@ -47,6 +50,9 @@ public class TratadorEventosConsulta implements ActionListener {
 							.println("Erro IOException- botao editar - actionPerformed()/TratadorEventosConsulta.java");
 				}
 			}
+		
+		// Caso o botão selecionado na janela Consulta seja o botão excluir
+			
 		} else if (evento.getSource() == janelaPrincipal.getBotaoExcluir()) {
 			// System.out.println("Botao EXCLUIR pressionado!");
 			if (tabela.getSelectedRowCount() == 1) {
@@ -66,9 +72,15 @@ public class TratadorEventosConsulta implements ActionListener {
 					}
 				}
 			}
+
+		// Caso o botão selecionado na janela de consulta seja o botão cadastrar
+			
 		} else if (evento.getSource() == janelaPrincipal.getBotaoCadastrar()) {
 			janelaPrincipal.limparTela();
 			janelaPrincipal.telaCadastrar();
+			
+		// Caso o botão selecionado na janela de consulta seja o botão condição	
+		
 		} else if (evento.getSource() == janelaPrincipal.getBotaoCondicao()) {
 			String condicao = "";
 			String inicio = janelaPrincipal.getRegistroInicio().getText();
@@ -84,6 +96,8 @@ public class TratadorEventosConsulta implements ActionListener {
 								"Limite deve ser um inteiro",
 								"Edição de contato", JOptionPane.ERROR_MESSAGE);
 					}
+				} else {
+					condicao += "&limit=1";
 				}
 				if (janelaPrincipal.getDecrescente().isSelected())
 					condicao += "&descending=true";
@@ -113,6 +127,13 @@ public class TratadorEventosConsulta implements ActionListener {
 		}
 	}
 
+	/**
+	 * Esse método será acionado sempre que o botão editar seja pressionado.
+	 * Ela recebe o objeto Contato instanciado com os dados da linha selecionada
+	 * da tabela e faz a chamada a função montarJanelaEditar() da classe JanelaEditar.
+	 * 
+	 * @param contato
+	 */
 	public void abreJanelaEditar(Contato contato) {
 		janelaEditar = new JanelaEditar(acessoBanco, contato);
 		janelaEditar.montarJanelaEditar();
