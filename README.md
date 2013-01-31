@@ -7,7 +7,7 @@ TP_WS_CouchDB
 em Java utilizando o banco de dados não relacional (noSQL) CouchDB, orientado a documentos e de código livre, mantido
 pela Apache. Toda a comunicação da aplicação com o banco de dados é realizada via HTTP através da API REST Json do CouchDB.
 
-<b>Alunos:</b>Bruno Ferreira e Guilherme J. Anselmo<br>
+<b>Alunos:</b>Bruno F. da Costa e Guilherme J. A. Moreira<br>
 <b>Instituição:</b> IFSEMG - Câmpus Barbacena<br>
 <b>Prof.:</b> Rafael Alencar<br>
 <b>Cidade/Data:</b> Barbacena - 01/2013<br>
