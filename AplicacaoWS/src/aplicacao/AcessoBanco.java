@@ -47,7 +47,7 @@ public class AcessoBanco {
 		JSONObject json, documento, dadosContato;
 		JSONArray arrayDocumentos;
 		String url = getUrlmongorest() + getNomebanco()
-				+ "/_all_docs?include_docs=true";
+				+ "/_design/listaContato/_view/tudo";
 		
 		if (!condicao.equals("todos"))
 			url += condicao;
@@ -57,17 +57,20 @@ public class AcessoBanco {
 			json = new JSONObject(jsonString.toString());
 			arrayDocumentos = json.getJSONArray("rows");
 			for (int i = 0; i < arrayDocumentos.length(); i++) {
-				Contato contato = new Contato();
-				documento = arrayDocumentos.getJSONObject(i);
-				dadosContato = documento.getJSONObject("doc");
-				contato.setId(Integer.parseInt(dadosContato.getString("_id")));
-				contato.setNome(dadosContato.getString("nome"));
-				contato.setApelido(dadosContato.getString("apelido"));
-				contato.setTelefoneResidencial(dadosContato.getString("telres"));
-				contato.setTelefoneCelular(dadosContato.getString("telcel"));
-				contato.setCidade(dadosContato.getString("cidade"));
-				contato.setEstado(dadosContato.getString("estado"));
-				listaContatos.add(contato);
+				try {
+					Contato contato = new Contato();
+					documento = arrayDocumentos.getJSONObject(i);
+					dadosContato = documento.getJSONObject("value");
+					contato.setId(Integer.parseInt(dadosContato.getString("_id")));
+					contato.setNome(dadosContato.getString("nome"));
+					contato.setApelido(dadosContato.getString("apelido"));
+					contato.setTelefoneResidencial(dadosContato.getString("telres"));
+					contato.setTelefoneCelular(dadosContato.getString("telcel"));
+					contato.setCidade(dadosContato.getString("cidade"));
+					contato.setEstado(dadosContato.getString("estado"));
+					listaContatos.add(contato);
+				} catch (NumberFormatException e) {
+				}
 			}
 			return listaContatos;
 		} catch (JSONException e1) {
@@ -95,7 +98,7 @@ public class AcessoBanco {
 	}
 
 	public int maiorNumeroDocumento() throws IOException {
-		String sufixo = "/_all_docs";
+		String sufixo = "/_design/listaContato/_view/tudo";
 		String url = getUrlmongorest() + getNomebanco() + sufixo;
 		String jsonRetornado = getRegistro(url);
 		JSONArray arrayDocumentos;
@@ -214,7 +217,7 @@ public class AcessoBanco {
 	}
 
 	public void setRegistro(String json) {
-		System.out.println(json);
+		//System.out.println(json);
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpPut putRequest = new HttpPut(URI.create(urlMongoRest + nomeBanco
 				+ "/" + nomeDocumento));

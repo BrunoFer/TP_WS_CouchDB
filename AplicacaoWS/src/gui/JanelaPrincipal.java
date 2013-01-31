@@ -238,7 +238,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 
 		// montando o painel de id inicial
 		JPanel painelInicio = new JPanel();
-		TitledBorder bordaInicio = new TitledBorder("ID inicio");
+		TitledBorder bordaInicio = new TitledBorder("Nome");
 		registroInicio = new JTextField(5);
 		painelInicio.add(registroInicio);
 		painelInicio.setBackground(new Color(255,255,255,0));
