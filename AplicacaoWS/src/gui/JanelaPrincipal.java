@@ -178,7 +178,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelDentro.add(comboEstados, "spanx 2");
 		painelDentro.add(botoes, "spanx 3, gapleft 270");
 
-		painelDentro.setBackground(new Color(255,255,255,0));
+		painelDentro.setBackground(new Color(255,255,255,100));
 		MigLayout layoutFora = new MigLayout();
 		painelPrincipal.setLayout(layoutFora);
 		painelPrincipal.add(painelDentro,"gapleft 50, gaptop 120");
@@ -229,6 +229,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelIcones.add(botaoCadastrar);
 
 		// acrescenta o painel icones no painel Principal
+		painelIcones.setBackground(new Color(255,255,255,0));
 		painelDentro.add(painelIcones, "spanx 4,gapleft 580, gaptop 10");
 
 		// acrescentando a tabela com os dados no painel principal
@@ -279,7 +280,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelDentro.add(painelFerramentas,"gaptop 10,gapleft 200, spanx 4");
 
 		painelFerramentas.setBackground(new Color(255,255,255,0));
-		painelDentro.setBackground(new Color(255,255,255,0));
+		painelDentro.setBackground(new Color(255,255,255,100));
 		MigLayout layoutFora = new MigLayout();
 		painelPrincipal.setLayout(layoutFora);
 		painelPrincipal.add(painelDentro,"gap 20 20 20 20");

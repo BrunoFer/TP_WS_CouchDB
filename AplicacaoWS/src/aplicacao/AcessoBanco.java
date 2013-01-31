@@ -27,7 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AcessoBanco {
-	private String urlMongoRest = "http://localhost:5984/";
+	private String host = "http://localhost";
+	private String porta = "5984";
 	private String nomeBanco = "agenda";
 	private int nomeDocumento;
 	private URL urlConsulta;
@@ -46,7 +47,7 @@ public class AcessoBanco {
 		List<Contato> listaContatos = new ArrayList<Contato>();
 		JSONObject json, documento, dadosContato;
 		JSONArray arrayDocumentos;
-		String url = getUrlmongorest() + getNomebanco()
+		String url = getHost()+":"+getPorta()+"/"+getNomebanco()
 				+ "/_design/listaContato/_view/tudo";
 		
 		if (!condicao.equals("todos"))
@@ -82,7 +83,7 @@ public class AcessoBanco {
 
 	public boolean verificaBancoCriado() throws IOException {
 		setNomeBanco("agenda");
-		String url = getUrlmongorest() + getNomebanco();
+		String url = getHost()+":"+getPorta()+"/"+getNomebanco();
 		String jsonRetornado = getRegistro(url);
 		if (jsonRetornado == null)
 			return false;
@@ -91,7 +92,7 @@ public class AcessoBanco {
 
 	public void inicializaBanco() throws ClientProtocolException, IOException {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
-		HttpPut putRequest = new HttpPut(URI.create(urlMongoRest + nomeBanco));
+		HttpPut putRequest = new HttpPut(URI.create(host +":"+porta+"/"+nomeBanco));
 
 		HttpResponse response = httpClient.execute(putRequest);
 		System.out.println(response);
@@ -99,7 +100,7 @@ public class AcessoBanco {
 
 	public int maiorNumeroDocumento() throws IOException {
 		String sufixo = "/_design/listaContato/_view/tudo";
-		String url = getUrlmongorest() + getNomebanco() + sufixo;
+		String url = getHost()+":"+getPorta()+"/"+getNomebanco()+sufixo;
 		String jsonRetornado = getRegistro(url);
 		JSONArray arrayDocumentos;
 		JSONObject documento;
@@ -129,7 +130,7 @@ public class AcessoBanco {
 	}
 
 	public String buscarHashContato(int numeroDocumento) throws IOException {
-		String url = getUrlmongorest() + getNomebanco() + "/" + numeroDocumento;
+		String url = getHost()+":"+getPorta()+"/"+getNomebanco()+"/"+numeroDocumento;
 
 		// fazendo a requisicao do hash do documento do aluno
 		String jsonRetornado = getRegistro(url);
@@ -151,7 +152,7 @@ public class AcessoBanco {
 		try {
 			hash = buscarHashContato(numeroDocumento);
 			// montando a url para deletar o documento do aluno
-			String url = getUrlmongorest() + getNomebanco() + "/"
+			String url = getHost()+":"+getPorta()+"/" + getNomebanco() + "/"
 					+ numeroDocumento + "?rev=" + hash;
 			removeRegistro(url);
 		} catch (IOException e) {
@@ -166,7 +167,7 @@ public class AcessoBanco {
 		try {
 			String hash = buscarHashContato(numeroDocumento);
 			// montando a url para deletar o documento do aluno
-			String url = getUrlmongorest() + getNomebanco() + "/";
+			String url = getHost()+":"+getPorta()+"/"+getNomebanco()+"/";
 			/*
 			 * acrescenta o id e o hash do aluno à string json, sem isso o
 			 * documento não é alterado corretamente
@@ -217,10 +218,8 @@ public class AcessoBanco {
 	}
 
 	public void setRegistro(String json) {
-		//System.out.println(json);
 		DefaultHttpClient httpClient = new DefaultHttpClient();
-		HttpPut putRequest = new HttpPut(URI.create(urlMongoRest + nomeBanco
-				+ "/" + nomeDocumento));
+		HttpPut putRequest = new HttpPut(URI.create(getHost()+":"+getPorta()+"/"+getNomebanco()+"/"+getNomeDocumento()));
 		HttpEntity input = new StringEntity(json, ContentType.APPLICATION_JSON);
 
 		putRequest.setEntity(input);
@@ -261,6 +260,22 @@ public class AcessoBanco {
 			return null;
 		}
 	}
+	
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public String getPorta() {
+		return porta;
+	}
+
+	public void setPorta(String porta) {
+		this.porta = porta;
+	}
 
 	public int getNomeDocumento() {
 		return nomeDocumento;
@@ -270,16 +285,8 @@ public class AcessoBanco {
 		this.nomeDocumento = nomeDocumento;
 	}
 
-	public String getUrlmongorest() {
-		return urlMongoRest;
-	}
-
 	public String getNomebanco() {
 		return nomeBanco;
-	}
-
-	public void setUrlMongoRest(String urlMongoRest) {
-		this.urlMongoRest = urlMongoRest;
 	}
 
 	public void setNomeBanco(String nomeBanco) {
