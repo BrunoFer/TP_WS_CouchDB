@@ -31,11 +31,19 @@ public class TratadorEventosEditar implements ActionListener{
 				JOptionPane.showMessageDialog(null, "Informe ao menos um telefone!", "Edição de contato", JOptionPane.ERROR_MESSAGE);
 			} else{
 				json = montarJson();
-				acessoBanco.atualizarAluno(janelaEditar.getNumeroDocumento(),json);
+				acessoBanco.atualizarContato(janelaEditar.getNumeroDocumento(),json);
 				janelaEditar.dispose();
 			}
 		}
 	}
+	
+	/**
+	 * Esta função realizada a formatação dos dados recebidos da janela editar
+	 * de forma que fiquem em formato JSON para a realização da requisição Post
+	 * ao CouchDB e retorna a string formatada.
+	 * 
+	 * @return
+	 */
 	
 	public String montarJson(){
 		String json = "";
