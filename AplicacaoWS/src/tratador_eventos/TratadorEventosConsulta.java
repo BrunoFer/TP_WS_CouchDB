@@ -6,7 +6,6 @@ import gui.TabelaContatos;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -42,13 +41,8 @@ public class TratadorEventosConsulta implements ActionListener {
 				int linhaSelecionada = tabela.getSelectedRow();
 				contato = tabelaContatos.getContato(linhaSelecionada);
 				abreJanelaEditar(contato);
-				try {
-					janelaPrincipal.limparTela();
-					janelaPrincipal.telaConsultar("todos");
-				} catch (IOException e) {
-					System.out
-							.println("Erro IOException- botao editar - actionPerformed()/TratadorEventosConsulta.java");
-				}
+				janelaPrincipal.limparTela();
+				janelaPrincipal.telaConsultar("todos");
 			}
 		
 		// Caso o botão selecionado na janela Consulta seja o botão excluir
@@ -60,16 +54,11 @@ public class TratadorEventosConsulta implements ActionListener {
 						"Deseja excluir contato?", "Exclusão",
 						JOptionPane.YES_NO_CANCEL_OPTION);
 				if (confirma == JOptionPane.YES_OPTION) {
-					try {
-						int contato = (Integer) tabelaContatos.getValueAt(
-								tabela.getSelectedRow(), 0);
-						acessoBanco.deletarContato(contato);
-						janelaPrincipal.limparTela();
-						janelaPrincipal.telaConsultar("todos");
-					} catch (IOException e) {
-						System.out
-								.println("Erro IOException - botao excluir - actionPerformed()/TratadorEventosConsulta.java");
-					}
+					int contato = (Integer) tabelaContatos.getValueAt(
+							tabela.getSelectedRow(), 0);
+					acessoBanco.deletarContato(contato);
+					janelaPrincipal.limparTela();
+					janelaPrincipal.telaConsultar("todos");
 				}
 			}
 
@@ -117,13 +106,8 @@ public class TratadorEventosConsulta implements ActionListener {
 					condicao += "?descending=true";
 			}
 
-			try {
-				janelaPrincipal.limparTela();
-				janelaPrincipal.telaConsultar(condicao);
-			} catch (IOException e) {
-				System.out
-						.println("Erro de condicao! - TratadorEventosConsulta");
-			}
+			janelaPrincipal.limparTela();
+			janelaPrincipal.telaConsultar(condicao);
 		}
 	}
 
