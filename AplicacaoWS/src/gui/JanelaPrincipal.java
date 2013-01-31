@@ -9,7 +9,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +73,6 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	private JTable tabelaContatos;
 	private TabelaContatos tabelaContatosModelo;
 	private JTable tabela;
-
 	private JPanel painelIcones;
 	private Icon iconeCadastrar;
 	private Icon iconeEditar;
@@ -82,7 +80,6 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	private JButton botaoEditar;
 	private Icon iconeExcluir;
 	private JButton botaoExcluir;
-
 	private JButton botaoCondicao;
 	private JTextField textoLimite;
 	private JTextField registroInicio;
@@ -95,6 +92,11 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	private TratadorEventosTabela tratadorEventosTabela;
 	private TratadorEventosConsulta tratadorEventosConsulta;
 
+	/**
+	 * Construtor da classe JanelaPrincipal
+	 * 
+	 * @param acessoBanco
+	 */
 	public JanelaPrincipal(AcessoBanco acessoBanco) {
 		super();
 		this.acessoBanco = acessoBanco;
@@ -103,6 +105,9 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		setLocationRelativeTo(null);
 	}
 
+	/**
+	 * Função que fará a montagem do JFrame da aplicação.
+	 */
 	public void montarJanela() {
 		tratadorEventosMenu = new TratadorEventosMenu(this);
 		menuJanela = new MenuPrincipal();
@@ -135,6 +140,11 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		});
 	}
 
+	/**
+	 * Este método é utilizado para atualizar a área do painel principal,
+	 * criando uma maneira de utilização do mesmo espaço para a criação de
+	 * áreas com objetivos diferentes.
+	 */
 	public void limparTela() {
 		painelPrincipal.removeAll();
 		repaint();
@@ -142,6 +152,10 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		setVisible(true);
 	}
 
+	/**
+	 * Este método será utilizado para limpar os JTextField da tela de cadastro
+	 * de Contatos.
+	 */
 	public void limparDados() {
 		getTextoNome().setText("");
 		getTextoApelido().setText("");
@@ -150,6 +164,10 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		getTextoCidade().setText("");
 	}
 
+	/**
+	 * Método responsável por organizar todos os elementos da tela de cadastro de
+	 * Contato.
+	 */
 	public void telaCadastrar() {
 		tratadorEventosCadastro = new TratadorEventosCadastro(this, acessoBanco);
 
@@ -192,7 +210,14 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		setVisible(true);
 	}
 
-	public void telaConsultar(String condicao) throws IOException {
+	/**
+	 * Esta função é responsável por recriar o PainelPrincipal de forma que
+	 * a área seja utilizada para área de consulta de Contatos. A condição
+	 * recebida como parâmetro será utilizada para montar a tabela de registros.
+	 * 
+	 * @param condicao
+	 */
+	public void telaConsultar(String condicao){
 		tratadorEventosTabela = new TratadorEventosTabela(this);
 		tabela = getTabelaContatos(condicao);
 		tabela.addMouseListener(tratadorEventosTabela);
@@ -264,8 +289,10 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		botaoCondicao = new JButton("OK");
 		botaoCondicao.addActionListener(tratadorEventosConsulta);
 
-		// montando o painel de ferramentas de pesquisa com o painel de limite e
-		// o painel de id inicial
+		/* 
+		 * Montando o painel de ferramentas de pesquisa com o painel de limite e
+		 * o painel de id inicial
+		 */
 		JPanel painelFerramentas = new JPanel();
 		TitledBorder tituloPainelFerramentas = new TitledBorder(
 				"Ferramentas de pesquisa");
@@ -292,7 +319,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		setVisible(true);
 	}
 
-	/*
+	/**
 	 * Esta função seta as propriedades da tabela que receberá os contatos
 	 * cadastrados no banco. Dentro das funções utilizadas estão o
 	 * redimensionamento da tabela, com os respectivos tamanhos de colunas e
@@ -315,7 +342,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		tabela.setPreferredScrollableViewportSize(new Dimension(720, 300));
 	}
 
-	public JTable getTabelaContatos(String condicao) throws IOException {
+	public JTable getTabelaContatos(String condicao){
 
 		if (tabelaContatos == null) {
 			tabelaContatos = new JTable();
@@ -326,7 +353,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		return tabelaContatos;
 	}
 
-	private TabelaContatos getTabelaModelo(String condicao) throws IOException {
+	private TabelaContatos getTabelaModelo(String condicao){
 		if (tabelaContatosModelo == null) {
 			tabelaContatosModelo = new TabelaContatos(pegaContatos(condicao));
 		} else {
@@ -335,7 +362,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		return tabelaContatosModelo;
 	}
 
-	private List<Contato> pegaContatos(String condicao) throws IOException {
+	private List<Contato> pegaContatos(String condicao){
 		List<Contato> contatos = new ArrayList<Contato>();
 		contatos = acessoBanco.buscaDocumentos(condicao);
 		return contatos;
