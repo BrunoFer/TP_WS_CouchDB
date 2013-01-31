@@ -22,26 +22,42 @@ public class TratadorEventosCadastro implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
+		/*
+		 * Caso o botão pressionado na janela de cadastro seja o botão salvar
+		 */
 		if (e.getSource() == janela.getBotaoSalvar()) {
-			// System.out.println("Voce clicou no botao salvar");
 
 			if (janela.getTextoNome().getText().equals(""))
-				JOptionPane.showMessageDialog(null, "Você deve preencher o campo nome!",
+				JOptionPane.showMessageDialog(null,
+						"Você deve preencher o campo nome!",
 						"Cadastro de Contato", JOptionPane.ERROR_MESSAGE);
-			else if ( janela.getTextoTelRes().getText().equals("") && janela.getTextoTelCel().getText().equals("")){
-				JOptionPane.showMessageDialog(null, "Informe ao menos um telefone!",
-						"Cadastro de Contato", JOptionPane.ERROR_MESSAGE);
+			else if (janela.getTextoTelRes().getText().equals("")
+					&& janela.getTextoTelCel().getText().equals("")) {
+				JOptionPane.showMessageDialog(null,
+						"Informe ao menos um telefone!", "Cadastro de Contato",
+						JOptionPane.ERROR_MESSAGE);
 			} else {
 				String json = montarJson();
 				acessoBanco.setRegistro(json);
 				janela.limparDados();
 			}
 
+		/*
+		 * Caso o botão pressionado na janela de cadastro seja o botão limpar
+		 */
 		} else if (e.getSource() == janela.getBotaoLimpar()) {
 			janela.limparDados();
 		}
 	}
 
+	/**
+	 * Esta função realizada a formatação dos dados recebidos da janela cadastro
+	 * de forma que fiquem em formato JSON para a realização da requisição Post
+	 * ao CouchDB e retorna a string formatada.
+	 * 
+	 * @return
+	 */
 	public String montarJson() {
 		String json = "{";
 		json += "\"nome\": \"" + janela.getTextoNome().getText() + "\"";
