@@ -67,7 +67,6 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	private JComboBox comboEstados = new JComboBox(estados);
 	private JButton botaoSalvar = new JButton("Salvar");
 	private JButton botaoLimpar = new JButton("Limpar");
-	private JPanel botoes = new JPanel();
 
 	// Elementos da janela de Consulta
 	private JTable tabelaContatos;
@@ -178,8 +177,10 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		bordaPainelDentro.setTitleFont(new Font("Times New Roman", Font.BOLD, 25));
 		painelDentro.setBorder(bordaPainelDentro);
 		
+		JPanel botoes = new JPanel();
 		botoes.add(botaoLimpar);
 		botoes.add(botaoSalvar);
+		botoes.setBackground(new Color(255,255,255,0));
 		
 		//cadastro.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		painelDentro.add(nome, "gapleft 70, gaptop 40");
