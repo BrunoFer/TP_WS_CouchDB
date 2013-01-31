@@ -1,7 +1,6 @@
 package aplicacao;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -14,7 +13,6 @@ import javax.swing.JOptionPane;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -34,7 +32,7 @@ public class AcessoBanco {
 	private URL urlConsulta;
 	private String capturaJson;
 
-	public AcessoBanco() throws ClientProtocolException, IOException {
+	public AcessoBanco(){
 		if (!verificaBancoCriado()) {
 			inicializaBanco();
 			this.nomeDocumento = 1;
@@ -43,16 +41,24 @@ public class AcessoBanco {
 		}
 	}
 
-	public List<Contato> buscaDocumentos(String condicao) throws IOException {
+	/**
+	 * Esta função fará a busca por todos os documentos do banco Agenda, de acordo com a 
+	 * condição recebida como parâmetro, e retornará uma lista com os registros retornados
+	 * pela chamada da função getRegistro() e manipulada como JSON.
+	 * 
+	 * @param condicao
+	 * @return
+	 */
+	public List<Contato> buscaDocumentos(String condicao){
 		List<Contato> listaContatos = new ArrayList<Contato>();
 		JSONObject json, documento, dadosContato;
 		JSONArray arrayDocumentos;
-		String url = getHost()+":"+getPorta()+"/"+getNomebanco()
+		String url = getHost() + ":" + getPorta() + "/" + getNomebanco()
 				+ "/_design/listaContato/_view/tudo";
-		
+
 		if (!condicao.equals("todos"))
 			url += condicao;
-		
+
 		String jsonString = getRegistro(url);
 		try {
 			json = new JSONObject(jsonString.toString());
@@ -62,10 +68,12 @@ public class AcessoBanco {
 					Contato contato = new Contato();
 					documento = arrayDocumentos.getJSONObject(i);
 					dadosContato = documento.getJSONObject("value");
-					contato.setId(Integer.parseInt(dadosContato.getString("_id")));
+					contato.setId(Integer.parseInt(dadosContato
+							.getString("_id")));
 					contato.setNome(dadosContato.getString("nome"));
 					contato.setApelido(dadosContato.getString("apelido"));
-					contato.setTelefoneResidencial(dadosContato.getString("telres"));
+					contato.setTelefoneResidencial(dadosContato
+							.getString("telres"));
 					contato.setTelefoneCelular(dadosContato.getString("telcel"));
 					contato.setCidade(dadosContato.getString("cidade"));
 					contato.setEstado(dadosContato.getString("estado"));
@@ -81,26 +89,46 @@ public class AcessoBanco {
 		return null;
 	}
 
-	public boolean verificaBancoCriado() throws IOException {
+	/**
+	 * Esta função chama o método getRegistro() para a verificação da existência do banco Agenda.
+	 * Caso exista, a string retornada conterá informações do banco. Caso contrário, a string possuirá
+	 * valor null e o valor de retorno desta função será false.
+	 * 
+	 * @return
+	 */
+	public boolean verificaBancoCriado(){
 		setNomeBanco("agenda");
-		String url = getHost()+":"+getPorta()+"/"+getNomebanco();
+		String url = getHost() + ":" + getPorta() + "/" + getNomebanco();
 		String jsonRetornado = getRegistro(url);
 		if (jsonRetornado == null)
 			return false;
 		return true;
 	}
 
-	public void inicializaBanco() throws ClientProtocolException, IOException {
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		HttpPut putRequest = new HttpPut(URI.create(host +":"+porta+"/"+nomeBanco));
+	/**
+	 * Esta função será chamada caso o banco Agenda não esteja criado até a
+	 * momento de execução do aplicativo. A função chamará a função setRegistro
+	 * que realizará a requisição ao CouchDB.
+	 * 
+	 */
 
-		HttpResponse response = httpClient.execute(putRequest);
-		System.out.println(response);
+	public void inicializaBanco() {
+		setRegistro("");
 	}
 
-	public int maiorNumeroDocumento() throws IOException {
+	/**
+	 * Esta função realiza uma verificação dentre todos os registros criados no
+	 * banco Agenda, a fim de conhecer o maior número utilizado como id até
+	 * agora, para enfim, setar o próximo número que poderá ser utilizado como
+	 * id de registro.
+	 * 
+	 * @return
+	 */
+
+	public int maiorNumeroDocumento() {
 		String sufixo = "/_design/listaContato/_view/tudo";
-		String url = getHost()+":"+getPorta()+"/"+getNomebanco()+sufixo;
+		String url = getHost() + ":" + getPorta() + "/" + getNomebanco()
+				+ sufixo;
 		String jsonRetornado = getRegistro(url);
 		JSONArray arrayDocumentos;
 		JSONObject documento;
@@ -114,23 +142,35 @@ public class AcessoBanco {
 				arrayDocumentos = json.getJSONArray("rows");
 				for (int i = 0; i < arrayDocumentos.length(); i++) {
 					documento = arrayDocumentos.getJSONObject(i);
-					int numeroDocumento = Integer.parseInt(documento
-							.getString("id"));
-					if (numeroDocumento > maiorNumero) {
-						maiorNumero = numeroDocumento;
+					try {
+						int numeroDocumento = Integer.parseInt(documento
+								.getString("id"));
+						if (numeroDocumento > maiorNumero) {
+							maiorNumero = numeroDocumento;
+						}
+					} catch (NumberFormatException exception) {
 					}
 				}
 			} catch (JSONException e) {
 				System.out
 						.println("Erro ao manipular JSON! - maiorNumeroDocumento()/AcessoBanco.java");
 			}
-			// System.out.println(maiorNumero);
 			return maiorNumero;
 		}
 	}
 
-	public String buscarHashContato(int numeroDocumento) throws IOException {
-		String url = getHost()+":"+getPorta()+"/"+getNomebanco()+"/"+numeroDocumento;
+	/**
+	 * O couchDB precisa, para exclusão e alteração de algum registro, do hash
+	 * de revisão do registro atual. Esta função chama o método getRegistro()
+	 * para extrair esta informação do JSON obtido.
+	 * 
+	 * @param numeroDocumento
+	 * @return
+	 */
+
+	public String buscaRevisaoContato(int numeroDocumento) throws IOException {
+		String url = getHost() + ":" + getPorta() + "/" + getNomebanco() + "/"
+				+ numeroDocumento;
 
 		// fazendo a requisicao do hash do documento do aluno
 		String jsonRetornado = getRegistro(url);
@@ -141,19 +181,26 @@ public class AcessoBanco {
 			return hash;
 		} catch (JSONException e) {
 			System.out
-					.println("Erro ao manipular JSON! - buscarHashAluno()/AcessoBanco.java");
+					.println("Erro ao manipular JSON! - buscaRevisaoContato()/AcessoBanco.java");
 			return null;
 		}
 	}
+
+	/**
+	 * Método que recebe o id do documento como parâmetro e monta a string que
+	 * será utilizada como URL para exclusão do registro.
+	 * 
+	 * @param numeroDocumento
+	 */
 
 	public void deletarContato(int numeroDocumento) {
 		// busca o hash do aluno que será deletado
 		String hash;
 		try {
-			hash = buscarHashContato(numeroDocumento);
+			hash = buscaRevisaoContato(numeroDocumento);
 			// montando a url para deletar o documento do aluno
-			String url = getHost()+":"+getPorta()+"/" + getNomebanco() + "/"
-					+ numeroDocumento + "?rev=" + hash;
+			String url = getHost() + ":" + getPorta() + "/" + getNomebanco()
+					+ "/" + numeroDocumento + "?rev=" + hash;
 			removeRegistro(url);
 		} catch (IOException e) {
 			System.out
@@ -161,20 +208,27 @@ public class AcessoBanco {
 		}
 	}
 
-	public void atualizarAluno(int numeroDocumento, String json) {
-		// System.out.println("Cheguei aqui - numero do documento:"+
-		// numeroDocumento);
+	/**
+	 * Função que monta o json de atualização do contato. Os parâmetros
+	 * recebidos são o número do documento, que será o seu id no banco, e o json
+	 * montado com os dados fornecidos para a atualização.
+	 * 
+	 * @param numeroDocumento
+	 * @param json
+	 */
+	public void atualizarContato(int numeroDocumento, String dados) {
 		try {
-			String hash = buscarHashContato(numeroDocumento);
+			String hash = buscaRevisaoContato(numeroDocumento);
 			// montando a url para deletar o documento do aluno
-			String url = getHost()+":"+getPorta()+"/"+getNomebanco()+"/";
+			String url = getHost() + ":" + getPorta() + "/" + getNomebanco()
+					+ "/";
 			/*
 			 * acrescenta o id e o hash do aluno à string json, sem isso o
 			 * documento não é alterado corretamente
 			 */
-			String jsonFinal = "{ \"_id\":\"" + numeroDocumento
-					+ "\",\"_rev\":\"" + hash + "\"," + json;
-			updateRegistro(url, jsonFinal);
+			String json = "{ \"_id\":\"" + numeroDocumento + "\",\"_rev\":\""
+					+ hash + "\"," + dados;
+			updateRegistro(url, json);
 		} catch (IOException e) {
 			System.out
 					.println("Erro IOException - atualizarAluno()/AcessoBanco.java");
@@ -182,6 +236,14 @@ public class AcessoBanco {
 
 	}
 
+	/**
+	 * Função que irá efetivamente fazer a requisição Post para a atualização do
+	 * registro no CouchDB. Os parâmetros recebidos são a url que deverá ser
+	 * usada pelo Post e o json que será passado nesta requisição.
+	 * 
+	 * @param url
+	 * @param json
+	 */
 	public void updateRegistro(String url, String json) {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpPost requisicaoPost = new HttpPost(URI.create(url));
@@ -201,6 +263,12 @@ public class AcessoBanco {
 		}
 	}
 
+	/**
+	 * Função utilizada para a remoção de um registro no banco do CouchDB. Ela
+	 * recebe a url que será usada no HttpDelete e realiza a exclusão.
+	 * 
+	 * @param url
+	 */
 	public void removeRegistro(String url) {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpDelete deleteRequest = new HttpDelete(url);
@@ -217,15 +285,31 @@ public class AcessoBanco {
 		}
 	}
 
+	/**
+	 * Função utilizada para se acrescentar informações no couchDB. É utilizada
+	 * para criar um novo documento ou para criar um novo banco. O parâmetro
+	 * recebido json é uma string em formato JSON contendo as informações de um
+	 * novo registro ou vazio em caso da criação de um banco.
+	 * 
+	 * @param json
+	 */
 	public void setRegistro(String json) {
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		HttpPut putRequest = new HttpPut(URI.create(getHost()+":"+getPorta()+"/"+getNomebanco()+"/"+getNomeDocumento()));
-		HttpEntity input = new StringEntity(json, ContentType.APPLICATION_JSON);
+		DefaultHttpClient clienteHttp = new DefaultHttpClient();
+		HttpPut requisicaoPUT;
+		if (json.equals("")) {
+			requisicaoPUT = new HttpPut(URI.create(getHost() + ":" + getPorta()
+					+ "/" + getNomebanco()));
+		} else {
+			requisicaoPUT = new HttpPut(URI.create(getHost() + ":" + getPorta()
+					+ "/" + getNomebanco() + "/" + getNomeDocumento()));
+			HttpEntity input = new StringEntity(json,
+					ContentType.APPLICATION_JSON);
+			requisicaoPUT.setEntity(input);
+		}
 
-		putRequest.setEntity(input);
 		HttpResponse response;
 		try {
-			response = httpClient.execute(putRequest);
+			response = clienteHttp.execute(requisicaoPUT);
 			System.out.println(response);
 			setNomeDocumento(nomeDocumento + 1);
 			JOptionPane.showMessageDialog(null,
@@ -237,13 +321,22 @@ public class AcessoBanco {
 		}
 	}
 
-	public String getRegistro(String url) throws IOException {
+	/**
+	 * 
+	 * Função utilizada para fazer qualquer requisição Get com o banco Agenda do
+	 * Aplicativo. No parâmetro recebido deve ser especificado uma Url válida
+	 * para o CouchDB.
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public String getRegistro(String url) {
 		HttpURLConnection conexao;
 		BufferedReader rd;
 		String linha;
+		capturaJson = "";
 		try {
 			this.urlConsulta = new URL(url);
-			capturaJson = "";
 			conexao = (HttpURLConnection) urlConsulta.openConnection();
 			conexao.setRequestMethod("GET");
 			rd = new BufferedReader(new InputStreamReader(
@@ -252,15 +345,15 @@ public class AcessoBanco {
 				capturaJson += linha;
 			}
 			rd.close();
-			// retorna a string de retorno da requisição
-			return capturaJson;
-		} catch (FileNotFoundException e1) {
+		} catch (IOException e) {
 			System.out
 					.println("Erro na conexão! - getRegistro()/AcessoBanco.java");
 			return null;
 		}
+		// retorna a string de retorno da requisição
+		return capturaJson;
 	}
-	
+
 	public String getHost() {
 		return host;
 	}
