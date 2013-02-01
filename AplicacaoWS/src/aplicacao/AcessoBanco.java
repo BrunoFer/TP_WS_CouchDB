@@ -28,11 +28,13 @@ public class AcessoBanco {
 	private String host = "http://localhost";
 	private String porta = "5984";
 	private String nomeBanco = "agenda";
+	private String localBusca = "_design/listaContatos/_view/todos";
+	private String pegaDocumento = "value";
 	private int nomeDocumento;
 	private URL urlConsulta;
 	private String capturaJson;
 
-	public AcessoBanco(){
+	public AcessoBanco() {
 		if (!verificaBancoCriado()) {
 			inicializaBanco();
 			this.nomeDocumento = 1;
@@ -42,24 +44,55 @@ public class AcessoBanco {
 	}
 
 	/**
-	 * Esta função fará a busca por todos os documentos do banco Agenda, de acordo com a 
-	 * condição recebida como parâmetro, e retornará uma lista com os registros retornados
-	 * pela chamada da função getRegistro() e manipulada como JSON.
+	 * Esta função fará a busca por todos os documentos do banco Agenda, de
+	 * acordo com a condição recebida como parâmetro, e retornará uma lista com
+	 * os registros retornados pela chamada da função getRegistro() e manipulada
+	 * como JSON.
 	 * 
 	 * @param condicao
 	 * @return
 	 */
-	public List<Contato> buscaDocumentos(String condicao){
+	public List<Contato> buscaDocumentos(String condicao) {
 		List<Contato> listaContatos = new ArrayList<Contato>();
 		JSONObject json, documento, dadosContato;
 		JSONArray arrayDocumentos;
 		String url = getHost() + ":" + getPorta() + "/" + getNomebanco()
-				+ "/_design/listaContato/_view/tudo";
+				+ "/"+ getLocalBusca();
+
+		/* Verifica a url usada para busca:
+		 * - se url == "_all_docs?include_docs=true", a condicao iniciará com &
+		 * - se url == "_design/listaContato/_view/todos", a condicao iniciará com ?
+		 */
+		
+		if (getLocalBusca().contains("_all") && !condicao.equals("todos")){
+			String condicaoModificada = "&"+condicao.substring(1,condicao.length());
+			System.out.println(condicaoModificada);
+			condicao=condicaoModificada;
+		}
 
 		if (!condicao.equals("todos"))
 			url += condicao;
-
+		
+		System.out.println(url);
 		String jsonString = getRegistro(url);
+		
+		/*
+		 * Se a busca falhou com uma visão que pode não estar criada, a url de busca irá
+		 * mudar para a padrão. A variável pegaDocumento altera de acordo com a url de busca,
+		 * pois é ela que contem todos os dados de um registro de Contato.
+		 * Caso a url seja usando a visão criada, essa variável recebe o valor "value".
+		 * Caso contrário, em que a url seja a padrão, essa variável recebe o valor "doc".
+		 */
+		if (jsonString==null){
+			setLocalBusca("_all_docs?include_docs=true");
+			pegaDocumento="doc";
+			url=getHost() + ":" + getPorta() + "/" + getNomebanco()
+					+ "/"+ getLocalBusca();
+			if (!condicao.equals("todos"))
+				url += condicao;
+			jsonString = getRegistro(url);
+		}
+		
 		try {
 			json = new JSONObject(jsonString.toString());
 			arrayDocumentos = json.getJSONArray("rows");
@@ -67,7 +100,7 @@ public class AcessoBanco {
 				try {
 					Contato contato = new Contato();
 					documento = arrayDocumentos.getJSONObject(i);
-					dadosContato = documento.getJSONObject("value");
+					dadosContato = documento.getJSONObject(pegaDocumento);
 					contato.setId(Integer.parseInt(dadosContato
 							.getString("_id")));
 					contato.setNome(dadosContato.getString("nome"));
@@ -85,18 +118,22 @@ public class AcessoBanco {
 		} catch (JSONException e1) {
 			System.out
 					.println("Erro ao manipular JSON! - buscaDocumentos()/AcessoBanco.java");
+		} catch (NullPointerException e2){
+			System.out
+					.println("Erro na busca por documentos - formatação da URL - buscaDocumentos()/AcessoBanco.java");
 		}
-		return null;
+		return listaContatos;
 	}
 
 	/**
-	 * Esta função chama o método getRegistro() para a verificação da existência do banco Agenda.
-	 * Caso exista, a string retornada conterá informações do banco. Caso contrário, a string possuirá
-	 * valor null e o valor de retorno desta função será false.
+	 * Esta função chama o método getRegistro() para a verificação da existência
+	 * do banco Agenda. Caso exista, a string retornada conterá informações do
+	 * banco. Caso contrário, a string possuirá valor null e o valor de retorno
+	 * desta função será false.
 	 * 
 	 * @return
 	 */
-	public boolean verificaBancoCriado(){
+	public boolean verificaBancoCriado() {
 		setNomeBanco("agenda");
 		String url = getHost() + ":" + getPorta() + "/" + getNomebanco();
 		String jsonRetornado = getRegistro(url);
@@ -126,9 +163,8 @@ public class AcessoBanco {
 	 */
 
 	public int maiorNumeroDocumento() {
-		String sufixo = "/_design/listaContato/_view/tudo";
 		String url = getHost() + ":" + getPorta() + "/" + getNomebanco()
-				+ sufixo;
+				+ "/"+"_all_docs";
 		String jsonRetornado = getRegistro(url);
 		JSONArray arrayDocumentos;
 		JSONObject documento;
@@ -232,7 +268,7 @@ public class AcessoBanco {
 		} catch (IOException e) {
 			System.out
 					.println("Erro IOException - atualizarAluno()/AcessoBanco.java");
-		}
+		};
 
 	}
 
@@ -347,11 +383,19 @@ public class AcessoBanco {
 			rd.close();
 		} catch (IOException e) {
 			System.out
-					.println("Erro na conexão! - getRegistro()/AcessoBanco.java");
+					.println("Erro na primeira conexão! - getRegistro()/AcessoBanco.java com o caminho \""+ getLocalBusca()+"\"");
 			return null;
 		}
 		// retorna a string de retorno da requisição
 		return capturaJson;
+	}
+
+	public String getLocalBusca() {
+		return localBusca;
+	}
+
+	public void setLocalBusca(String localBusca) {
+		this.localBusca = localBusca;
 	}
 
 	public String getHost() {
