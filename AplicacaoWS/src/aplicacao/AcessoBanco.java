@@ -56,43 +56,46 @@ public class AcessoBanco {
 		List<Contato> listaContatos = new ArrayList<Contato>();
 		JSONObject json, documento, dadosContato;
 		JSONArray arrayDocumentos;
-		String url = getHost() + ":" + getPorta() + "/" + getNomebanco()
-				+ "/"+ getLocalBusca();
+		String url = getHost() + ":" + getPorta() + "/" + getNomebanco() + "/"
+				+ getLocalBusca();
 
-		/* Verifica a url usada para busca:
-		 * - se url == "_all_docs?include_docs=true", a condicao iniciará com &
-		 * - se url == "_design/listaContato/_view/todos", a condicao iniciará com ?
+		/*
+		 * Verifica a url usada para busca: - se url ==
+		 * "_all_docs?include_docs=true", a condicao iniciará com & - se url ==
+		 * "_design/listaContato/_view/todos", a condicao iniciará com ?
 		 */
-		
-		if (getLocalBusca().contains("_all") && !condicao.equals("todos")){
-			String condicaoModificada = "&"+condicao.substring(1,condicao.length());
+
+		if (getLocalBusca().contains("_all") && !condicao.equals("todos")) {
+			String condicaoModificada = "&"
+					+ condicao.substring(1, condicao.length());
 			System.out.println(condicaoModificada);
-			condicao=condicaoModificada;
+			condicao = condicaoModificada;
 		}
 
 		if (!condicao.equals("todos"))
 			url += condicao;
-		
+
 		System.out.println(url);
 		String jsonString = getRegistro(url);
-		
+
 		/*
-		 * Se a busca falhou com uma visão que pode não estar criada, a url de busca irá
-		 * mudar para a padrão. A variável pegaDocumento altera de acordo com a url de busca,
-		 * pois é ela que contem todos os dados de um registro de Contato.
-		 * Caso a url seja usando a visão criada, essa variável recebe o valor "value".
-		 * Caso contrário, em que a url seja a padrão, essa variável recebe o valor "doc".
+		 * Se a busca falhou com uma visão que pode não estar criada, a url de
+		 * busca irá mudar para a padrão. A variável pegaDocumento altera de
+		 * acordo com a url de busca, pois é ela que contem todos os dados de um
+		 * registro de Contato. Caso a url seja usando a visão criada, essa
+		 * variável recebe o valor "value". Caso contrário, em que a url seja a
+		 * padrão, essa variável recebe o valor "doc".
 		 */
-		if (jsonString==null){
+		if (jsonString == null) {
 			setLocalBusca("_all_docs?include_docs=true");
-			pegaDocumento="doc";
-			url=getHost() + ":" + getPorta() + "/" + getNomebanco()
-					+ "/"+ getLocalBusca();
+			pegaDocumento = "doc";
+			url = getHost() + ":" + getPorta() + "/" + getNomebanco() + "/"
+					+ getLocalBusca();
 			if (!condicao.equals("todos"))
 				url += condicao;
 			jsonString = getRegistro(url);
 		}
-		
+
 		try {
 			json = new JSONObject(jsonString.toString());
 			arrayDocumentos = json.getJSONArray("rows");
@@ -118,7 +121,7 @@ public class AcessoBanco {
 		} catch (JSONException e1) {
 			System.out
 					.println("Erro ao manipular JSON! - buscaDocumentos()/AcessoBanco.java");
-		} catch (NullPointerException e2){
+		} catch (NullPointerException e2) {
 			System.out
 					.println("Erro na busca por documentos - formatação da URL - buscaDocumentos()/AcessoBanco.java");
 		}
@@ -134,8 +137,27 @@ public class AcessoBanco {
 	 * @return
 	 */
 	public boolean verificaBancoCriado() {
+		if (!verificaInstalacaoCouchDB()) {
+			JOptionPane
+					.showMessageDialog(null,
+							"O CouchDB não está instalado em seu sistema",
+							"Erro na execução do aplicativo",
+							JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+		}
 		setNomeBanco("agenda");
 		String url = getHost() + ":" + getPorta() + "/" + getNomebanco();
+		String jsonRetornado = getRegistro(url);
+		if (jsonRetornado == null)
+			return false;
+		return true;
+	}
+
+	/**
+	 * Função que verifica se o couchDB está instalado no sistema
+	 */
+	public boolean verificaInstalacaoCouchDB() {
+		String url = getHost() + ":" + getPorta();
 		String jsonRetornado = getRegistro(url);
 		if (jsonRetornado == null)
 			return false;
@@ -163,8 +185,8 @@ public class AcessoBanco {
 	 */
 
 	public int maiorNumeroDocumento() {
-		String url = getHost() + ":" + getPorta() + "/" + getNomebanco()
-				+ "/"+"_all_docs";
+		String url = getHost() + ":" + getPorta() + "/" + getNomebanco() + "/"
+				+ "_all_docs";
 		String jsonRetornado = getRegistro(url);
 		JSONArray arrayDocumentos;
 		JSONObject documento;
@@ -268,7 +290,8 @@ public class AcessoBanco {
 		} catch (IOException e) {
 			System.out
 					.println("Erro IOException - atualizarAluno()/AcessoBanco.java");
-		};
+		}
+		;
 
 	}
 
@@ -383,7 +406,7 @@ public class AcessoBanco {
 			rd.close();
 		} catch (IOException e) {
 			System.out
-					.println("Erro na primeira conexão! - getRegistro()/AcessoBanco.java com o caminho \""+ getLocalBusca()+"\"");
+					.println("Erro na conexão! - getRegistro()/AcessoBanco.java");
 			return null;
 		}
 		// retorna a string de retorno da requisição
