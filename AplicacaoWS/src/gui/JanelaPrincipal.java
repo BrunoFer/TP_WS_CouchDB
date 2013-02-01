@@ -219,8 +219,9 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	 * @param condicao
 	 */
 	public void telaConsultar(String condicao){
-		tratadorEventosTabela = new TratadorEventosTabela(this);
 		tabela = getTabelaContatos(condicao);
+		propriedadesTabela();
+		tratadorEventosTabela = new TratadorEventosTabela(this);
 		tabela.addMouseListener(tratadorEventosTabela);
 
 		tratadorEventosConsulta = new TratadorEventosConsulta(this, tabela,
@@ -259,7 +260,6 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelDentro.add(painelIcones, "spanx 4,gapleft 580, gaptop 10");
 
 		// acrescentando a tabela com os dados no painel principal
-		propriedadesTabela();
 		JScrollPane barraRolagem = new JScrollPane(tabela);
 		painelDentro.add(barraRolagem, "spanx 4,gapleft 40, gaptop 10");
 
@@ -341,6 +341,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		tabela.setBackground(new Color(240, 255, 240));
 		tabela.setFont(new Font("Verdana", Font.BOLD, 15));
 		tabela.setPreferredScrollableViewportSize(new Dimension(720, 300));
+		tabela.setAutoCreateRowSorter(true);
 	}
 
 	public JTable getTabelaContatos(String condicao){
