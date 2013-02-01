@@ -28,7 +28,13 @@ public class TabelaContatos extends AbstractTableModel{
     }
  
     public TabelaContatos(List<Contato> listaContatos) {
-        linhas = new ArrayList<Contato>(listaContatos);
+    	try{
+    		linhas = new ArrayList<Contato>(listaContatos);
+    	} catch (NullPointerException excecao){
+    		System.out
+				.println("Erro na busca por documentos - formatação da URL - construtor da TabelaContatos" +
+						"/TabelaContatos.java");
+    	}
     }
 
 	@Override
