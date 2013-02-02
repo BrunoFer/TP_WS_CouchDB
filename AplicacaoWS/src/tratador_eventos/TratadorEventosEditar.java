@@ -31,7 +31,7 @@ public class TratadorEventosEditar implements ActionListener{
 				JOptionPane.showMessageDialog(null, "Informe ao menos um telefone!", "Edição de contato", JOptionPane.ERROR_MESSAGE);
 			} else{
 				json = montarJson();
-				acessoBanco.atualizarContato(janelaEditar.getNumeroDocumento(),json);
+				acessoBanco.atualizarContato(janelaEditar.getIdDocumento(),json);
 				janelaEditar.dispose();
 			}
 		}

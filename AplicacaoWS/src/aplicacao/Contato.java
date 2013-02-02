@@ -1,20 +1,23 @@
 package aplicacao;
 
 public class Contato {
-	String nome, apelido, telefoneResidencial, telefoneCelular;
-	String cidade,estado;
-	int id;
+	String nome, apelido, dataNascimento, telefoneResidencial, telefoneCelular;
+	String cidade, estado;
+	String id;
 	int qtdeAlunos;
 
 	public Contato() {
 		this.qtdeAlunos++;
 	}
 
-	public Contato(int id, String nome, String apelido, String telefoneResidencial, String telefoneCelular, String cidade, String estado) {
+	public Contato(String id, String nome, String apelido, String dataNascimento,
+			String telefoneResidencial, String telefoneCelular, String cidade,
+			String estado) {
 		super();
-		this.id=id;
+		this.id = id;
 		this.nome = nome;
 		this.apelido = apelido;
+		this.dataNascimento = dataNascimento;
 		this.telefoneResidencial = telefoneResidencial;
 		this.telefoneCelular = telefoneCelular;
 		this.cidade = cidade;
@@ -22,11 +25,11 @@ public class Contato {
 		this.qtdeAlunos++;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -44,6 +47,14 @@ public class Contato {
 
 	public void setApelido(String apelido) {
 		this.apelido = apelido;
+	}
+	
+	public String getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(String dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 	public String getTelefoneResidencial() {

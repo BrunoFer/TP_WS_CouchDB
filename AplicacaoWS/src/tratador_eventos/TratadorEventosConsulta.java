@@ -20,7 +20,7 @@ public class TratadorEventosConsulta implements ActionListener {
 	private TabelaContatos tabelaContatos;
 	private AcessoBanco acessoBanco;
 	private JanelaEditar janelaEditar;
-	private Contato contato = new Contato();
+	private Contato contato;
 
 	public TratadorEventosConsulta(JanelaPrincipal janelaPrincipal,
 			JTable tabela, AcessoBanco acessoBanco,
@@ -39,6 +39,7 @@ public class TratadorEventosConsulta implements ActionListener {
 			// System.out.println("Botao EDITAR pressionado!");
 			if (tabela.getSelectedRowCount() == 1) {
 				int linhaSelecionada = tabela.getSelectedRow();
+				contato = new Contato();
 				contato = tabelaContatos.getContato(linhaSelecionada);
 				abreJanelaEditar(contato);
 				janelaPrincipal.limparTela();
@@ -54,7 +55,7 @@ public class TratadorEventosConsulta implements ActionListener {
 						"Deseja excluir contato?", "Exclusão",
 						JOptionPane.YES_NO_CANCEL_OPTION);
 				if (confirma == JOptionPane.YES_OPTION) {
-					int contato = (Integer) tabelaContatos.getValueAt(
+					String contato = (String) tabelaContatos.getValueAt(
 							tabela.getSelectedRow(), 0);
 					acessoBanco.deletarContato(contato);
 					janelaPrincipal.limparTela();
@@ -112,7 +113,7 @@ public class TratadorEventosConsulta implements ActionListener {
 	}
 
 	/**
-	 * Esse método será acionado sempre que o botão editar seja pressionado.
+	 * Esse método será acionado sempre que o botão editar for pressionado.
 	 * Ela recebe o objeto Contato instanciado com os dados da linha selecionada
 	 * da tabela e faz a chamada a função montarJanelaEditar() da classe JanelaEditar.
 	 * 

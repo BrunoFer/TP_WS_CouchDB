@@ -13,15 +13,16 @@ public class TabelaContatos extends AbstractTableModel{
 	private static final long serialVersionUID = 1L;
 	private List<Contato> linhas;
 	
-	private String[] colunas = new String[] { "Id", "Nome", "Apelido", "Tel Residencial", "Tel Cel", "Cidade", "Estado"};
+	private String[] colunas = new String[] { "Id", "Nome", "Apelido", "Data Nasc.", "Tel Residencial", "Tel Cel", "Cidade", "Estado"};
 	
 	private static final int ID = 0;
 	private static final int NOME = 1;
 	private static final int APELIDO = 2;
-	private static final int TELEFONERES = 3;
-	private static final int TELEFONECEL = 4;
-	private static final int CIDADE = 5;
-	private static final int ESTADO = 6;
+	private static final int DATANASCIMENTO = 3;
+	private static final int TELEFONERES = 4;
+	private static final int TELEFONECEL = 5;
+	private static final int CIDADE = 6;
+	private static final int ESTADO = 7;
 
 	public TabelaContatos() {
         linhas = new ArrayList<Contato>();
@@ -56,10 +57,12 @@ public class TabelaContatos extends AbstractTableModel{
 	public Class<?> getColumnClass(int columnIndex) {
 	    switch (columnIndex) {
 	    case ID:
-	    	return Integer.class;
+	    	return String.class;
 	    case NOME:
 	        return String.class;
 	    case APELIDO:
+	    	return String.class;
+	    case DATANASCIMENTO:
 	    	return String.class;
 	    case TELEFONERES:
 	        return String.class;
@@ -92,6 +95,8 @@ public class TabelaContatos extends AbstractTableModel{
 	        return contato.getNome();
 	    case APELIDO:
 	        return contato.getApelido();
+	    case DATANASCIMENTO:
+	    	return contato.getDataNascimento();
 	    case TELEFONERES:
 	    	return contato.getTelefoneResidencial();
 	    case TELEFONECEL:
@@ -113,13 +118,16 @@ public class TabelaContatos extends AbstractTableModel{
 	 
 	    switch (columnIndex) {
 	    case ID:
-	    	contato.setId((Integer) valor);
+	    	contato.setId((String) valor);
 	    case NOME:
 	    	contato.setNome((String) valor);
 	        break;
 	    case APELIDO:
 	    	contato.setApelido((String) valor);
 	        break;
+	    case DATANASCIMENTO:
+	    	contato.setDataNascimento((String) valor);
+	    	break;
 	    case TELEFONERES:
 	    	contato.setTelefoneResidencial((String) valor);
 	    	break;

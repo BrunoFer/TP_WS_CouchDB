@@ -30,17 +30,12 @@ public class AcessoBanco {
 	private String nomeBanco = "agenda";
 	private String localBusca = "_design/listaContatos/_view/todos";
 	private String pegaDocumento = "value";
-	private int nomeDocumento;
 	private URL urlConsulta;
 	private String capturaJson;
 
 	public AcessoBanco() {
-		if (!verificaBancoCriado()) {
+		if (!verificaBancoCriado())
 			inicializaBanco();
-			this.nomeDocumento = 1;
-		} else {
-			this.nomeDocumento = maiorNumeroDocumento() + 1;
-		}
 	}
 
 	/**
@@ -104,8 +99,8 @@ public class AcessoBanco {
 					Contato contato = new Contato();
 					documento = arrayDocumentos.getJSONObject(i);
 					dadosContato = documento.getJSONObject(pegaDocumento);
-					contato.setId(Integer.parseInt(dadosContato
-							.getString("_id")));
+					contato.setId(dadosContato
+							.getString("_id"));
 					contato.setNome(dadosContato.getString("nome"));
 					contato.setApelido(dadosContato.getString("apelido"));
 					contato.setTelefoneResidencial(dadosContato
@@ -176,44 +171,32 @@ public class AcessoBanco {
 	}
 
 	/**
-	 * Esta função realiza uma verificação dentre todos os registros criados no
-	 * banco Agenda, a fim de conhecer o maior número utilizado como id até
-	 * agora, para enfim, setar o próximo número que poderá ser utilizado como
-	 * id de registro.
+	 * O couchDB possui um mecanismo que gera um novo id sempre que for
+	 * necessário incluir um novo registro. Esta função chama o método getRegistro()
+	 * para extrair esta informação do JSON obtido pelo mecanismo de geração _uuids
+	 * do couchDB.
 	 * 
+	 * @param idDocumento
 	 * @return
 	 */
 
-	public int maiorNumeroDocumento() {
-		String url = getHost() + ":" + getPorta() + "/" + getNomebanco() + "/"
-				+ "_all_docs";
+	public String buscaId() {
+		String url = getHost() + ":" + getPorta() + "/" + "_uuids";
+
+		// fazendo a requisicao de um JSON com o novo id
 		String jsonRetornado = getRegistro(url);
-		JSONArray arrayDocumentos;
-		JSONObject documento;
-		if (jsonRetornado == null) {
-			return 0;
-		} else {
-			JSONObject json;
-			int maiorNumero = 0;
-			try {
-				json = new JSONObject(jsonRetornado.toString());
-				arrayDocumentos = json.getJSONArray("rows");
-				for (int i = 0; i < arrayDocumentos.length(); i++) {
-					documento = arrayDocumentos.getJSONObject(i);
-					try {
-						int numeroDocumento = Integer.parseInt(documento
-								.getString("id"));
-						if (numeroDocumento > maiorNumero) {
-							maiorNumero = numeroDocumento;
-						}
-					} catch (NumberFormatException exception) {
-					}
-				}
-			} catch (JSONException e) {
-				System.out
-						.println("Erro ao manipular JSON! - maiorNumeroDocumento()/AcessoBanco.java");
-			}
-			return maiorNumero;
+		JSONObject json;
+		try {
+			json = new JSONObject(jsonRetornado.toString());
+			String uuid = json.getString("uuids");
+			System.out.println(uuid);
+			String idContato = uuid.substring(2, uuid.length()-2);
+			System.out.println(idContato);
+			return idContato;
+		} catch (JSONException e) {
+			System.out
+					.println("Erro ao manipular JSON! - buscaRevisaoContato()/AcessoBanco.java");
+			return null;
 		}
 	}
 
@@ -222,21 +205,21 @@ public class AcessoBanco {
 	 * de revisão do registro atual. Esta função chama o método getRegistro()
 	 * para extrair esta informação do JSON obtido.
 	 * 
-	 * @param numeroDocumento
+	 * @param idDocumento
 	 * @return
 	 */
 
-	public String buscaRevisaoContato(int numeroDocumento) throws IOException {
+	public String buscaRevisaoContato(String idDocumento) throws IOException {
 		String url = getHost() + ":" + getPorta() + "/" + getNomebanco() + "/"
-				+ numeroDocumento;
+				+ idDocumento;
 
 		// fazendo a requisicao do hash do documento do aluno
 		String jsonRetornado = getRegistro(url);
 		JSONObject json;
 		try {
 			json = new JSONObject(jsonRetornado.toString());
-			String hash = json.getString("_rev");
-			return hash;
+			String revisao = json.getString("_rev");
+			return revisao;
 		} catch (JSONException e) {
 			System.out
 					.println("Erro ao manipular JSON! - buscaRevisaoContato()/AcessoBanco.java");
@@ -248,17 +231,17 @@ public class AcessoBanco {
 	 * Método que recebe o id do documento como parâmetro e monta a string que
 	 * será utilizada como URL para exclusão do registro.
 	 * 
-	 * @param numeroDocumento
+	 * @param idDocumento
 	 */
 
-	public void deletarContato(int numeroDocumento) {
+	public void deletarContato(String idDocumento) {
 		// busca o hash do aluno que será deletado
 		String hash;
 		try {
-			hash = buscaRevisaoContato(numeroDocumento);
+			hash = buscaRevisaoContato(idDocumento);
 			// montando a url para deletar o documento do aluno
 			String url = getHost() + ":" + getPorta() + "/" + getNomebanco()
-					+ "/" + numeroDocumento + "?rev=" + hash;
+					+ "/" + idDocumento + "?rev=" + hash;
 			removeRegistro(url);
 		} catch (IOException e) {
 			System.out
@@ -271,12 +254,12 @@ public class AcessoBanco {
 	 * recebidos são o número do documento, que será o seu id no banco, e o json
 	 * montado com os dados fornecidos para a atualização.
 	 * 
-	 * @param numeroDocumento
+	 * @param idDocumento
 	 * @param json
 	 */
-	public void atualizarContato(int numeroDocumento, String dados) {
+	public void atualizarContato(String idDocumento, String dados) {
 		try {
-			String hash = buscaRevisaoContato(numeroDocumento);
+			String revisao = buscaRevisaoContato(idDocumento);
 			// montando a url para deletar o documento do aluno
 			String url = getHost() + ":" + getPorta() + "/" + getNomebanco()
 					+ "/";
@@ -284,8 +267,8 @@ public class AcessoBanco {
 			 * acrescenta o id e o hash do aluno à string json, sem isso o
 			 * documento não é alterado corretamente
 			 */
-			String json = "{ \"_id\":\"" + numeroDocumento + "\",\"_rev\":\""
-					+ hash + "\"," + dados;
+			String json = "{ \"_id\":\"" + idDocumento + "\",\"_rev\":\""
+					+ revisao + "\"," + dados;
 			updateRegistro(url, json);
 		} catch (IOException e) {
 			System.out
@@ -360,7 +343,7 @@ public class AcessoBanco {
 					+ "/" + getNomebanco()));
 		} else {
 			requisicaoPUT = new HttpPut(URI.create(getHost() + ":" + getPorta()
-					+ "/" + getNomebanco() + "/" + getNomeDocumento()));
+					+ "/" + getNomebanco() + "/" + buscaId()));
 			HttpEntity input = new StringEntity(json,
 					ContentType.APPLICATION_JSON);
 			requisicaoPUT.setEntity(input);
@@ -370,7 +353,6 @@ public class AcessoBanco {
 		try {
 			response = clienteHttp.execute(requisicaoPUT);
 			System.out.println(response);
-			setNomeDocumento(nomeDocumento + 1);
 			JOptionPane.showMessageDialog(null,
 					"Registro incluído com sucesso!", "Cadastro",
 					JOptionPane.INFORMATION_MESSAGE);
@@ -435,14 +417,6 @@ public class AcessoBanco {
 
 	public void setPorta(String porta) {
 		this.porta = porta;
-	}
-
-	public int getNomeDocumento() {
-		return nomeDocumento;
-	}
-
-	public void setNomeDocumento(int nomeDocumento) {
-		this.nomeDocumento = nomeDocumento;
 	}
 
 	public String getNomebanco() {
