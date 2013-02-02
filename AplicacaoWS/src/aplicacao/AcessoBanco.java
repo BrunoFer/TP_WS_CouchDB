@@ -63,16 +63,13 @@ public class AcessoBanco {
 		if (getLocalBusca().contains("_all") && !condicao.equals("todos")) {
 			String condicaoModificada = "&"
 					+ condicao.substring(1, condicao.length());
-			System.out.println(condicaoModificada);
 			condicao = condicaoModificada;
 		}
 
 		if (!condicao.equals("todos"))
 			url += condicao;
 
-		System.out.println(url);
 		String jsonString = getRegistro(url);
-
 		/*
 		 * Se a busca falhou com uma visão que pode não estar criada, a url de
 		 * busca irá mudar para a padrão. A variável pegaDocumento altera de
@@ -99,11 +96,11 @@ public class AcessoBanco {
 					Contato contato = new Contato();
 					documento = arrayDocumentos.getJSONObject(i);
 					dadosContato = documento.getJSONObject(pegaDocumento);
-					contato.setId(dadosContato
-							.getString("_id"));
+					contato.setId(dadosContato.getString("_id"));
 					contato.setNome(dadosContato.getString("nome"));
 					contato.setApelido(dadosContato.getString("apelido"));
-					contato.setDataNascimento(dadosContato.getString("datanascimento"));
+					contato.setDataNascimento(dadosContato
+							.getString("datanascimento"));
 					contato.setTelefoneResidencial(dadosContato
 							.getString("telres"));
 					contato.setTelefoneCelular(dadosContato.getString("telcel"));
@@ -116,7 +113,7 @@ public class AcessoBanco {
 			return listaContatos;
 		} catch (JSONException e1) {
 			System.out
-					.println("Erro ao manipular JSON! - buscaDocumentos()/AcessoBanco.java");
+					.println("Erro ao manipular JSON do registro! - buscaDocumentos()/AcessoBanco.java");
 		} catch (NullPointerException e2) {
 			System.out
 					.println("Erro na busca por documentos - formatação da URL - buscaDocumentos()/AcessoBanco.java");
@@ -173,9 +170,9 @@ public class AcessoBanco {
 
 	/**
 	 * O couchDB possui um mecanismo que gera um novo id sempre que for
-	 * necessário incluir um novo registro. Esta função chama o método getRegistro()
-	 * para extrair esta informação do JSON obtido pelo mecanismo de geração _uuids
-	 * do couchDB.
+	 * necessário incluir um novo registro. Esta função chama o método
+	 * getRegistro() para extrair esta informação do JSON obtido pelo mecanismo
+	 * de geração _uuids do couchDB.
 	 * 
 	 * @param idDocumento
 	 * @return
@@ -190,9 +187,7 @@ public class AcessoBanco {
 		try {
 			json = new JSONObject(jsonRetornado.toString());
 			String uuid = json.getString("uuids");
-			System.out.println(uuid);
-			String idContato = uuid.substring(2, uuid.length()-2);
-			System.out.println(idContato);
+			String idContato = uuid.substring(2, uuid.length() - 2);
 			return idContato;
 		} catch (JSONException e) {
 			System.out
@@ -295,6 +290,7 @@ public class AcessoBanco {
 		requisicaoPost.setEntity(input);
 		HttpResponse response;
 		try {
+			System.out.println("POST : " + url + " - " + json);
 			response = httpClient.execute(requisicaoPost);
 			System.out.println(response);
 			JOptionPane.showMessageDialog(null,
@@ -317,6 +313,7 @@ public class AcessoBanco {
 		HttpDelete deleteRequest = new HttpDelete(url);
 		HttpResponse response;
 		try {
+			System.out.println("DELETE : " + url);
 			response = httpClient.execute(deleteRequest);
 			System.out.println(response);
 			JOptionPane.showMessageDialog(null,
@@ -340,14 +337,17 @@ public class AcessoBanco {
 		DefaultHttpClient clienteHttp = new DefaultHttpClient();
 		HttpPut requisicaoPUT;
 		if (json.equals("")) {
-			requisicaoPUT = new HttpPut(URI.create(getHost() + ":" + getPorta()
-					+ "/" + getNomebanco()));
+			String url = getHost() + ":" + getPorta() + "/" + getNomebanco();
+			requisicaoPUT = new HttpPut(URI.create(url));
+			System.out.println("PUT : " + url);
 		} else {
-			requisicaoPUT = new HttpPut(URI.create(getHost() + ":" + getPorta()
-					+ "/" + getNomebanco() + "/" + buscaId()));
+			String url = getHost() + ":" + getPorta() + "/" + getNomebanco()
+					+ "/" + buscaId();
+			requisicaoPUT = new HttpPut(URI.create(url));
 			HttpEntity input = new StringEntity(json,
 					ContentType.APPLICATION_JSON);
 			requisicaoPUT.setEntity(input);
+			System.out.println("PUT : " + url + " - " + json);
 		}
 
 		HttpResponse response;
@@ -378,6 +378,7 @@ public class AcessoBanco {
 		String linha;
 		capturaJson = "";
 		try {
+			System.out.println("GET : " + url);
 			this.urlConsulta = new URL(url);
 			conexao = (HttpURLConnection) urlConsulta.openConnection();
 			conexao.setRequestMethod("GET");
