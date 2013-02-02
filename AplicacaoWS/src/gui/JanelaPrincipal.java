@@ -160,6 +160,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	public void limparDados() {
 		getTextoNome().setText("");
 		getTextoApelido().setText("");
+		getTextoDataNascimento().setText("");
 		getTextoTelRes().setText("");
 		getTextoTelCel().setText("");
 		getTextoCidade().setText("");
