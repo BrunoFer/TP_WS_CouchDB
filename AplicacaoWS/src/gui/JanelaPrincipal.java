@@ -52,12 +52,14 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	// Elementos da Janela de Cadastro
 	private JLabel nome = new JLabel("Nome: ");
 	private JLabel apelido = new JLabel("Apelido: ");
+	private JLabel dataNascimento = new JLabel("Data de nascimento: ");
 	private JLabel telefoneResidencial = new JLabel("Tel. Residencial: ");
 	private JLabel telefoneCelular = new JLabel("Tel. Cel.: ");
 	private JLabel cidade = new JLabel("Cidade: ");
 	private JLabel estado = new JLabel("Estado: ");
 	private JTextField textoNome = new JTextField(45);
 	private JTextField textoApelido = new JTextField(20);
+	private JTextField textoDataNascimento = new JTextField(20);
 	private JTextField textoTelRes = new JTextField(12);
 	private JTextField textoTelCel = new JTextField(12);
 	private JTextField textoCidade = new JTextField(25);
@@ -100,7 +102,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		super();
 		this.acessoBanco = acessoBanco;
 		setTitle("Contact Application");
-		setSize(900, 750);
+		setSize(1100, 750);
 		setLocationRelativeTo(null);
 	}
 
@@ -184,18 +186,20 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		
 		//cadastro.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		painelDentro.add(nome, "gapleft 70, gaptop 40");
-		painelDentro.add(textoNome, "spanx 2, gapright 50");
-		painelDentro.add(apelido, "gapleft 70");
+		painelDentro.add(textoNome, "spanx 2, gapright 230");
+		painelDentro.add(apelido, "gapleft 70, gaptop 10");
 		painelDentro.add(textoApelido, "spanx 2");
-		painelDentro.add(telefoneResidencial, "gapleft 70");
+		painelDentro.add(dataNascimento, "gapleft 70, gaptop 10");
+		painelDentro.add(textoDataNascimento, "spanx 2");
+		painelDentro.add(telefoneResidencial, "gapleft 70, gaptop 10");
 		painelDentro.add(textoTelRes, "spanx 2");
-		painelDentro.add(telefoneCelular, "gapleft 70");
+		painelDentro.add(telefoneCelular, "gapleft 70, gaptop 10");
 		painelDentro.add(textoTelCel, "spanx 2");
-		painelDentro.add(cidade, "gapleft 70");
+		painelDentro.add(cidade, "gapleft 70, gaptop 10");
 		painelDentro.add(textoCidade, "spanx 2");
-		painelDentro.add(estado, "gapleft 70");
-		painelDentro.add(comboEstados, "spanx 2");
-		painelDentro.add(botoes, "spanx 3, gapleft 270");
+		painelDentro.add(estado, "gapleft 70, gaptop 10");
+		painelDentro.add(comboEstados, "spanx 2, gaptop 10");
+		painelDentro.add(botoes, "spanx 3, gapleft 350, gaptop 30");
 
 		painelDentro.setBackground(new Color(255,255,255,100));
 		MigLayout layoutFora = new MigLayout();
@@ -257,11 +261,11 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 
 		// acrescenta o painel icones no painel Principal
 		painelIcones.setBackground(new Color(255,255,255,0));
-		painelDentro.add(painelIcones, "spanx 4,gapleft 580, gaptop 10");
+		painelDentro.add(painelIcones, "spanx 4,gapleft 780, gaptop 10");
 
 		// acrescentando a tabela com os dados no painel principal
 		JScrollPane barraRolagem = new JScrollPane(tabela);
-		painelDentro.add(barraRolagem, "spanx 4,gapleft 40, gaptop 10");
+		painelDentro.add(barraRolagem, "spanx 4,gapleft 15, gaptop 10");
 
 		// montando o painel de id inicial
 		JPanel painelInicio = new JPanel();
@@ -305,7 +309,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelFerramentas.add(botaoCondicao);
 
 		// acrescenta ao painel principal, o painel inferior
-		painelDentro.add(painelFerramentas,"gaptop 10,gapleft 200, spanx 4");
+		painelDentro.add(painelFerramentas,"gaptop 10,gapleft 300, spanx 4");
 
 		painelFerramentas.setBackground(new Color(255,255,255,0));
 		painelDentro.setBackground(new Color(255,255,255,100));
@@ -328,19 +332,20 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	 * fundo e a fonte utilizada no texto.
 	 */
 	public void propriedadesTabela() {
-		tabela.getColumnModel().getColumn(0).setPreferredWidth(40);
-		tabela.getColumnModel().getColumn(1).setPreferredWidth(145);
-		tabela.getColumnModel().getColumn(2).setPreferredWidth(100);
-		tabela.getColumnModel().getColumn(3).setPreferredWidth(110);
+		tabela.getColumnModel().getColumn(0).setPreferredWidth(110);
+		tabela.getColumnModel().getColumn(1).setPreferredWidth(150);
+		tabela.getColumnModel().getColumn(2).setPreferredWidth(80);
+		tabela.getColumnModel().getColumn(3).setPreferredWidth(90);
 		tabela.getColumnModel().getColumn(4).setPreferredWidth(110);
-		tabela.getColumnModel().getColumn(5).setPreferredWidth(150);
-		tabela.getColumnModel().getColumn(6).setPreferredWidth(55);
+		tabela.getColumnModel().getColumn(5).setPreferredWidth(110);
+		tabela.getColumnModel().getColumn(6).setPreferredWidth(150);
+		tabela.getColumnModel().getColumn(7).setPreferredWidth(40);
 		tabela.setRowHeight(23);
 		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		tabela.setGridColor(new Color(40, 255, 40));
 		tabela.setBackground(new Color(240, 255, 240));
 		tabela.setFont(new Font("Verdana", Font.BOLD, 15));
-		tabela.setPreferredScrollableViewportSize(new Dimension(720, 300));
+		tabela.setPreferredScrollableViewportSize(new Dimension(980, 300));
 		tabela.setAutoCreateRowSorter(true);
 	}
 
@@ -508,6 +513,14 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 
 	public void setTextoCidade(JTextField textoCidade) {
 		this.textoCidade = textoCidade;
+	}
+
+	public JTextField getTextoDataNascimento() {
+		return textoDataNascimento;
+	}
+
+	public void setTextoDataNascimento(JTextField textoDataNascimento) {
+		this.textoDataNascimento = textoDataNascimento;
 	}
 
 	public JButton getBotaoLimpar() {

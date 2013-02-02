@@ -26,12 +26,14 @@ public class JanelaEditar extends JDialog{
 	private JLabel edicao = new JLabel("Edição");
 	private JLabel nome = new JLabel("Nome: ");
 	private JLabel apelido = new JLabel("Apelido");
+	private JLabel dataNascimento = new JLabel("Data Nasc.");
 	private JLabel telefoneResidencial = new JLabel("Telefone Residencial: ");
 	private JLabel telefoneCelular = new JLabel("Telefone Celular: ");
 	private JLabel cidade = new JLabel("Cidade: ");
 	private JLabel estado = new JLabel("Estado: ");
-	private JTextField textoNome = new JTextField(50);
+	private JTextField textoNome = new JTextField(30);
 	private JTextField textoApelido = new JTextField(30);
+	private JTextField textoDataNascimento = new JTextField(25);
 	private JTextField textoTelRes = new JTextField(12);
 	private JTextField textoTelCel = new JTextField(12);
 	private JTextField textoCidade = new JTextField(30);
@@ -44,14 +46,14 @@ public class JanelaEditar extends JDialog{
 	private TratadorEventosEditar tratadorEventosEditar;
 	private AcessoBanco acessoBanco;
 	private Contato contato;
-	private int numeroDocumento;
+	private String idDocumento;
 	
 	public JanelaEditar(AcessoBanco acessoBanco, Contato contato){
 		this.acessoBanco = acessoBanco;
 		this.contato = contato;
-		this.numeroDocumento = contato.getId();
+		this.idDocumento = contato.getId();
 		setTitle("Editar Contato");
-		setSize(300, 350);
+		setSize(300, 380);
 	}
 
 	public void montarJanelaEditar(){
@@ -70,6 +72,8 @@ public class JanelaEditar extends JDialog{
 		painelPrincipal.add(textoNome, "wrap");
 		painelPrincipal.add(apelido);
 		painelPrincipal.add(textoApelido,"wrap");
+		painelPrincipal.add(dataNascimento);
+		painelPrincipal.add(textoDataNascimento,"wrap");
 		painelPrincipal.add(telefoneResidencial);
 		painelPrincipal.add(textoTelRes, "wrap");
 		painelPrincipal.add(telefoneCelular);
@@ -108,12 +112,16 @@ public class JanelaEditar extends JDialog{
 		});
 	}
 	
-	public JComboBox getComboEstados() {
-		return comboEstados;
+	public String getIdDocumento() {
+		return idDocumento;
 	}
 
-	public int getNumeroDocumento() {
-		return numeroDocumento;
+	public void setIdDocumento(String idDocumento) {
+		this.idDocumento = idDocumento;
+	}
+
+	public JComboBox getComboEstados() {
+		return comboEstados;
 	}
 
 	public JTextField getTextoNome() {
@@ -122,6 +130,14 @@ public class JanelaEditar extends JDialog{
 
 	public void setTextoNome(JTextField textoNome) {
 		this.textoNome = textoNome;
+	}
+
+	public JTextField getTextoDataNascimento() {
+		return textoDataNascimento;
+	}
+
+	public void setTextoDataNascimento(JTextField textoDataNascimento) {
+		this.textoDataNascimento = textoDataNascimento;
 	}
 
 	public JTextField getTextoApelido() {

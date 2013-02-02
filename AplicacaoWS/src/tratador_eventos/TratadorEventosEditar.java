@@ -53,6 +53,8 @@ public class TratadorEventosEditar implements ActionListener{
 				+ "\"";
 		json += ", \"telcel\": \"" + janelaEditar.getTextoTelCel().getText()
 				+ "\"";
+		json += ", \"datanascimento\": \"" + janelaEditar.getTextoDataNascimento().getText()
+				+ "\"";
 		json += ", \"cidade\": \"" + janelaEditar.getTextoCidade().getText()+ "\"";
 		json += ", \"estado\": \"" + janelaEditar.getComboEstados().getSelectedItem()+ "\"}";
 		

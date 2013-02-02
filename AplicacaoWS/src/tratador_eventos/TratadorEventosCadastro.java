@@ -62,6 +62,7 @@ public class TratadorEventosCadastro implements ActionListener {
 		String json = "{";
 		json += "\"nome\": \"" + janela.getTextoNome().getText() + "\"";
 		json += ", \"apelido\": \"" + janela.getTextoApelido().getText() + "\"";
+		json += ", \"datanascimento\": \"" + janela.getTextoDataNascimento().getText() + "\"";
 		json += ", \"telres\": \"" + janela.getTextoTelRes().getText() + "\"";
 		json += ", \"telcel\": \"" + janela.getTextoTelCel().getText() + "\"";
 		json += ", \"cidade\": \"" + janela.getTextoCidade().getText() + "\"";
