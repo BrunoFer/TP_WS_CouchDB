@@ -103,6 +103,7 @@ public class AcessoBanco {
 							.getString("_id"));
 					contato.setNome(dadosContato.getString("nome"));
 					contato.setApelido(dadosContato.getString("apelido"));
+					contato.setDataNascimento(dadosContato.getString("datanascimento"));
 					contato.setTelefoneResidencial(dadosContato
 							.getString("telres"));
 					contato.setTelefoneCelular(dadosContato.getString("telcel"));
