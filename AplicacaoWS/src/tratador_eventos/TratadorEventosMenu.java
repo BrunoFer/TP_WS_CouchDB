@@ -5,7 +5,6 @@ import gui.JanelaSobre;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -25,12 +24,8 @@ public class TratadorEventosMenu implements ActionListener {
 			janelaPrincipal.limparTela();
 			janelaPrincipal.telaCadastrar();
 		} else if (e.getSource() == janelaPrincipal.getMenuJanela().getExibir()) {
-			try {
-				janelaPrincipal.limparTela();
-				janelaPrincipal.telaConsultar("todos");
-			} catch (IOException e1) {
-				System.out.println("Erro IOException - getexibir() - actionPerformed()/TratadorEventosMenu.java");
-			}
+			janelaPrincipal.limparTela();
+			janelaPrincipal.telaConsultar("todos");
 		} else if (e.getSource()==janelaPrincipal.getMenuJanela().getAplicacao()){
 			janelaSobre = new JanelaSobre();
 			janelaSobre.montarJanelaSobre();
