@@ -35,7 +35,6 @@ public class TratadorEventosCadastro implements ActionListener {
 			String telRes = janela.getTextoTelRes().getText();
 			String telCel = janela.getTextoTelCel().getText();
 			boolean passou = true;
-			System.out.println(data);
 
 			if (nome.isEmpty()) {
 				JOptionPane.showMessageDialog(null,

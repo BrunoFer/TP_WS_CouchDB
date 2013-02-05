@@ -77,7 +77,6 @@ public class JanelaEditar extends JDialog {
 			textoDataNascimento = new JFormattedTextField(maskaraData);
 			textoDataNascimento.setColumns(8);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

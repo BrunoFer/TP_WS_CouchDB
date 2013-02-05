@@ -199,7 +199,6 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 			textoDataNascimento = new JFormattedTextField(maskaraData);
 			textoDataNascimento.setColumns(8);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
