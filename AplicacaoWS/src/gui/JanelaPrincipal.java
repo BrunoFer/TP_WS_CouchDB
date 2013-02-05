@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,6 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.MaskFormatter;
 
 import net.miginfocom.swing.MigLayout;
 import tratador_eventos.TratadorEventosCadastro;
@@ -61,7 +64,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	private JLabel estado = new JLabel("Estado: ");
 	private JTextField textoNome = new JTextField(45);
 	private JTextField textoApelido = new JTextField(20);
-	private JTextField textoDataNascimento = new JTextField(12);
+	private JFormattedTextField textoDataNascimento;
 	private JTextField textoTelRes = new JTextField(12);
 	private JTextField textoTelCel = new JTextField(12);
 	private JTextField textoCidade = new JTextField(25);
@@ -162,7 +165,6 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	public void limparDados() {
 		getTextoNome().setText("");
 		getTextoApelido().setText("");
-		getTextoDataNascimento().setText("");
 		getTextoTelRes().setText("");
 		getTextoTelCel().setText("");
 		getTextoCidade().setText("");
@@ -192,6 +194,16 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		botoes.add(botaoSalvar);
 		botoes.setBackground(new Color(255,255,255,0));
 		
+		try {
+			MaskFormatter maskaraData = new MaskFormatter("##/##/####");
+			textoDataNascimento = new JFormattedTextField(maskaraData);
+			textoDataNascimento.setColumns(15);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		//cadastro.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		painelDentro.add(nome, "gapleft 70, gaptop 40");
 		painelDentro.add(textoNome, "spanx 2, gapright 230");
@@ -217,7 +229,6 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		//limitando as teclas que podem ser utilizadas em cada campo
 		textoNome.setDocument(new TeclasPermitidasLetras());
 		textoCidade.setDocument(new TeclasPermitidasLetras());
-		textoDataNascimento.setDocument(new TeclasPermitidasNumeros());
 		textoTelCel.setDocument(new TeclasPermitidasNumeros());
 		textoTelRes.setDocument(new TeclasPermitidasNumeros());
 		
@@ -535,11 +546,11 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		this.textoCidade = textoCidade;
 	}
 
-	public JTextField getTextoDataNascimento() {
+	public JFormattedTextField getTextoDataNascimento() {
 		return textoDataNascimento;
 	}
 
-	public void setTextoDataNascimento(JTextField textoDataNascimento) {
+	public void setTextoDataNascimento(JFormattedTextField textoDataNascimento) {
 		this.textoDataNascimento = textoDataNascimento;
 	}
 

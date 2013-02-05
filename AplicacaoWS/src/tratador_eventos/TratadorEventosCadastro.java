@@ -35,7 +35,7 @@ public class TratadorEventosCadastro implements ActionListener {
 			String telRes = janela.getTextoTelRes().getText();
 			String telCel = janela.getTextoTelCel().getText();
 			boolean passou = true;
-			System.out.println(telCel.length() + " - " + telRes.length());
+			System.out.println(data);
 
 			if (nome.isEmpty()) {
 				JOptionPane.showMessageDialog(null,
@@ -43,7 +43,7 @@ public class TratadorEventosCadastro implements ActionListener {
 						"Cadastro de Contato", JOptionPane.ERROR_MESSAGE);
 				passou = false;
 			} else if (!data.isEmpty()) {
-				if (data.length() != 8) {
+				if (data.length() != 10) {
 					JOptionPane.showMessageDialog(null, "Data inválida",
 							"Cadastro de Contato", JOptionPane.ERROR_MESSAGE);
 					passou = false;
@@ -52,43 +52,50 @@ public class TratadorEventosCadastro implements ActionListener {
 					String resposta = valida.validaData(data);
 					if (resposta != null) {
 						JOptionPane.showMessageDialog(null, "Data inválida: "
-								+ resposta + " incorreto!", "Cadastro de Contato",
+								+ resposta + " incorreto!",
+								"Cadastro de Contato",
 								JOptionPane.ERROR_MESSAGE);
 						passou = false;
 					}
 				}
 			}
-			if (telRes.isEmpty() && telCel.isEmpty()) {
-				JOptionPane.showMessageDialog(null,
-						"Informe ao menos um telefone!", "Cadastro de Contato",
-						JOptionPane.ERROR_MESSAGE);
-				passou = false;
-			} else if (!telRes.isEmpty() && !telCel.isEmpty()) {
-				if (telRes.length() < 10 || telRes.length() > 11) {
+			if (passou) {
+				if (telRes.isEmpty() && telCel.isEmpty()) {
 					JOptionPane.showMessageDialog(null,
-							"Telefone Residencial inválido",
+							"Informe ao menos um telefone!",
 							"Cadastro de Contato", JOptionPane.ERROR_MESSAGE);
 					passou = false;
-				}
-				if (telCel.length() < 10 || telCel.length() > 11) {
-					JOptionPane.showMessageDialog(null,
-							"Telefone Celular inválido", "Cadastro de Contato",
-							JOptionPane.ERROR_MESSAGE);
-					passou = false;
-				}
-			} else if (!telCel.isEmpty()) {
-				if (telCel.length() < 10 || telCel.length() > 11) {
-					JOptionPane.showMessageDialog(null,
-							"Telefone Celular inválido", "Cadastro de Contato",
-							JOptionPane.ERROR_MESSAGE);
-					passou = false;
-				}
-			} else if (!telRes.isEmpty()) {
-				if (telRes.length() < 10 || telRes.length() > 11) {
-					JOptionPane.showMessageDialog(null,
-							"Telefone Residencial inválido",
-							"Cadastro de Contato", JOptionPane.ERROR_MESSAGE);
-					passou = false;
+				} else if (!telRes.isEmpty() && !telCel.isEmpty()) {
+					if (telRes.length() < 10 || telRes.length() > 11) {
+						JOptionPane.showMessageDialog(null,
+								"Telefone Residencial inválido",
+								"Cadastro de Contato",
+								JOptionPane.ERROR_MESSAGE);
+						passou = false;
+					}
+					if (telCel.length() < 10 || telCel.length() > 11) {
+						JOptionPane.showMessageDialog(null,
+								"Telefone Celular inválido",
+								"Cadastro de Contato",
+								JOptionPane.ERROR_MESSAGE);
+						passou = false;
+					}
+				} else if (!telCel.isEmpty()) {
+					if (telCel.length() < 10 || telCel.length() > 11) {
+						JOptionPane.showMessageDialog(null,
+								"Telefone Celular inválido",
+								"Cadastro de Contato",
+								JOptionPane.ERROR_MESSAGE);
+						passou = false;
+					}
+				} else if (!telRes.isEmpty()) {
+					if (telRes.length() < 10 || telRes.length() > 11) {
+						JOptionPane.showMessageDialog(null,
+								"Telefone Residencial inválido",
+								"Cadastro de Contato",
+								JOptionPane.ERROR_MESSAGE);
+						passou = false;
+					}
 				}
 			}
 

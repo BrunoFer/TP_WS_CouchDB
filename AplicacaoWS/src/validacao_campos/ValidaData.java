@@ -14,8 +14,8 @@ public class ValidaData {
 								// normal
 
 			dia = data.substring(0, 2);// captura apenas o dia
-			mes = data.substring(2, 4);// captura apenas o mês
-			ano = data.substring(4, 8);// captura apenas o ano
+			mes = data.substring(3, 5);// captura apenas o mês
+			ano = data.substring(6, 10);// captura apenas o ano
 
 			diaint = Integer.parseInt(dia);// transforma o valor de String para
 											// int
@@ -26,7 +26,7 @@ public class ValidaData {
 			int valorano = anoint % 4;// captura o valor do resto
 
 			if (valorano == 0) {// Anos em que o resto será zero
-				verano = data.substring(6, 8);// captura os dois dígitos finais
+				verano = data.substring(8, 10);// captura os dois dígitos finais
 												// do ano
 				verificarano = Integer.parseInt(verano);// transforma verano em
 														// int
