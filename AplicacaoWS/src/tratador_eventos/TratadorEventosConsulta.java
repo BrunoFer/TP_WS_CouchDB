@@ -86,9 +86,8 @@ public class TratadorEventosConsulta implements ActionListener {
 								"Limite deve ser um inteiro",
 								"Edição de contato", JOptionPane.ERROR_MESSAGE);
 					}
-				} else {
-					condicao += "&limit=1";
-				}
+				} 
+				
 				if (janelaPrincipal.getDecrescente().isSelected())
 					condicao += "&descending=true";
 			} else if (!limite.equals("")) {

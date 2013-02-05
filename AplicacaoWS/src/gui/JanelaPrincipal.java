@@ -208,8 +208,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelDentro.add(apelido, "gapleft 70, gaptop 10");
 		painelDentro.add(textoApelido, "spanx 2");
 		painelDentro.add(dataNascimento, "gapleft 70, gaptop 10");
-		painelDentro.add(textoDataNascimento);
-		painelDentro.add(new JLabel("ddmmaaaa"));
+		painelDentro.add(textoDataNascimento, "spanx 2");
 		painelDentro.add(telefoneResidencial, "gapleft 70, gaptop 10");
 		painelDentro.add(textoTelRes);
 		painelDentro.add(new JLabel("ddd+telefone"));
