@@ -299,6 +299,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		JPanel painelInicio = new JPanel();
 		TitledBorder bordaInicio = new TitledBorder("Nome");
 		registroInicio = new JTextField(5);
+		registroInicio.setDocument(new TeclasPermitidasLetras());
 		painelInicio.add(registroInicio);
 		painelInicio.setBackground(new Color(255,255,255,0));
 		painelInicio.setBorder(bordaInicio);
@@ -307,6 +308,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		JPanel painelLimite = new JPanel();
 		TitledBorder bordaLimite = new TitledBorder("Limite");
 		textoLimite = new JTextField(5);
+		textoLimite.setDocument(new TeclasPermitidasNumeros());
 		painelLimite.add(textoLimite);
 		painelLimite.setBackground(new Color(255,255,255,0));
 		painelLimite.setBorder(bordaLimite);
