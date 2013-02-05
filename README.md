@@ -6,26 +6,22 @@ pela Apache. Toda a comunicação da aplicação com o banco de dados é realiza
 
 <h2> Screenshots </h2>
 
-<h3>
-
-Tela de cadastro:
+<b>Tela de cadastro:</b>
 
 ![alt text](https://raw.github.com/BrunoFer/TP_WS_CouchDB/master/samples/cadastro.png "Tela de cadastro:")
 
-Tela de visualização:
+<b>Tela de visualização:</b>
 
 ![alt text](https://raw.github.com/BrunoFer/TP_WS_CouchDB/master/samples/consulta.png "Tela de visualização:")
 
-Tela de edição:
+<b>Tela de edição:</b>
 
 ![alt text](https://raw.github.com/BrunoFer/TP_WS_CouchDB/master/samples/edicao.png "Tela de edição:")
 
-Tela sobre o projeto:
+<b>Tela sobre o projeto:</b>
 
 ![alt text](https://raw.github.com/BrunoFer/TP_WS_CouchDB/master/samples/sobreProjeto.png "Tela sobre o projeto:")
 
-Tela sobre o desenvolvimento:
+<b>Tela sobre o desenvolvimento:</b>
 
 ![alt text](https://raw.github.com/BrunoFer/TP_WS_CouchDB/master/samples/sobreDesenvolvimento.png "Tela sobre o desenvolvimento:")
-
-</h3>
