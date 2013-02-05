@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+import validacao_campos.ValidaData;
+
 import aplicacao.AcessoBanco;
 
 public class TratadorEventosEditar implements ActionListener{
@@ -25,11 +27,77 @@ public class TratadorEventosEditar implements ActionListener{
 		if (evento.getSource()==janelaEditar.getBotaoCancelar()){
 			janelaEditar.dispose();
 		} else if (evento.getSource() == janelaEditar.getBotaoSalvar()){
-			if (janelaEditar.getTextoNome().getText().equals("")){
-				JOptionPane.showMessageDialog(null, "Preencha campo nome!", "Edição de contato", JOptionPane.ERROR_MESSAGE);
-			} else if ( janelaEditar.getTextoTelRes().getText().equals("") && janelaEditar.getTextoTelCel().getText().equals("")){
-				JOptionPane.showMessageDialog(null, "Informe ao menos um telefone!", "Edição de contato", JOptionPane.ERROR_MESSAGE);
-			} else{
+			String nome = janelaEditar.getTextoNome().getText();
+			nome = nome.replace(" ", "");
+			String data = janelaEditar.getTextoDataNascimento().getText();
+			String telRes = janelaEditar.getTextoTelRes().getText();
+			String telCel = janelaEditar.getTextoTelCel().getText();
+			boolean passou = true;
+			System.out.println(data);
+
+			if (nome.isEmpty()) {
+				JOptionPane.showMessageDialog(null,
+						"Preencha o campo nome corretamente!",
+						"Cadastro de Contato", JOptionPane.ERROR_MESSAGE);
+				passou = false;
+			} else if (!data.isEmpty()) {
+				if (data.length() != 10) {
+					JOptionPane.showMessageDialog(null, "Data inválida",
+							"Cadastro de Contato", JOptionPane.ERROR_MESSAGE);
+					passou = false;
+				} else {
+					ValidaData valida = new ValidaData();
+					String resposta = valida.validaData(data);
+					if (resposta != null) {
+						JOptionPane.showMessageDialog(null, "Data inválida: "
+								+ resposta + " incorreto!",
+								"Cadastro de Contato",
+								JOptionPane.ERROR_MESSAGE);
+						passou = false;
+					}
+				}
+			}
+			if (passou) {
+				if (telRes.isEmpty() && telCel.isEmpty()) {
+					JOptionPane.showMessageDialog(null,
+							"Informe ao menos um telefone!",
+							"Cadastro de Contato", JOptionPane.ERROR_MESSAGE);
+					passou = false;
+				} else if (!telRes.isEmpty() && !telCel.isEmpty()) {
+					if (telRes.length() < 10 || telRes.length() > 11) {
+						JOptionPane.showMessageDialog(null,
+								"Telefone Residencial inválido",
+								"Cadastro de Contato",
+								JOptionPane.ERROR_MESSAGE);
+						passou = false;
+					}
+					if (telCel.length() < 10 || telCel.length() > 11) {
+						JOptionPane.showMessageDialog(null,
+								"Telefone Celular inválido",
+								"Cadastro de Contato",
+								JOptionPane.ERROR_MESSAGE);
+						passou = false;
+					}
+				} else if (!telCel.isEmpty()) {
+					if (telCel.length() < 10 || telCel.length() > 11) {
+						JOptionPane.showMessageDialog(null,
+								"Telefone Celular inválido",
+								"Cadastro de Contato",
+								JOptionPane.ERROR_MESSAGE);
+						passou = false;
+					}
+				} else if (!telRes.isEmpty()) {
+					if (telRes.length() < 10 || telRes.length() > 11) {
+						JOptionPane.showMessageDialog(null,
+								"Telefone Residencial inválido",
+								"Cadastro de Contato",
+								JOptionPane.ERROR_MESSAGE);
+						passou = false;
+					}
+				}
+			}
+
+			if (passou) {
 				json = montarJson();
 				acessoBanco.atualizarContato(janelaEditar.getIdDocumento(),json);
 				janelaEditar.dispose();
