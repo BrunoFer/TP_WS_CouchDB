@@ -154,7 +154,6 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	public void limparTela() {
 		painelPrincipal.removeAll();
 		repaint();
-		limparDados();
 		setVisible(true);
 	}
 
@@ -165,6 +164,7 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	public void limparDados() {
 		getTextoNome().setText("");
 		getTextoApelido().setText("");
+		getTextoDataNascimento().setText("");
 		getTextoTelRes().setText("");
 		getTextoTelCel().setText("");
 		getTextoCidade().setText("");
@@ -197,12 +197,11 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		try {
 			MaskFormatter maskaraData = new MaskFormatter("##/##/####");
 			textoDataNascimento = new JFormattedTextField(maskaraData);
-			textoDataNascimento.setColumns(15);
+			textoDataNascimento.setColumns(8);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		
 		//cadastro.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		painelDentro.add(nome, "gapleft 70, gaptop 40");
