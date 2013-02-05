@@ -31,6 +31,8 @@ import tratador_eventos.TratadorEventosCadastro;
 import tratador_eventos.TratadorEventosConsulta;
 import tratador_eventos.TratadorEventosMenu;
 import tratador_eventos.TratadorEventosTabela;
+import validacao_campos.TeclasPermitidasLetras;
+import validacao_campos.TeclasPermitidasNumeros;
 import aplicacao.AcessoBanco;
 import aplicacao.Contato;
 
@@ -50,16 +52,16 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 	private Image iconeBarra;
 
 	// Elementos da Janela de Cadastro
-	private JLabel nome = new JLabel("Nome: ");
+	private JLabel nome = new JLabel("* Nome: ");
 	private JLabel apelido = new JLabel("Apelido: ");
 	private JLabel dataNascimento = new JLabel("Data de nascimento: ");
-	private JLabel telefoneResidencial = new JLabel("Tel. Residencial: ");
-	private JLabel telefoneCelular = new JLabel("Tel. Cel.: ");
+	private JLabel telefoneResidencial = new JLabel("** Tel. Residencial: ");
+	private JLabel telefoneCelular = new JLabel("** Tel. Cel.: ");
 	private JLabel cidade = new JLabel("Cidade: ");
 	private JLabel estado = new JLabel("Estado: ");
 	private JTextField textoNome = new JTextField(45);
 	private JTextField textoApelido = new JTextField(20);
-	private JTextField textoDataNascimento = new JTextField(20);
+	private JTextField textoDataNascimento = new JTextField(12);
 	private JTextField textoTelRes = new JTextField(12);
 	private JTextField textoTelCel = new JTextField(12);
 	private JTextField textoCidade = new JTextField(25);
@@ -180,6 +182,11 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		bordaPainelDentro.setTitleFont(new Font("Times New Roman", Font.BOLD, 25));
 		painelDentro.setBorder(bordaPainelDentro);
 		
+		JLabel obrigatorio1 = new JLabel("* - Campo Obrigatório");
+		JLabel obrigatorio2 = new JLabel("** - Apenas um destes campos é obrigatório");
+		obrigatorio1.setForeground(Color.RED);
+		obrigatorio2.setForeground(Color.RED);
+		
 		JPanel botoes = new JPanel();
 		botoes.add(botaoLimpar);
 		botoes.add(botaoSalvar);
@@ -191,17 +198,29 @@ public class JanelaPrincipal extends JFrame implements KeyListener {
 		painelDentro.add(apelido, "gapleft 70, gaptop 10");
 		painelDentro.add(textoApelido, "spanx 2");
 		painelDentro.add(dataNascimento, "gapleft 70, gaptop 10");
-		painelDentro.add(textoDataNascimento, "spanx 2");
+		painelDentro.add(textoDataNascimento);
+		painelDentro.add(new JLabel("ddmmaaaa"));
 		painelDentro.add(telefoneResidencial, "gapleft 70, gaptop 10");
-		painelDentro.add(textoTelRes, "spanx 2");
+		painelDentro.add(textoTelRes);
+		painelDentro.add(new JLabel("ddd+telefone"));
 		painelDentro.add(telefoneCelular, "gapleft 70, gaptop 10");
-		painelDentro.add(textoTelCel, "spanx 2");
+		painelDentro.add(textoTelCel);
+		painelDentro.add(new JLabel("ddd+telefone"));
 		painelDentro.add(cidade, "gapleft 70, gaptop 10");
 		painelDentro.add(textoCidade, "spanx 2");
 		painelDentro.add(estado, "gapleft 70, gaptop 10");
 		painelDentro.add(comboEstados, "spanx 2, gaptop 10");
 		painelDentro.add(botoes, "spanx 3, gapleft 350, gaptop 30");
-
+		painelDentro.add(obrigatorio1,"spanx 3, gaptop 30, gapleft 70");
+		painelDentro.add(obrigatorio2,"spanx 3, gapleft 70");
+		
+		//limitando as teclas que podem ser utilizadas em cada campo
+		textoNome.setDocument(new TeclasPermitidasLetras());
+		textoCidade.setDocument(new TeclasPermitidasLetras());
+		textoDataNascimento.setDocument(new TeclasPermitidasNumeros());
+		textoTelCel.setDocument(new TeclasPermitidasNumeros());
+		textoTelRes.setDocument(new TeclasPermitidasNumeros());
+		
 		painelDentro.setBackground(new Color(255,255,255,100));
 		MigLayout layoutFora = new MigLayout();
 		painelPrincipal.setLayout(layoutFora);
