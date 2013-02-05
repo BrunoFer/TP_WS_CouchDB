@@ -20,7 +20,7 @@ public class JanelaSobre extends JDialog{
 	private JTabbedPane tabs = new JTabbedPane();
 	
 	public JanelaSobre(){
-		setTitle("Sobre Application Contact");
+		setTitle("Sobre Contact Application");
 		setSize(610,500);
 	}
 	
@@ -32,9 +32,9 @@ public class JanelaSobre extends JDialog{
 			logoCouch.setImage(logoCouch.getImage().getScaledInstance(250, 200, 100));
 			JLabel projeto = new JLabel();
 			String texto1 = "<html><b>Aplicação desenvolvida para a aula de WebServices.</b> <br><br>" +
-					"O objetivo da aplicação era utilizar um banco de dados não relacional,porém<br>" +
-					"a comunicação da aplicação com o banco deveria ser usando os métodos <br>" +
-					"do Protocolo HTTP (GET,POST,PUT e DELETE), através do REST.<br><br>" +
+					"O objetivo desta aplicação é utilizar um banco de dados não relacional,porém<br>" +
+					"a comunicação da aplicação com o banco utiliza os métodos do Protocolo HTTP <br>" +
+					"(GET,POST,PUT e DELETE), através da API RESTfull.<br><br>" +
 					"<b>Ferramentas utilizadas:</b> <br>" +
 					" <b>-</b> CouchDB: Banco de dados não relacional, da empresa Apache;<br>" +
 					" <b>-</b> Biblioteca HTTPClient, da empresa Apache;<br>" +
